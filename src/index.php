@@ -19,22 +19,26 @@ function toCamelCase( $string ){
 $conn = new DBHandler();
 $conn->getConnection();
 
+
 echo '<ul>';
 foreach ( $conn->getTables() as $value) {
-    echo '<li>'. $value . '</li>';
-}
-echo '</ul>';
-
-echo '<h1>All DB Tables als PHP Class Name: </h1>';
-
-echo '<ul>';
-foreach ($conn->getTables() as $value) {
-
-    $model = new TableToModel( $value );
+    $model = new TableToModel( $value, $conn->getColumns($value) );
     $model->writeFile();
+    echo '<li>'. $value . '</li>';
     
-    echo '<li>' . toCamelCase( $value ) . '</li>';
+    // echo '<ul>';
+    // echo '<li> Columns </li>';
+    // foreach ($conn->getColumns( $value ) as $val2) {
+    //     echo '<ul>';
+    //     echo '<li>' . $val2['COLUMN_NAME'] . ' | ' . $val2['DATA_TYPE'] . ' | ' . $val2['IS_NULLABLE'] . '</li>';
+    //     echo '</ul>';
+    // }
+    // echo '</ul>';
 }
+
 echo '</ul>';
+
+// $model = new TableToModel( $value );
+// $model->writeFile();
 
 ?>

@@ -42,9 +42,11 @@ class DBHandler {
         return $query->fetchAll( \PDO::FETCH_COLUMN );
     }
 
-    public function getColumns(){
-        $sql = '';
+    public function getColumns( $tableName ){
+        $sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{$tableName}'";
 
+        $query = $this->connection->query($sql);
+        return $query->fetchAll();
     }
 
     public function getTableReferences( $tableName ){

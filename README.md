@@ -1,15 +1,5 @@
+#DORM
 
+Ein PHP ORM Framework mit kaum abbängigkeiten außer den nativen Erweiterungen.
 
-
-
-PSR-4 Schema
-
-Projektordner/
- |- app/
- |- config/
- |- src/
-    |- Controller/
-    |- Component/
-    |- Oop/
-       |- Tutorial/
-          |- BeispielKlasse.php
+Eine einfache GUI zur Inizialisierung von Modelen anhand der Tabellen in der Datenbank
