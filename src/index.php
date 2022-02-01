@@ -25,10 +25,12 @@ $columnsPerson = array( 'name', 'surname' );
 
 $person = new Person();
 
-$query = $conn->select( $columnsPerson )->from( $person->getTableName() );
+$query = $conn
+            ->select( $columnsPerson )
+            ->from( $person->getTableName() );
 
 
-$query2 = $conn->select( )->from( 'person' );
+$query2 = $conn->select()->from( 'person' );
 
 
 
