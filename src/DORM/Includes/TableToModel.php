@@ -23,9 +23,7 @@ class TableToModel{
         <?php
         namespace DORM\Models;
 
-        use DORM\Database\CRUD;
-
-        class {$this->className} extends CRUD {
+        class {$this->className} {
             
             private \$tableName = '{$this->tableName}';
         MODEL;

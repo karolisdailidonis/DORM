@@ -1,7 +1,7 @@
 <?php
 namespace DORM\Database;
 
-class DBHandler {
+class DBHandler extends QueryBuilder {
 
     private $connection = null;
 
@@ -9,6 +9,8 @@ class DBHandler {
     private $db_host;
     private $db_user;
     private $db_password;
+
+    private $error;
 
     function __construct(){
         $ini = parse_ini_file('config.ini');
@@ -19,7 +21,7 @@ class DBHandler {
         $this->db_password  = $ini['db_password'];
     }
 
-    public function getConnection(){
+    public function getConnection(): self{
         $this->connection = null;
         try {
             $this->connection = new \PDO( 
@@ -30,9 +32,9 @@ class DBHandler {
             $this->connection->exec("set names utf8");
             
         } catch ( \PDOException  $exception ) {
-            echo "No connection to Database: " . $exception->getMessage();
+            $this->error = "No connection to Database: " . $exception->getMessage();
         }
-        return $this->connection;
+        return $this;
     }
 
     public function getTables(){
@@ -61,6 +63,12 @@ class DBHandler {
         ";
 
         return;
+    }
+
+    public function execute( string $sqlQuery ){
+
+        $query = $this->connection->query($sqlQuery);
+        return $query->fetchAll();
     }
 
 }
