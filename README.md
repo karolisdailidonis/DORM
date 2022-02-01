@@ -7,11 +7,24 @@ Eine einfache GUI zur Inizialisierung von Modelen anhand der Tabellen in der Dat
 
 Minimal PHP Version is 7.4.0
 
+Implemented functions:
+- PHP model class generator
+- Custom Query Builder
+  - Select
+- REST API [ open ]
+- Setup GUI
+  - Generate models from selected DB tables [ open ]
+  - Try REST API Request [ open ]
+
+
 ## Setup
+The DORM has a simple setup page, which can be found at DORM/Includes/Setup.php
+
 
 ```php
+use DORM\Includes\Setup;
 
-Setup.php
+new Setup();
 
 ```
 

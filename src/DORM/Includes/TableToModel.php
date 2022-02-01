@@ -10,10 +10,10 @@ class TableToModel{
     private $columns;
     private $relations;
     
-    function __construct($tableName, $columns){
+    function __construct( string $tableName, $columns){
         $this->tableName = $tableName;
         $this->filePath = dirname( __DIR__ ) . '/Models';
-        $this->className = toCamelCase($tableName);
+        $this->className = $this->toCamelCase($tableName);
         $this->columns = $columns;
     }
 
