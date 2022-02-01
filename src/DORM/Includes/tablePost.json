@@ -1,0 +1,47 @@
+[
+    {
+      "schema": "Post data to server",
+      "tables": [
+        {
+          "columns": [
+            { "column": "name", "as": "Given Name" },
+            { "column": "surname" }
+          ],
+          "from": "person",
+          "where": { },
+          "join": ""
+        },
+        {
+          "columns": [
+            { "column": "name", "as": "Given Name" },
+            { "column": "surname" }
+          ],
+          "from": "location",
+          "where": {},
+          "join": {}
+        }
+      ]
+    },
+
+
+    {
+      "schema": "REST output from server",
+      "tables": {
+          "person": {
+              "columns": {
+                    "person_id": 1223,
+                    "name": "Karolis",
+                    "surname": "Dailidonis"
+                },
+                "references": {
+                    
+                },
+                "includes": {
+
+                }
+            }
+        }      
+    }
+
+
+]
