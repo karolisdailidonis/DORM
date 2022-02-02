@@ -12,18 +12,6 @@ new Setup();
 
 $conn = new DBHandler();
 
-$b = new TestTable();
-
-
-// echo '<h1>All DB Tables: </h1>'; 
-// function toCamelCase( $string ){
-//     $string = str_replace( '_', ' ', $string );
-//     $string = ucwords( $string );
-//     $string = str_replace( ' ', '', $string );
-//     return $string;
-// }
-
-
 // $columnsPerson = array( 'name', 'surname' ); 
 
 // $person = new Person();
