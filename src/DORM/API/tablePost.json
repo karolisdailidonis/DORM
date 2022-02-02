@@ -3,6 +3,7 @@
       "schema": "Post data to server",
       "tables": [
         {
+          "requestJob": "insert",
           "columns": [
             { "column": "name", "as": "Given Name" },
             { "column": "surname" }
@@ -10,15 +11,6 @@
           "from": "person",
           "where": { },
           "join": ""
-        },
-        {
-          "columns": [
-            { "column": "name", "as": "Given Name" },
-            { "column": "surname" }
-          ],
-          "from": "location",
-          "where": {},
-          "join": {}
         }
       ]
     },

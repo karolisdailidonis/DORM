@@ -29,9 +29,9 @@ Later the composer option will be added as well.
 To call one of the main functions, you must also use ``use`` in one of the three folders.
 
 ```php
-include 'DORM\API';
-include 'DORM\Database';
-include 'DORM\Includes';
+use 'DORM\API';
+use 'DORM\Database';
+use 'DORM\Includes';
 ```
 like to call the DBHandler.php class
 ```php
@@ -75,8 +75,10 @@ new API();
 ### POST Request
 ```json
 {
+  "schema": "DORM 0.1",
   "tables": [
     {
+      "requestJob": "insert",
       "columns": [
         { "column": "name", "as": "Given Name" },
         { "column": "surname" }
@@ -86,6 +88,7 @@ new API();
       "join": ""
     },
     {
+      "requestJob": "delete",
       "columns": [
         { "column": "name", "as": "Given Name" },
         { "column": "surname" }
@@ -100,7 +103,8 @@ new API();
 
 ### Response
 ```json
-{
+{ 
+  "schema": "DORM 0.1",
   "tables": {
       "person": {
           "columns": {
@@ -115,7 +119,8 @@ new API();
 
             }
         }
-    }      
+  },
+  "errors" : []      
 }
 ```
 
