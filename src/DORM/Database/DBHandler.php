@@ -1,7 +1,9 @@
 <?php
+
 namespace DORM\Database;
 
-class DBHandler extends QueryBuilder {
+class DBHandler extends QueryBuilder
+{
 
     private $connection = null;
 
@@ -12,7 +14,8 @@ class DBHandler extends QueryBuilder {
 
     private $error;
 
-    function __construct(){
+    function __construct()
+    {
         $ini = parse_ini_file('config.ini');
 
         $this->db_name      = $ini['db_name'];
@@ -23,37 +26,41 @@ class DBHandler extends QueryBuilder {
         $this->connect();
     }
 
-    public function connect(): self{
+    public function connect(): self
+    {
         $this->connection = null;
         try {
-            $this->connection = new \PDO( 
-                "mysql:host=$this->db_host; dbname=$this->db_name", 
-                $this->db_user, 
-                $this->db_password);
+            $this->connection = new \PDO(
+                "mysql:host=$this->db_host; dbname=$this->db_name",
+                $this->db_user,
+                $this->db_password
+            );
 
             $this->connection->exec("set names utf8");
-            
-        } catch ( \PDOException  $exception ) {
+        } catch (\PDOException  $exception) {
             $this->error = "No connection to Database: " . $exception->getMessage();
         }
         return $this;
     }
 
-    public function getTables(){
+    public function getTables()
+    {
         $sql = 'SHOW TABLES';
-        
+
         $query = $this->connection->query($sql);
-        return $query->fetchAll( \PDO::FETCH_COLUMN );
+        return $query->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-    public function getColumns( $tableName ){
+    public function getColumns($tableName)
+    {
         $sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{$tableName}'";
 
         $query = $this->connection->query($sql);
         return $query->fetchAll();
     }
 
-    public function getTableReferences( $tableName ){
+    public function getTableReferences($tableName)
+    {
         $sql = "
             SELECT  table_name,
                     column_name,
@@ -67,13 +74,14 @@ class DBHandler extends QueryBuilder {
         return;
     }
 
-    public function execute( string $sqlQuery ){
+    public function getConnection(){
+        return $this->connection;
+    }
+
+    public function execute(string $sqlQuery)
+    {
 
         $query = $this->connection->query($sqlQuery);
         return $query->fetchAll();
     }
-
 }
-
-
-?>

@@ -1,96 +1,94 @@
 <?php
-
 namespace DORM\Includes;
+
+use DORM\Database\DBHandler;
 
 class Setup
 {
 
+    private $connection = null;
+
     function __construct()
     {
+        $this->connection = new DBHandler();
         $this->render();
     }
 
     public function render()
     {
         if (isset($_POST["generate-models"])) {
-            echo 'generated new models: ';
-            // foreach ($variable as $key => $value) {
-                // ( new TableToModel() )->writeFile();
-            // }
+            if (isset($_POST["selectedTables"])) {
+                echo 'generated new models: ';
+                echo '<br>';
+                foreach ($_POST['selectedTables'] as $value) {
+                    ( new TableToModel($value, $this->connection->getColumns($value)))->writeFile();
+                    echo $value; 
+                    echo '<br>';
+                }
+            }
         }
 
         if (isset($_POST["restapi-request"])) {
             echo 'REST-API Requested: ';
         }
 
+        $webRoot = realpath(dirname(__FILE__));
+        $serverRoot = realpath($_SERVER['DOCUMENT_ROOT']);
+        $pathToWebRoot = "";
+        if ($webRoot === $serverRoot) {
+            $pathToWebRoot = "";
+        } else {
+            $pathToWebRoot = substr($webRoot, strlen($serverRoot) + 1);
+        }
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== '') ? 'https://' : 'http://';
+
 ?>
-        <style>
-            #dorm-setup {
-                display: flex;
-                justify-content: center;
-            }
-
-            #dorm-content {
-                max-width: 500px;
-            }
-
-            #dorm-setup form {
-                border: thin solid grey;
-            }
-        </style>
+        <link rel="stylesheet" href="<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/setup.css' ?>">
 
         <div id="dorm-setup">
             <div id="dorm-content">
                 <h1> Setup the DORM </h1>
-                <h2> Tables found in the databes </h2>
-                <form id="model-generator" method="POST">
-                    <div>
+                <div class="box">
+                    <h2> Tables found in the databes </h2>
+                    <form id="model-generator" method="POST">
                         <div>
-                            <input type="checkbox" name="table" id="real_table_name" value="real_table_name">
-                            <label for="vehicle1">real_table_name</label>
+                            <?php foreach ($this->connection->getTables() as $value) { ?>
+                                <div>
+                                    <input type="checkbox" name="selectedTables[]" id="<?php echo $value ?>" value="<?php echo $value ?>">
+                                    <label for="<?php echo $value ?>"><?php echo $value ?></label>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="btn-container">
+                            <input class="btn" type="submit" name="generate-models" value="Re-/Create model classes">
+                        </div>
+                    </form>
+                </div>
+                <div class="box">
+                    <h2>REST-API Request</h2>
+                    <form id="rest-request" method="POST">
+                        <div class="code">
+                            {
+                            json output
+                            }
+                            {
+                            json request
+                            }
                         </div>
                         <div>
-                            <input type="checkbox" name="table" id="real_table_name" value="real_table_name">
-                            <label for="vehicle1">real_table_name</label>
+                            <div>
+                                <input type="text" placeholder="Table name">
+                                <input type="text" placeholder="columns">
+                                <input type="text" placeholder="where">
+                            </div>
+                            <div class="btn-container">
+                                <input class="btn" type="submit" name="restapi-request" value="Request">
+                            </div>
                         </div>
-                        <div>
-                            <input type="checkbox" name="table" id="real_table_name" value="real_table_name">
-                            <label for="vehicle1">real_table_name</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" name="table" id="real_table_name" value="real_table_name">
-                            <label for="vehicle1">real_table_name</label>
-                        </div>
-                    </div>
-                    <div>
-                        <input class="btn" type="submit" name="generate-models" value="Re-/Create model classes">
-                    </div>
-                </form>
-
-                <h2>REST-API Request</h2>
-                <form id="rest-request" method="POST">
-                    <div>
-                        {
-                        json output
-                        }
-                        {
-                        json request
-                        }
-                    </div>
-                    <div>
-                        <div>
-                            <input type="text" placeholder="Table name">
-                            <input type="text" placeholder="columns">
-                            <input type="text" placeholder="where">
-                        </div>
-                        <div>
-                            <input class="btn" type="submit" name="restapi-request" value="Request">
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
-<?php
+    <?php
     }
 }
-?>
+    ?>

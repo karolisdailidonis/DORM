@@ -1,6 +1,11 @@
 # DORM
 A lightweight PHP ORM framework with REST-API and no extensions other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
+
+1. [Install](##Install)
+2. [Setup](##Setup)
+3. [REST-API](##Rest)
+
 Requirements:
 - Minimal PHP Version is 7.4.0
 
