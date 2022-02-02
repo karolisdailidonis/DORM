@@ -19,9 +19,11 @@ class DBHandler extends QueryBuilder {
         $this->db_host      = $ini['db_host'];
         $this->db_user      = $ini['db_user'];
         $this->db_password  = $ini['db_password'];
+
+        $this->connect();
     }
 
-    public function getConnection(): self{
+    public function connect(): self{
         $this->connection = null;
         try {
             $this->connection = new \PDO( 
