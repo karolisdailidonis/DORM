@@ -5,7 +5,7 @@ use DORM\Includes\DORMModel;
 
 class TestTable extends DORMModel {
     
-    private $tableName = 'person';
+    public $tableName = 'person';
     private $columns = array(
         'person_id' => array( 'type' => 'int', 'length' => -1, 'nullable' => 'NO'),
         'surname' => array( 'type' => 'varchar', 'length' => 100, 'nullable' => 'NO'),
@@ -17,6 +17,10 @@ class TestTable extends DORMModel {
 
     );
 
+    function __construct(){
+        
+    }
+    
     public function getTableName(){
         return $this->tableName;
     } 

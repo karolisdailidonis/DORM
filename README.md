@@ -1,11 +1,8 @@
 # DORM
-A lightweight PHP ORM with REST-API
+A lightweight PHP ORM framework with REST-API and no extensions other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
-Ein PHP ORM Framework mit kaum abbängigkeiten außer den nativen Erweiterungen.
-
-Eine einfache GUI zur Inizialisierung von Modelen anhand der Tabellen in der Datenbank
-
-Minimal PHP Version is 7.4.0
+Requirements:
+- Minimal PHP Version is 7.4.0
 
 Implemented functions:
 - PHP model class generator
@@ -16,6 +13,27 @@ Implemented functions:
   - Generate models from selected DB tables [ open ]
   - Try REST API Request [ open ]
 
+## Install
+
+Simply download the main DORM folder from the src/ and paste it into your project. The project follows PSR-4 code style guide with namespaces and autoload, that means you only need to include the autoload.
+```php
+include 'DORM/autoload.php';
+```
+Later the composer option will be added as well.
+
+To call one of the main functions, you must also use ``use`` in one of the three folders.
+
+```php
+include 'DORM\API';
+include 'DORM\Database';
+include 'DORM\Includes';
+```
+like to call the DBHandler.php class
+```php
+use DORM\Database\DBHandler;
+
+$connection = new DBHandler();
+```
 
 ## Setup
 The DORM has a simple setup page, which can be found at DORM/Includes/Setup.php
@@ -25,7 +43,6 @@ The DORM has a simple setup page, which can be found at DORM/Includes/Setup.php
 use DORM\Includes\Setup;
 
 new Setup();
-
 ```
 
 
@@ -40,7 +57,17 @@ new Setup();
 
 ## REST API
 
-### POST
+You can use the DORM REST API anywhere, such as in your api.php file located in the root directory of the example.com/api.php website.
+
+Just put this two line of Code
+
+```php
+use DORM\API\API;
+
+new API();
+```
+
+### POST Request
 ```json
 {
   "tables": [
@@ -66,7 +93,7 @@ new Setup();
 }
 ```
 
-### Output
+### Response
 ```json
 {
   "tables": {
