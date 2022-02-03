@@ -1,26 +1,56 @@
 <?php
 namespace DORM\API;
 
+use DORM\Database\DBHandler;
+use DORM\Includes\ModelList;
+
 class API {
 
     function __construct(){
         $this->request();
     }
 
-
     public function request(){
-        $request =  (array) json_decode(file_get_contents("php://input"));
-        $body = [];
-        $errors = [];
-
+        $request    = json_decode(file_get_contents("php://input"), true);
+        $body       = [];
+        $errors     = [];
 
         if ( isset($request['tables'] ) && is_array($request['tables']) ){
 
-            foreach ($request['tables'] as $value) {
-                $body[] = 'blubb';
+            $dbHandler = new DBHandler();
+            $modelList = new ModelList( $dbHandler->getConnection());
+
+            foreach ($request['tables'] as $table) {
+
+                if (isset($table['requestJob'])){
+                    $modelFromList = $modelList->findModel($table['from']);
+
+                    if( is_array($modelFromList) && $modelFromList  != false ){
+
+                        switch ($table['requestJob']) {
+                            case 'read':
+                                $model = (new $modelFromList['class_name']())->read( $table );
+                                $model = $dbHandler->execute( $model );
+                                $body[$modelFromList['table_name']] = json_encode( $model );
+                                break;
+                            
+                            default:
+                                $errors[] = array( 'message' => 'wrong requestJob', 'request' => $table );
+                                break;
+                        }
+
+                        
+                    }else {
+                        $errors[] = array( 'message' => 'can not found a model in the modellist', 'request' => $table );
+                    }
+                
+                } else {
+                    $errors[] = array( 'message' => 'missing key: requestJob', 'request' => $table );
+                }
             }
+
         } else {
-            $errors[] =  'no correct request found';
+            $errors[] = array( 'message' => 'no correct request found');
         }
 
         $this->response( $body, $errors );
@@ -39,7 +69,6 @@ class API {
         $response['erros'] = $errors;
 
         print_r( json_encode( $response ) );
-
     }
 
 }

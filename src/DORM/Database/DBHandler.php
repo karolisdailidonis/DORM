@@ -74,14 +74,22 @@ class DBHandler extends QueryBuilder
         return;
     }
 
+
+
+    public function insertModel( string $tableName, string $className){
+        $sql = "REPLACE INTO dorm_model_list ( table_name, class_name)
+                VALUES ( '{$tableName}', '{$className}' )";
+
+        $this->connection->exec($sql);
+    }
+
     public function getConnection(){
         return $this->connection;
     }
 
-    public function execute(string $sqlQuery)
-    {
+    public function execute(string $sqlQuery){
 
         $query = $this->connection->query($sqlQuery);
-        return $query->fetchAll();
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

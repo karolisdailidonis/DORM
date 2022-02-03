@@ -3,29 +3,37 @@ namespace DORM\Includes;
 
 use DORM\Database\DBHandler;
 
-class Setup
-{
+class Setup {
 
     private $connection = null;
 
-    function __construct()
-    {
+    function __construct(){
+
         $this->connection = new DBHandler();
         $this->render();
+
     }
 
-    public function render()
-    {
+    public function render(){
+
         if (isset($_POST["generate-models"])) {
+
             if (isset($_POST["selectedTables"])) {
+
                 echo 'generated new models: ';
                 echo '<br>';
-                foreach ($_POST['selectedTables'] as $value) {
-                    ( new TableToModel($value, $this->connection->getColumns($value)))->writeFile();
+               
+                foreach ( $_POST['selectedTables'] as $value ) {
+
+                    $model = ( new TableToModel($value, $this->connection->getColumns($value)))->writeFile();
+                    $this->connection->insertModel($model['tableName'], $model['className'] );
+
                     echo $value; 
                     echo '<br>';
+
                 }
             }
+            
         }
 
         if (isset($_POST["restapi-request"])) {
@@ -35,11 +43,13 @@ class Setup
         $webRoot = realpath(dirname(__FILE__));
         $serverRoot = realpath($_SERVER['DOCUMENT_ROOT']);
         $pathToWebRoot = "";
+
         if ($webRoot === $serverRoot) {
             $pathToWebRoot = "";
         } else {
             $pathToWebRoot = substr($webRoot, strlen($serverRoot) + 1);
         }
+
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== '') ? 'https://' : 'http://';
 
 ?>

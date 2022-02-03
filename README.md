@@ -2,10 +2,6 @@
 A lightweight PHP ORM framework with REST-API and no extensions other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
 
-1. [Install](##Install)
-2. [Setup](##Setup)
-3. [REST-API](##Rest)
-
 Requirements:
 - Minimal PHP Version is 7.4.0
 
@@ -26,6 +22,8 @@ include 'DORM/autoload.php';
 ```
 Later the composer option will be added as well.
 
+Next, set in the DORM/Database/config.ini file you database connection data.
+
 To call one of the main functions, you must also use ``use`` in one of the three folders.
 
 ```php
@@ -33,13 +31,14 @@ use 'DORM\API';
 use 'DORM\Database';
 use 'DORM\Includes';
 ```
-like to call the DBHandler.php class
+Like to call the DBHandler.php class
 ```php
 use DORM\Database\DBHandler;
 
 $connection = new DBHandler();
 ```
 
+Except for the generated classes, these are not in any namespace. There the normal class call is enough and the included autoload does the rest.
 ## Setup
 The DORM has a simple setup page, which can be found at DORM/Includes/Setup.php
 
@@ -73,12 +72,17 @@ new API();
 ```
 
 ### POST Request
+
+! Actual possible requests:
+- select, from
+- requestJob
+  - read
 ```json
 {
   "schema": "DORM 0.1",
   "tables": [
     {
-      "requestJob": "insert",
+      "requestJob": "read",
       "columns": [
         { "column": "name", "as": "Given Name" },
         { "column": "surname" }

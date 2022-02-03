@@ -16,12 +16,15 @@ spl_autoload_register(function ($className) {
 /*
 * Autoload für die Tabellen Klassen welche sich nicht im namespace befinden
 */
-// spl_autoload_register(function ($className) {
-// 	$fileName = dirname(__DIR__, 1) . '/DORM/Models/' .  $className . '.php';
+spl_autoload_register(function ($className) {
 
-// 	if (file_exists($fileName)) {
-// 		require_once $fileName;
-// 	}
-// });
+	//ToDo: genauso, falls die klasse einen bekannten namespace hat, return
+
+	$fileName = dirname(__DIR__, 1) . '/DORM/Models/' .  $className . '.php';
+
+	if (file_exists($fileName)) {
+		require_once $fileName;
+	}
+});
 
 ?>

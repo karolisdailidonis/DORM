@@ -1,12 +1,14 @@
 <?php
-namespace DORM\Models;
+/*
+* DORM generated class
+*/
 
 use DORM\Includes\DORMModel;
 
-class TestTable extends DORMModel {
+class Person extends DORMModel {
     
-    public $tableName = 'person';
-    private $columns = array(
+    protected $tableName = 'person';
+    protected $columns = array(
         'person_id' => array( 'type' => 'int', 'length' => -1, 'nullable' => 'NO'),
         'surname' => array( 'type' => 'varchar', 'length' => 100, 'nullable' => 'NO'),
         'name' => array( 'type' => 'varchar', 'length' => 100, 'nullable' => 'NO'),
@@ -17,12 +19,10 @@ class TestTable extends DORMModel {
 
     );
 
-    function __construct(){
-        
-    }
-    
     public function getTableName(){
         return $this->tableName;
     } 
 
 }
+
+?>
