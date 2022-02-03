@@ -21,16 +21,20 @@ class TableToModel{
         $this->file = fopen( $this->filePath . '/' . $this->className . '.php', 'w' );
         $fileContent = <<<MODEL
         <?php
-        namespace DORM\Models;
+        /*
+        * DORM generated class
+        */
 
-        class {$this->className} {
+        use DORM\Includes\DORMModel;
+
+        class {$this->className} extends DORMModel {
             
-            private \$tableName = '{$this->tableName}';
+            protected \$tableName = '{$this->tableName}';
         MODEL;
 
         $fileContent .= <<<MODEL
 
-            private \$columns = array(
+            protected \$columns = array(
 
         MODEL;
 
@@ -69,6 +73,8 @@ class TableToModel{
 
         fwrite( $this->file, $fileContent);
         fclose( $this->file );
+
+        return array( 'tableName' => $this->tableName, "className" => $this->className );
     }
 
     function toCamelCase($string){

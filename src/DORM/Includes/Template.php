@@ -1,4 +1,6 @@
 <?php
+
+// zum testen / notizen
 namespace DORM\Models;
 
 class Tempplate {
