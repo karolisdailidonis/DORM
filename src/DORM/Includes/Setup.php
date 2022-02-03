@@ -1,20 +1,25 @@
 <?php
+
 namespace DORM\Includes;
 
 use DORM\Database\DBHandler;
 
-class Setup {
+class Setup
+{
 
     private $connection = null;
 
-    function __construct(){
+    function __construct()
+    {
 
         $this->connection = new DBHandler();
         $this->render();
-
     }
 
-    public function render(){
+    public function render()
+    {
+
+        $this->connection->setDormDB();
 
         if (isset($_POST["generate-models"])) {
 
@@ -22,18 +27,16 @@ class Setup {
 
                 echo 'generated new models: ';
                 echo '<br>';
-               
-                foreach ( $_POST['selectedTables'] as $value ) {
 
-                    $model = ( new TableToModel($value, $this->connection->getColumns($value)))->writeFile();
-                    $this->connection->insertModel($model['tableName'], $model['className'] );
+                foreach ($_POST['selectedTables'] as $value) {
 
-                    echo $value; 
+                    $model = (new TableToModel($value, $this->connection->getColumns($value)))->writeFile();
+                    $this->connection->insertModel($model['tableName'], $model['className']);
+
+                    echo $value;
                     echo '<br>';
-
                 }
             }
-            
         }
 
         if (isset($_POST["restapi-request"])) {
@@ -54,6 +57,16 @@ class Setup {
 
 ?>
         <link rel="stylesheet" href="<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/setup.css' ?>">
+        <style type="text/css">
+            @font-face {
+                font-family: "Roboto";
+                src: url(<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/Roboto-Regular.ttf' ?>) format("truetype");
+            }
+
+            * {
+                font-family: "Roboto";
+            }
+        </style>
 
         <div id="dorm-setup">
             <div id="dorm-content">
@@ -74,7 +87,7 @@ class Setup {
                         </div>
                     </form>
                 </div>
-                <div class="box">
+                <!-- <div class="box">
                     <h2>REST-API Request</h2>
                     <form id="rest-request" method="POST">
                         <div class="code">
@@ -96,9 +109,12 @@ class Setup {
                             </div>
                         </div>
                     </form>
-                </div>
+                </div> -->
             </div>
     <?php
+
+    
     }
+
 }
     ?>

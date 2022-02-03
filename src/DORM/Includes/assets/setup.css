@@ -13,8 +13,8 @@
 }
 
 #dorm-setup form {
-    /* border: thin solid grey; */
     margin: 10px;
+    width: 400px;
 }
 
 #rest-request {
