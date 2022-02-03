@@ -9,6 +9,5 @@ new Setup();
 
 $conn = new DBHandler();
 
-$modelList = new ModelList( $conn->getConnection() );
 
 ?>

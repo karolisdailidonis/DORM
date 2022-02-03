@@ -2,6 +2,8 @@
 
 namespace DORM\Database;
 
+use DORM\Includes\INIWriter;
+
 class DBHandler extends QueryBuilder
 {
 
@@ -12,7 +14,10 @@ class DBHandler extends QueryBuilder
     private $db_user;
     private $db_password;
 
+    private $setDB;
+
     private $error;
+
 
     function __construct()
     {
@@ -22,6 +27,10 @@ class DBHandler extends QueryBuilder
         $this->db_host      = $ini['db_host'];
         $this->db_user      = $ini['db_user'];
         $this->db_password  = $ini['db_password'];
+        
+        $this->setDB        = $ini['dorm_db'];
+        ini_set("blubb", "t");
+
 
         $this->connect();
     }
@@ -43,16 +52,14 @@ class DBHandler extends QueryBuilder
         return $this;
     }
 
-    public function getTables()
-    {
+    public function getTables(){
         $sql = 'SHOW TABLES';
 
         $query = $this->connection->query($sql);
         return $query->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-    public function getColumns($tableName)
-    {
+    public function getColumns($tableName){
         $sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{$tableName}'";
 
         $query = $this->connection->query($sql);
@@ -75,6 +82,42 @@ class DBHandler extends QueryBuilder
     }
 
 
+    public function isDormDB():bool {
+        if($this->setDB == 'true') return true;
+
+        return false;
+    }
+
+    public function setDormDB(){
+
+        $exist = $this->execute("SELECT * FROM INFORMATION_SCHEMA.TABLES
+           WHERE TABLE_NAME = 'dorm_model_list' ");
+
+        if(  count($exist) <= 0 ) $this->setDatabase();
+
+        $ini = parse_ini_file('config.ini');
+        $ini['dorm_db'] = "true";
+
+        $ini = (new INIWriter())->writeValue(  $ini , __DIR__ . '/config.ini' );
+
+    }
+
+    public function setDatabase()
+    {
+        $sql = "
+            CREATE TABLE IF NOT EXISTS dorm_model_list (
+                table_name varchar(100) NOT NULL,
+                class_name varchar(100) NOT NULL,
+                create_timestamp timestamp NOT NULL,
+
+                PRIMARY KEY(table_name)
+            );
+        ";
+
+        $this->connection->exec($sql);
+    }
+
+
 
     public function insertModel( string $tableName, string $className){
         $sql = "REPLACE INTO dorm_model_list ( table_name, class_name)
@@ -82,6 +125,7 @@ class DBHandler extends QueryBuilder
 
         $this->connection->exec($sql);
     }
+
 
     public function getConnection(){
         return $this->connection;
