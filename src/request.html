@@ -8,41 +8,53 @@
     <title>Request test</title>
 </head>
 <body>
-    <script>
-        axios.post('http://localhost/ORM/api.php', 
+    <h1>Response</h1>
+    <div id="response"></div>
+
+    <script >
+        var responseHTML = document.querySelector('#response');
+
+        console.log(responseHTML);
+        
+        var resp = axios.post('http://localhost/ORM/api.php', 
             {
                 "schema": "DORM 0.1",
                 "tables": [
                     {
-                        "requestJob": "insert",
+                        "requestJob": "read",
                         "columns": [
                             { "column": "name" },
                             { "column": "surname" },
-                            { "column": "email" }
+                            { "column": "emasil" }
                         ],
                         "from": "person",
                         "where": {},
                         "join": ""
                     },
                     {
-                        "requestJob": "delete",
-                        "columns": [
-                            { "column": "name", "as": "Given Name" },
-                            { "column": "surname" }
-                        ],
-                        "from": "location",
-                        "where": {},
-                        "join": {}
+                        "requestJob": "insert",
+                        "values": {
+                             "name": "karolis",
+                             "surname": "dailidonis"
+                            }
+                        ,
+                        "from": "person"
                     }
                 ]
             }
             )
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+            .then(
+                (response, d) => {
+                console.log(response);
+                responseHTML.innerHTML = JSON.stringify( response.data );
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+
+
     </script>
 </body>
 </html>
