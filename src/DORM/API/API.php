@@ -29,10 +29,27 @@ class API {
 
                         switch ($table['requestJob']) {
                             case 'read':
-                                $model = (new $modelFromList['class_name']())->read( $table );
-                                $model = $dbHandler->execute( $model );
-                                $body[$modelFromList['table_name']] = json_encode( $model );
-                                break;
+                                try {
+                                    $model = (new $modelFromList['class_name']())->read( $table );
+                                    $model = $dbHandler->execute( $model );
+                                    $body[$modelFromList['table_name']] = json_encode( $model );
+                                    break;
+                                } catch (\PDOException $e) {
+                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
+                                    break;
+                                }
+                            case 'insert':
+                                try {
+                                    $model = (new $modelFromList['class_name']())->create( $table );
+                                    $model = $dbHandler->execute( $model );
+                                    // $body[$modelFromList['table_name']] = json_encode( $model );
+                                    break;
+                                } catch (\PDOException $e) {
+                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
+                                    break;
+                                }
+                            
+                                
                             
                             default:
                                 $errors[] = array( 'message' => 'wrong requestJob', 'request' => $table );

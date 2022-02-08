@@ -21,6 +21,24 @@ class DORMModel extends QueryBuilder {
         return strval( $query );
     }
 
+    // insert into model query
+    public function create( array $request ){
+
+        $columns    = [];
+        $values     = [];
+
+        foreach ($request['values'] as $key => $value) {
+            $columns[]  = $key;
+            $values[]   = $value;
+        }
+
+        $query = $this->insert( $this->tableName)
+                        ->columns( $columns )
+                        ->values( $values );
+
+        return strval( $query );
+    }
+
 }
 
 ?>

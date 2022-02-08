@@ -13,18 +13,15 @@ class Select {
     
     public function __construct( array $columns = null ){
         ($columns != null ) ? $this->columns = $columns : $this->columns = array( '*' );
-
     }
 
     public function from ( string $table, string $alias = null): self {
 
         $this->from[] = $alias === null ? $table : "${table} AS ${alias}";
-
         return $this;
     }
 
     public function where ( string $table, string $alias = null ): self {
-
         return $this;
     }
 

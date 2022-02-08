@@ -46,6 +46,8 @@ class DBHandler extends QueryBuilder
             );
 
             $this->connection->exec("set names utf8");
+            $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
         } catch (\PDOException  $exception) {
             $this->error = "No connection to Database: " . $exception->getMessage();
         }
@@ -116,24 +118,22 @@ class DBHandler extends QueryBuilder
 
         $this->connection->exec($sql);
     }
-
-
-
     public function insertModel( string $tableName, string $className){
         $sql = "REPLACE INTO dorm_model_list ( table_name, class_name)
                 VALUES ( '{$tableName}', '{$className}' )";
 
         $this->connection->exec($sql);
     }
-
-
     public function getConnection(){
         return $this->connection;
     }
 
     public function execute(string $sqlQuery){
-
-        $query = $this->connection->query($sqlQuery);
-        return $query->fetchAll(\PDO::FETCH_ASSOC);
+        // try {
+            $query = $this->connection->query($sqlQuery, \PDO::FETCH_ASSOC);
+            return $query;
+        // } catch (\PDOException $e) {
+            // return $e;
+        // }
     }
 }

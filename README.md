@@ -9,6 +9,7 @@ Implemented functions:
 - PHP model class generator
 - Custom Query Builder
   - Select
+  - Insert
 - REST API [ open ]
 - Setup GUI
   - Generate models from selected DB tables [ open ]
@@ -77,6 +78,7 @@ new API();
 - select, from
 - requestJob
   - read
+  - insert
 ```json
 {
   "schema": "DORM 0.1",
@@ -92,14 +94,12 @@ new API();
       "join": ""
     },
     {
-      "requestJob": "delete",
-      "columns": [
-        { "column": "name", "as": "Given Name" },
-        { "column": "surname" }
-      ],
+      "requestJob": "insert",
+      "values": {
+        "name": "Bond",
+        "surname": "Max",
+      },
       "from": "location",
-      "where": {},
-      "join": {}
     }
   ]
 }
