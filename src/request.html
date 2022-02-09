@@ -21,24 +21,19 @@
                 "schema": "DORM 0.1",
                 "tables": [
                     {
-                        "requestJob": "read",
-                        "columns": [
-                            { "column": "name" },
-                            { "column": "surname" },
-                            { "column": "emasil" }
-                        ],
-                        "from": "person",
-                        "where": {},
-                        "join": ""
-                    },
-                    {
-                        "requestJob": "insert",
+                        "requestJob": "update",
                         "values": {
                              "name": "karolis",
                              "surname": "dailidonis"
                             }
                         ,
-                        "from": "person"
+                        "from": "person",
+                        "where": {
+                                "column": "person_id",
+                                "value": 81, 
+                                "condition": "=" 
+                            }
+                        
                     }
                 ]
             }
@@ -58,3 +53,42 @@
     </script>
 </body>
 </html>
+
+
+        <!-- {
+        "schema": "DORM 0.1",
+        "tables": [
+        {
+        "requestJob": "read",
+        "columns": [
+        { "column": "name" },
+        { "column": "surname" },
+        { "column": "emasil" }
+        ],
+        "from": "person",
+        "where": {},
+        "join": ""
+        },
+        {
+        "requestJob": "insert",
+        "values": {
+        "name": "karolis",
+        "surname": "dailidonis"
+        }
+        ,
+        "from": "person"
+        },
+        {
+        "requestJob": "update",
+        "values": {
+        "name": "karolis",
+        "surname": "dailidonis"
+        }
+        ,
+        "from": "person",
+        "where": [
+        {"person_id": 81, "condition": "=" }
+        ]
+        }
+        ]
+        } -->

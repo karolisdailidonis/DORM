@@ -10,10 +10,11 @@ Implemented functions:
 - Custom Query Builder
   - Select
   - Insert
-- REST API [ open ]
+  - Update
+- API [ open ]
 - Setup GUI
   - Generate models from selected DB tables [ open ]
-  - Try REST API Request [ open ]
+  - Try HTTP Post API Request [ open ]
 
 ## Install
 
@@ -60,9 +61,9 @@ new Setup();
 ?>
 ```
 
-## REST API
+## API
 
-You can use the DORM REST API anywhere, such as in your api.php file located in the root directory of the example.com/api.php website.
+You can use the DORM API anywhere, such as in your api.php file located in the root directory of the example.com/api.php website.
 
 Just put this two line of Code
 
@@ -76,9 +77,10 @@ new API();
 
 ! Actual possible requests:
 - select, from
-- requestJob
+- requestJob´s
   - read
   - insert
+  - update
 ```json
 {
   "schema": "DORM 0.1",
@@ -100,6 +102,19 @@ new API();
         "surname": "Max",
       },
       "from": "location",
+    },
+    {
+      "requestJob": "update",
+      "values": {
+        "name": "Bond",
+        "surname": "Max",
+      },
+      "from": "location",
+      "where": {
+          "column": "person_id",
+          "value": 81, 
+          "condition": "=" 
+      }
     }
   ]
 }
