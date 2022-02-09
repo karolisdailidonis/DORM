@@ -7,6 +7,7 @@ use DORM\Includes\ModelList;
 class API {
 
     function __construct(){
+        ini_set('display_errors', 0);
         $this->request();
     }
 
@@ -45,6 +46,19 @@ class API {
                                     // $body[$modelFromList['table_name']] = json_encode( $model );
                                     break;
                                 } catch (\PDOException $e) {
+                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
+                                    break;
+                                }
+                            case 'update':
+                                try {
+                                    $model = (new $modelFromList['class_name']())->updateData( $table );
+                                    $model = $dbHandler->execute( $model );
+                                    // $body[$modelFromList['table_name']] = json_encode( $model );
+                                    break;
+                                } catch (\PDOException $e) {
+                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
+                                    break;
+                                } catch ( \Throwable $e) {
                                     $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
                                     break;
                                 }

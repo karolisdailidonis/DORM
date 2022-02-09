@@ -21,7 +21,7 @@ class Select {
         return $this;
     }
 
-    public function where ( string $table, string $alias = null ): self {
+    public function where ( ): self {
         return $this;
     }
 

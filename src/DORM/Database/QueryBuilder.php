@@ -3,6 +3,7 @@ namespace DORM\Database;
 
 use DORM\Database\SQLClasses\Select;
 use DORM\Database\SQLClasses\Insert;
+use DORM\Database\SQLClasses\Update;
 
 class QueryBuilder {
 
@@ -10,8 +11,12 @@ class QueryBuilder {
         return new Select( $columns );
     }
 
-    public static function insert( $tableName ): Insert {
+    public static function insert( string $tableName ): Insert {
         return new Insert( $tableName );
+    }
+
+    public static function update( string $tableName ): Update{
+        return new Update( $tableName );
     }
 
 }
