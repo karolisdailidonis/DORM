@@ -18,15 +18,10 @@
         
         var resp = axios.post('http://localhost/ORM/api.php', 
             {
-                "schema": "DORM 0.1",
+                "schema": "DORM 0.0.1",
                 "tables": [
                     {
-                        "requestJob": "update",
-                        "values": {
-                             "name": "karolis",
-                             "surname": "dailidonis"
-                            }
-                        ,
+                        "requestJob": "delete",
                         "from": "person",
                         "where": {
                                 "column": "person_id",

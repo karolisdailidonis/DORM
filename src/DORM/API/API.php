@@ -62,9 +62,19 @@ class API {
                                     $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
                                     break;
                                 }
-                            
-                                
-                            
+                            case 'delete':
+                                try {
+                                    $model = (new $modelFromList['class_name']())->deleteData( $table );
+                                    $model = $dbHandler->execute( $model );
+                                    // $body[$modelFromList['table_name']] = json_encode( $model );
+                                    break;
+                                } catch (\PDOException $e) {
+                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
+                                    break;
+                                } catch ( \Throwable $e) {
+                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
+                                    break;
+                                }
                             default:
                                 $errors[] = array( 'message' => 'wrong requestJob', 'request' => $table );
                                 break;

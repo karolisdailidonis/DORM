@@ -29,8 +29,6 @@ class DBHandler extends QueryBuilder
         $this->db_password  = $ini['db_password'];
         
         $this->setDB        = $ini['dorm_db'];
-        ini_set("blubb", "t");
-
 
         $this->connect();
     }

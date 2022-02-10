@@ -1,20 +1,23 @@
 # DORM
-A lightweight PHP ORM framework with REST-API and no extensions other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
+A lightweight PHP ORM framework with REST-API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
+
+***
+**<font color="red">Caution, the software is still in a very early stage. Is unstable and definitely has security vulnerabilities</font>**
+***
+
 
 
 Requirements:
-- Minimal PHP Version is 7.4.0
+- Minimal PHP Version is PHP 8.0
+- MariaDB 10.4
 
 Implemented functions:
-- PHP model class generator
-- Custom Query Builder
-  - Select
-  - Insert
-  - Update
-- API [ open ]
+- PHP model class generator [ Dev ]
+- Custom Query Builder [ Dev ]
+- API [ Dev ]
 - Setup GUI
-  - Generate models from selected DB tables [ open ]
-  - Try HTTP Post API Request [ open ]
+  - Generate models from selected DB tables [ Dev ]
+  - HTTP Post API Request [ Dev ]
 
 ## Install
 
@@ -75,12 +78,12 @@ new API();
 
 ### POST Request
 
-! Actual possible requests:
-- select, from
+The basic SQL CRUD commands are implemented, but only with simple WHERE and SET clauses. As in the example Shema respectively
 - requestJob´s
   - read
   - insert
   - update
+  - delete
 ```json
 {
   "schema": "DORM 0.1",
@@ -92,8 +95,6 @@ new API();
         { "column": "surname" }
       ],
       "from": "person",
-      "where": { },
-      "join": ""
     },
     {
       "requestJob": "insert",
@@ -101,7 +102,7 @@ new API();
         "name": "Bond",
         "surname": "Max",
       },
-      "from": "location",
+      "from": "person",
     },
     {
       "requestJob": "update",
@@ -109,7 +110,16 @@ new API();
         "name": "Bond",
         "surname": "Max",
       },
-      "from": "location",
+      "from": "person",
+      "where": {
+          "column": "person_id",
+          "value": 81, 
+          "condition": "=" 
+      }
+    },
+    {
+      "requestJob": "delete",
+      "from": "person",
       "where": {
           "column": "person_id",
           "value": 81, 
@@ -123,19 +133,13 @@ new API();
 ### Response
 ```json
 { 
-  "schema": "DORM 0.1",
+  "schema": "DORM 0.0.1",
   "tables": {
       "person": {
           "columns": {
                 "person_id": 1223,
                 "name": "Karolis",
                 "surname": "Dailidonis"
-            },
-            "references": {
-
-            },
-            "includes": {
-
             }
         }
   },
@@ -145,5 +149,5 @@ new API();
 
 
 
-Inspiration for the Query Builder by
+Inspiration for the custom Query Builder by
 https://github.com/devcoder-xyz/php-query-builder
