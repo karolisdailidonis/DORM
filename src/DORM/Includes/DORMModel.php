@@ -55,9 +55,13 @@ class DORMModel extends QueryBuilder {
     }
 
     
-    public function delete(){
+    public function deleteData( array $request ){
 
-        $query = "";
+        $query = $this->delete( $this->tableName );
+
+        if ( isset($request['where'])) {
+            $query->where($request['where']['column'], $request['where']['condition'], $request['where']['value']);
+            }
     
         return strval( $query );
     }
