@@ -81,20 +81,24 @@ new API();
 The basic SQL CRUD commands are implemented, but only with simple WHERE and SET clauses. As in the example Shema respectively
 - requestJob´s
   - read
+    - embed ( left join, if table have references)
   - insert
   - update
   - delete
 ```json
 {
-  "schema": "DORM 0.1",
+  "schema": "DORM 0.0.2",
   "tables": [
     {
       "requestJob": "read",
       "columns": [
-        { "column": "name", "as": "Given Name" },
-        { "column": "surname" }
+        { "column": "ovc_number" },
+        { "column": "lead_child" }
       ],
-      "from": "person",
+      "from": "ovc",
+      "embed": [
+        { "table": "caregiver" }
+      ]
     },
     {
       "requestJob": "insert",
@@ -133,15 +137,36 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
 ### Response
 ```json
 { 
-  "schema": "DORM 0.0.1",
+  "schema": "DORM 0.0.2",
   "tables": {
-      "person": {
-          "columns": {
-                "person_id": 1223,
-                "name": "Karolis",
-                "surname": "Dailidonis"
-            }
-        }
+      "ovc": {
+        "rows": [
+            {
+                "person_id": "22",
+                "ovc_number": "23232132132",
+                "ovc_status": null,
+                "generate_income": "Yes",
+                "lead_child": "0",
+                "time_sick": "10",
+                "vaccinated": "No",
+                "seeked_treatment": "No",
+                "disability": "Yes",
+                "birthcertification": "Yes",
+                "who_pays_fee": null,
+                "school_id": "39",
+                "days_missed": "0",
+                "class": "7",
+                "caregiver_id": "21",
+                "household_id": "1255"
+            },
+        ]
+      },
+      "references": {
+              "caregiver": {
+                  "column": "caregiver_id",
+                  "referenced_column": "person_id"
+              }
+          }
   },
   "errors" : []      
 }

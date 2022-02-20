@@ -69,16 +69,16 @@ class DBHandler extends QueryBuilder
     public function getTableReferences($tableName)
     {
         $sql = "
-            SELECT  table_name,
-                    column_name,
-                    referenced_table_name,
-                    referenced_column_name 
+            SELECT  TABLE_NAME,
+                    COLUMN_NAME,
+                    REFERENCED_TABLE_NAME,
+                    REFERENCED_COLUMN_NAME 
             FROM information_schema.KEY_COLUMN_USAGE
             WHERE REFERENCED_TABLE_SCHEMA = 'kada0005_db4'
 			    AND TABLE_NAME = '{$tableName}'
         ";
 
-        return;
+        return $this->execute( $sql );
     }
 
 
@@ -126,10 +126,10 @@ class DBHandler extends QueryBuilder
         return $this->connection;
     }
 
-    public function execute(string $sqlQuery){
+    public function execute(string $sqlQuery): array {
         // try {
-            $query = $this->connection->query($sqlQuery, \PDO::FETCH_ASSOC);
-            return $query;
+            $query = $this->connection->query( $sqlQuery, \PDO::FETCH_ASSOC);
+            return $query->fetchAll(\PDO::FETCH_ASSOC);
         // } catch (\PDOException $e) {
             // return $e;
         // }

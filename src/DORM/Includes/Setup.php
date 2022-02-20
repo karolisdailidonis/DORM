@@ -30,7 +30,12 @@ class Setup
 
                 foreach ($_POST['selectedTables'] as $value) {
 
-                    $model = (new TableToModel($value, $this->connection->getColumns($value)))->writeFile();
+                    $model = (new TableToModel(
+                                $value, 
+                                $this->connection->getColumns($value),
+                                $this->connection->getTableReferences($value),
+                                )
+                            )->writeFile();
                     $this->connection->insertModel($model['tableName'], $model['className']);
 
                     echo $value;

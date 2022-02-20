@@ -34,6 +34,13 @@ class DORMModel extends QueryBuilder {
 
         $query =  $this->select( $columns )
                         ->from( $this->tableName );
+
+        if ( isset($request['embed'])) {
+            foreach ($request['embed'] as $embed) {
+                $a = $this->getReference($embed['table']);
+                $query->join($this->tableName, $embed['table'], $a['column'], $a['referenced_column'] );
+            }
+        }
         
         return strval( $query );
     }
@@ -64,6 +71,15 @@ class DORMModel extends QueryBuilder {
             }
     
         return strval( $query );
+    }
+
+    public function getReference( string $referencedTableName ){
+        $ref = $this->references[ $referencedTableName ];
+        return $ref;
+    }
+
+    public function getReferences(){
+        return $this->references;
     }
 
 

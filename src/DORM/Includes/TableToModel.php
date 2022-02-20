@@ -9,12 +9,14 @@ class TableToModel{
     private $className;
     private $columns;
     private $relations;
+    private $references;
     
-    function __construct( string $tableName, $columns){
+    function __construct( string $tableName, $columns, $references = null ){
         $this->tableName = $tableName;
         $this->filePath = dirname( __DIR__ ) . '/Models';
         $this->className = $this->toCamelCase($tableName);
         $this->columns = $columns;
+        $this->references = $references;
     }
 
     public function writeFile(){
@@ -52,6 +54,30 @@ class TableToModel{
                 $fileContentCol );
             $fileContentCol = str_replace("%IS_NULLABLE%", $column['IS_NULLABLE'], $fileContentCol );
             $fileContent .= $fileContentCol;
+        }
+
+        $fileContent .= <<<MODEL
+
+            );
+
+            protected \$references = array(
+
+        MODEL;
+        
+        if( $this->references != null ){
+            
+            foreach ( $this->references as $reference ) {
+                $fileContentCol = <<<MODEL
+                        '%REFERENCED_TABLE_NAME%' => array( 'column' => '%COLUMN_NAME%', 'referenced_column' => '%REFERENCED_COLUMN_NAME%' ),
+                
+                MODEL;
+    
+                $fileContentCol = str_replace("%REFERENCED_TABLE_NAME%", $reference['REFERENCED_TABLE_NAME'], $fileContentCol );
+                $fileContentCol = str_replace("%COLUMN_NAME%", $reference['COLUMN_NAME'], $fileContentCol );
+                $fileContentCol = str_replace("%REFERENCED_COLUMN_NAME%", $reference['REFERENCED_COLUMN_NAME'], $fileContentCol );
+                $fileContent .= $fileContentCol;
+            }
+
         }
 
         $fileContent .= <<<MODEL

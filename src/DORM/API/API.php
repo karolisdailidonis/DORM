@@ -31,11 +31,19 @@ class API {
                         switch ($table['requestJob']) {
                             case 'read':
                                 try {
-                                    $model = (new $modelFromList['class_name']())->read( $table );
+                                    $modelClass = new $modelFromList['class_name']();
+                                    $model = $modelClass->read( $table );
                                     $model = $dbHandler->execute( $model );
-                                    $body[$modelFromList['table_name']] = json_encode( $model );
+                                    $tableData = array();
+                                    $tableData['rows'] =  $model;
+                                    $tableData['references'] = $modelClass->getReferences( );
+
+                                    $body[$modelFromList['table_name']] = $tableData;
                                     break;
                                 } catch (\PDOException $e) {
+                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
+                                    break;
+                                } catch ( \Throwable $e) {
                                     $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
                                     break;
                                 }
@@ -75,7 +83,7 @@ class API {
                                     $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
                                     break;
                                 }
-                            default:
+                            default:          
                                 $errors[] = array( 'message' => 'wrong requestJob', 'request' => $table );
                                 break;
                         }
