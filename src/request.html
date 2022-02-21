@@ -36,7 +36,7 @@
         console.log(requestJob.value);
 
         function request(){
-            var resp = axios.post('http://localhost/ORM/api.php',
+            var resp = axios.post('http://localhost/api.php',
                     JSON.parse( requestJob.value )
                 )
                 .then(
