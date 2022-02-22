@@ -6,7 +6,9 @@ spl_autoload_register(function ($className) {
 
 	// ToDo: Prüfen ob ne classe aus dem eigenem namespace kommt.
 
-	$fileName = dirname(__DIR__, 1 ) . '/' .  $className . '.php';
+	// $fileName = dirname(__DIR__, 1 ) . '/' .  $className . '.php';
+	$fileName =  $className . '.php';
+	$fileName = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $fileName);
 
 	if (file_exists($fileName)) {
 		require_once $fileName;
@@ -26,5 +28,3 @@ spl_autoload_register(function ($className) {
 		require_once $fileName;
 	}
 });
-
-?>
