@@ -6,7 +6,11 @@ use DORM\Includes\ModelList;
 
 class API {
 
-    function __construct(){
+    protected $tokkenRequiered;
+    protected $tokken = "1234556";
+
+    function __construct( bool $tokkenRequiered = false ){
+        $this->tokkenRequiered = $tokkenRequiered;
         ini_set('display_errors', 0);
         $this->request();
     }
@@ -15,6 +19,13 @@ class API {
         $request    = json_decode(file_get_contents("php://input"), true);
         $body       = [];
         $errors     = [];
+
+        if( $this->tokkenRequiered){
+            if(  !(isset($request['tokken']) && $request['tokken'] == $this->tokken) ){
+                $this->response( [], ['Permission denied']);
+                return false;
+            } 
+        }
 
         if ( isset($request['tables'] ) && is_array($request['tables']) ){
 

@@ -1,5 +1,5 @@
 # DORM
-A lightweight PHP ORM framework with REST-API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
+A lightweight PHP ORM framework with API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
 ***
 **<font color="red">Caution, the software is still in a very early stage. Is unstable and definitely has security vulnerabilities</font>**
@@ -15,6 +15,7 @@ Implemented functions:
 - PHP model class generator [ Dev ]
 - Custom Query Builder [ Dev ]
 - API [ Dev ]
+  - With tokken auth
 - Setup GUI
   - Generate models from selected DB tables [ Dev ]
   - HTTP Post API Request [ Dev ]
@@ -75,7 +76,23 @@ use DORM\API\API;
 
 new API();
 ```
+If you want to use tokken for authentification, give the api class a boolen ```true``` and set in the API.php file you new tokken key. 
+```php
+#api.php
+use DORM\API\API;
 
+new API( true );
+
+#DORM/API/API.php
+
+...
+class API {
+
+    protected $tokkenRequiered;
+    protected $tokken = "<you-tokken-key>";
+...
+
+```
 ### POST Request
 
 The basic SQL CRUD commands are implemented, but only with simple WHERE and SET clauses. As in the example Shema respectively
@@ -87,7 +104,8 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
   - delete
 ```json
 {
-  "schema": "DORM 0.0.2",
+  "schema": "DORM 0.0.3",
+  "tokken": "123456",
   "tables": [
     {
       "requestJob": "read",
