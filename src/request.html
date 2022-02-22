@@ -9,6 +9,10 @@
 </head>
 <body>
     <h1>Response</h1>
+
+
+    <input id="apiurl" type="text" readonly >
+
     <textarea id="response" cols="60" rows="20"></textarea>
 
     <textarea id="requestJob" cols="60" rows="20">
@@ -32,11 +36,16 @@
     <script >
         const responseHTML = document.querySelector('#response');
         const requestJob = document.querySelector('#requestJob');
+        const apiurl = document.querySelector('#apiurl');
+
+        apiurl.value = window.location.hostname;
+        console.log(apiurl);
+
 
         console.log(requestJob.value);
 
         function request(){
-            var resp = axios.post('http://localhost/api.php',
+            var resp = axios.post( "http://" + apiurl.value + '/api.php',
                     JSON.parse( requestJob.value )
                 )
                 .then(
