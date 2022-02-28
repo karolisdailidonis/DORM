@@ -4,6 +4,6 @@ use DORM\API\API;
 include 'DORM/autoload.php';
 
 
-new API( );
+new API( true );
 
 ?>

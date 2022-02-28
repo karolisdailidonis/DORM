@@ -7,7 +7,7 @@ class Select {
 
     private $from = [];
 
-    private $where;
+    private $where = null;
     
     private $leftJoin = [];
     
@@ -21,7 +21,10 @@ class Select {
         return $this;
     }
 
-    public function where(): self {
+    // ToDo: Where als eigene Klasse auslagern? wird auch in select gebraucht etc.
+    public function where( string $column, string $condition, string $value ): self {
+
+        $this->where = $column . " " . $condition . " " . $value;
         return $this;
     }
 
@@ -46,7 +49,8 @@ class Select {
 
         return 'SELECT ' . implode( ', ', $this->columns )
             . ' FROM ' . implode( ', ', $this->from )
-            . ($this->leftJoin === [] ? '' : ' LEFT JOIN ' . implode(' LEFT JOIN ', $this->leftJoin));
+            . ($this->leftJoin === [] ? '' : ' LEFT JOIN ' . implode(' LEFT JOIN ', $this->leftJoin))
+            . ($this->where === null  ?  " " : " WHERE " . $this->where);
     }
 
 }

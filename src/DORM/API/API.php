@@ -44,10 +44,11 @@ class API {
                                 try {
                                     $modelClass = new $modelFromList['class_name']();
                                     $model = $modelClass->read( $table );
-                                    $model = $dbHandler->execute( $model );
+                                    $stmt = $dbHandler->execute( $model );
                                     $tableData = array();
-                                    $tableData['rows'] =  $model;
+                                    $tableData['rows'] =  $stmt;
                                     $tableData['references'] = $modelClass->getReferences( );
+                                    $tableData['query'] = $model;
 
                                     $body[$modelFromList['table_name']] = $tableData;
                                     break;
@@ -126,7 +127,7 @@ class API {
 
         $response = [];
         $response['body'] = $body;
-        $response['erros'] = $errors;
+        $response['errors'] = $errors;
 
         print_r( json_encode( $response ) );
     }

@@ -1,39 +1,16 @@
-[
+{
+  "schema": "DORM 0.0.1",
+  "tokken": "1234556",
+  "tables": [
     {
-      "schema": "Post data to server",
-      "tables": [
-        {
-          "requestJob": "insert",
-          "columns": [
-            { "column": "name", "as": "Given Name" },
-            { "column": "surname" }
-          ],
-          "from": "person",
-          "where": { },
-          "join": ""
-        }
-      ]
-    },
-
-
-    {
-      "schema": "REST output from server",
-      "tables": {
-          "person": {
-              "columns": {
-                    "person_id": 1223,
-                    "name": "Karolis",
-                    "surname": "Dailidonis"
-                },
-                "references": {
-                    
-                },
-                "includes": {
-
-                }
-            }
-        }      
+      "requestJob": "read",
+      "from": "person",
+      "columns": [{ "column": "surname" }, { "column": "name" }],
+      "where": {
+        "column": "name",
+        "value": "Sarah",
+        "condition": "="
+      }
     }
-
-
-]
+  ]
+}

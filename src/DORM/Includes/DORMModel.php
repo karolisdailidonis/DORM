@@ -41,10 +41,14 @@ class DORMModel extends QueryBuilder {
                 $query->join($this->tableName, $embed['table'], $a['column'], $a['referenced_column'] );
             }
         }
+        if ( isset($request['where']) ) {
+            $query->where($request['where']['column'], $request['where']['condition'], $request['where']['value']);
+        }
         
         return strval( $query );
     }
 
+    
 
     public function updateData( array $request){
         

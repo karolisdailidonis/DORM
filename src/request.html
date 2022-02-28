@@ -17,7 +17,8 @@
 
     <textarea id="requestJob" cols="60" rows="20">
     {
-        "schema": "DORM 0.0.1",
+        "schema": "DORM 0.0.3",
+        "tokken": "1234556",
         "tables": [
             {
                 "requestJob": "read",
@@ -25,7 +26,12 @@
                 "columns": [
                     { "column": "surname"},
                     { "column": "name"}
-                ]
+                ],
+                "where": {
+                    "column": "person_id",
+                    "value": 80,
+                    "condition": "="
+                }
         
             }   
         ]
