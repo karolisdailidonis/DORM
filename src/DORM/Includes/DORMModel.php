@@ -100,8 +100,6 @@ class DORMModel extends QueryBuilder {
         return $this->references;
     }
 
-
-
 }
 
 ?>
