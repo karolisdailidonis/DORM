@@ -41,6 +41,20 @@ class DORMModel extends QueryBuilder {
                 $query->join($this->tableName, $embed['table'], $a['column'], $a['referenced_column'] );
             }
         }
+
+        if ( isset($request['join'])) {
+            foreach ($request['join'] as $join ) {
+                $arr = [];
+                $index = 0;
+                foreach ($join as $table => $column) {
+                    $arr[ 'table' . $index] = $table;
+                    $arr[ 'column' . $index] = $column;
+                    $index = $index + 1;
+                }
+                $query->join($arr['table0'], $arr['table1'], $arr['column0'], $arr['column1'] );
+            }
+        }
+
         if ( isset($request['where']) ) {
             $query->where($request['where']['column'], $request['where']['condition'], $request['where']['value']);
         }

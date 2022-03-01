@@ -53,10 +53,10 @@ class API {
                                     $body[$modelFromList['table_name']] = $tableData;
                                     break;
                                 } catch (\PDOException $e) {
-                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
+                                    $errors[] = array( 'message' => $e->getMessage(), 'request' =>$table, 'query' => $model );
                                     break;
                                 } catch ( \Throwable $e) {
-                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
+                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table, 'query' => $model );
                                     break;
                                 }
                             case 'insert':
