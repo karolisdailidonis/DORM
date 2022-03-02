@@ -1,4 +1,4 @@
-# The DORM
+# The DORM 0.0.4
 A lightweight PHP ORM framework with API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
 ***
@@ -7,7 +7,7 @@ A lightweight PHP ORM framework with API and no dependencies other than the nati
 
 
 
-Requirements:
+Run Requirements:
 - Minimal PHP Version is PHP 8.0
 - MariaDB 10.4
 

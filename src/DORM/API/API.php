@@ -6,11 +6,11 @@ use DORM\Includes\ModelList;
 
 class API {
 
-    protected $tokkenRequiered;
-    protected $tokken = "1234556";
+    protected $tokenRequiered;
+    protected $token = "1234556";
 
-    function __construct( bool $tokkenRequiered = false ){
-        $this->tokkenRequiered = $tokkenRequiered;
+    function __construct( bool $tokenRequiered = false ){
+        $this->tokenRequiered = $tokenRequiered;
         ini_set('display_errors', 0);
         $this->request();
     }
@@ -20,8 +20,8 @@ class API {
         $body       = [];
         $errors     = [];
 
-        if( $this->tokkenRequiered){
-            if(  !(isset($request['tokken']) && $request['tokken'] == $this->tokken) ){
+        if( $this->tokenRequiered){
+            if(  !(isset($request['token']) && $request['token'] == $this->token) ){
                 $this->response( [], ['Permission denied']);
                 return false;
             } 
