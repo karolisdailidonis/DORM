@@ -53,3 +53,7 @@
     background-color: rgb(26, 60, 140);
     color: #fff;
 }
+
+#dorm-setup .tabcontent {
+    display: none;
+}

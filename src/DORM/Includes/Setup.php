@@ -6,18 +6,14 @@ use DORM\Database\DBHandler;
 
 class Setup
 {
-
     private $connection = null;
 
-    function __construct()
-    {
-
+    function __construct(){
         $this->connection = new DBHandler();
         $this->render();
     }
 
-    public function render()
-    {
+    public function render(){
 
         $this->connection->setDormDB();
 
@@ -31,11 +27,11 @@ class Setup
                 foreach ($_POST['selectedTables'] as $value) {
 
                     $model = (new TableToModel(
-                                $value, 
-                                $this->connection->getColumns($value),
-                                $this->connection->getTableReferences($value),
-                                )
-                            )->writeFile();
+                        $value,
+                        $this->connection->getColumns($value),
+                        $this->connection->getTableReferences($value),
+                    )
+                    )->writeFile();
                     $this->connection->insertModel($model['tableName'], $model['className']);
 
                     echo $value;
@@ -62,6 +58,7 @@ class Setup
 
 ?>
         <link rel="stylesheet" href="<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/setup.css' ?>">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <style type="text/css">
             @font-face {
                 font-family: "Roboto";
@@ -76,7 +73,43 @@ class Setup
         <div id="dorm-setup">
             <div id="dorm-content">
                 <h1> Setup the DORM </h1>
-                <div class="box">
+                <div class="tab">
+                    <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'requests')">API Request</button>
+                    <button class="tablinks" onclick="openCity(event, 'generator')">Model Generator</button>
+                </div>
+
+                <div id="requests" class="box tabcontent">
+                    <input id="apiurl" type="text">
+
+                    <textarea id="response" cols="60" rows="20"></textarea>
+
+                    <textarea id="requestJob" cols="60" rows="20">
+                        {
+                            "schema": "DORM 0.0.3",
+                            "token": "1234556",
+                            "tables": [
+                                {
+                                    "requestJob": "read",
+                                    "from": "person",
+                                    "columns": [
+                                        { "column": "surname"},
+                                        { "column": "name"}
+                                    ],
+                                    "where": {
+                                        "column": "person_id",
+                                        "value": 80,
+                                        "condition": "="
+                                    }
+                            
+                                }   
+                            ]
+                        }
+                        </textarea>
+                    <button onclick="request()">Request</button>
+
+                </div>
+
+                <div id="generator" class="box tabcontent">
                     <h2> Tables found in the databes </h2>
                     <form id="model-generator" method="POST">
                         <div>
@@ -92,34 +125,13 @@ class Setup
                         </div>
                     </form>
                 </div>
-                <!-- <div class="box">
-                    <h2>REST-API Request</h2>
-                    <form id="rest-request" method="POST">
-                        <div class="code">
-                            {
-                            json output
-                            }
-                            {
-                            json request
-                            }
-                        </div>
-                        <div>
-                            <div>
-                                <input type="text" placeholder="Table name">
-                                <input type="text" placeholder="columns">
-                                <input type="text" placeholder="where">
-                            </div>
-                            <div class="btn-container">
-                                <input class="btn" type="submit" name="restapi-request" value="Request">
-                            </div>
-                        </div>
-                    </form>
-                </div> -->
             </div>
-    <?php
+        </div>
 
-    
+        <script src="<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/setup.js' ?>"></script>
+<?php
+
+
     }
-
 }
-    ?>
+?>
