@@ -1,4 +1,4 @@
-# DORM
+# The DORM
 A lightweight PHP ORM framework with API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
 ***
