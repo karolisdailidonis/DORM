@@ -15,8 +15,11 @@ class DBHandler extends QueryBuilder
     private $db_password;
 
     private $setDB;
-
     private $error;
+
+    // SUPPORT
+    public $isMariaDB = false;
+    private $isMYSQL = false;
 
 
     function __construct()
@@ -45,6 +48,20 @@ class DBHandler extends QueryBuilder
 
             $this->connection->exec("set names utf8");
             $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $this->connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 1);
+
+            $dbVersion = $this->connection->query('select version()')->fetchColumn();
+            if (strpos( $dbVersion , "MariaDB" ) ) {
+                $this->isMariaDB = true;
+
+                // defined('DORM_CONSTANTS') or define('DORM_CONSTANTS', array() );
+
+                // $val =  DORM_CONSTANTS[0];
+                // define("IS_MARIADB", true);
+                // preg_match("/^[0-9\.]+/", $dbVersion, $match);
+                // define("DB_VERSION", $match[0] );
+            };
+
 
         } catch (\PDOException  $exception) {
             $this->error = "No connection to Database: " . $exception->getMessage();
@@ -122,16 +139,14 @@ class DBHandler extends QueryBuilder
 
         $this->connection->exec($sql);
     }
+
     public function getConnection(){
         return $this->connection;
     }
 
     public function execute(string $sqlQuery): array {
-        // try {
-            $query = $this->connection->query( $sqlQuery, \PDO::FETCH_ASSOC);
+            $query = $this->connection->prepare($sqlQuery);
+            $query->execute();
             return $query->fetchAll(\PDO::FETCH_ASSOC);
-        // } catch (\PDOException $e) {
-            // return $e;
-        // }
     }
 }

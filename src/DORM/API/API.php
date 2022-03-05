@@ -11,7 +11,7 @@ class API {
 
     function __construct( bool $tokenRequiered = false ){
         $this->tokenRequiered = $tokenRequiered;
-        ini_set('display_errors', 0);
+        ini_set('display_errors', 0 );
         $this->request();
     }
 
@@ -31,6 +31,8 @@ class API {
 
             $dbHandler = new DBHandler();
             $modelList = new ModelList( $dbHandler->getConnection());
+            
+            $solvedStack = [];
 
             foreach ($request['tables'] as $table) {
 
@@ -38,6 +40,7 @@ class API {
                     $modelFromList = $modelList->findModel($table['from']);
 
                     if( is_array($modelFromList) && $modelFromList  != false ){
+
 
                         switch ($table['requestJob']) {
                             case 'read':
@@ -47,33 +50,56 @@ class API {
                                     $stmt = $dbHandler->execute( $model );
                                     $tableData = array();
                                     $tableData['rows'] =  $stmt;
+                                    
+                                    // ToDo: $tableData['sys'] =  ( $dbHandler->isMariaDB ) ? "isMariaDB" : "kp";
                                     $tableData['references'] = $modelClass->getReferences( );
                                     $tableData['query'] = $model;
 
                                     $body[$modelFromList['table_name']] = $tableData;
                                     break;
+
                                 } catch (\PDOException $e) {
                                     $errors[] = array( 'message' => $e->getMessage(), 'request' =>$table, 'query' => $model );
                                     break;
+
                                 } catch ( \Throwable $e) {
                                     $errors[] = array( 'message' => $e->getMessage(), 'request' => $table, 'query' => $model );
                                     break;
+
                                 }
                             case 'insert':
                                 try {
+                                    if ( isset($table['before']['idFrom'] ) ){
+                                        $table['values']['person_id'] = $solvedStack[$table['before']['idFrom']]['insertID'];
+                                    }
+
                                     $model = (new $modelFromList['class_name']())->create( $table );
-                                    $model = $dbHandler->execute( $model );
-                                    // $body[$modelFromList['table_name']] = json_encode( $model );
+                                    
+                                    $stmt = $dbHandler->execute( $model );
+                                    $lastInsertID = $dbHandler->getConnection()->lastInsertId();
+                                    $result = array( 'insertID' => $lastInsertID );
+
+                                    $solvedStack[ $modelFromList['table_name'] ] = $result;
+
+                                    $tableData = array();
+                                    $tableData['result'] = $result;
+                                    $tableData['query'] = $model;
+
+                                    $body[$modelFromList['table_name']] = $tableData;
                                     break;
+
                                 } catch (\PDOException $e) {
                                     $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
+                                    break;
+
+                                } catch ( \Throwable $e) {
+                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table, 'query' => $model );
                                     break;
                                 }
                             case 'update':
                                 try {
                                     $model = (new $modelFromList['class_name']())->updateData( $table );
                                     $model = $dbHandler->execute( $model );
-                                    // $body[$modelFromList['table_name']] = json_encode( $model );
                                     break;
                                 } catch (\PDOException $e) {
                                     $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
@@ -86,7 +112,6 @@ class API {
                                 try {
                                     $model = (new $modelFromList['class_name']())->deleteData( $table );
                                     $model = $dbHandler->execute( $model );
-                                    // $body[$modelFromList['table_name']] = json_encode( $model );
                                     break;
                                 } catch (\PDOException $e) {
                                     $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
@@ -125,6 +150,7 @@ class API {
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
         $response = [];
+        // $response['sys'] =  array("db" => (IS_MARIADB) ? "isMariaDB" : "kp", "version" => DB_VERSION);
         $response['body'] = $body;
         $response['errors'] = $errors;
 

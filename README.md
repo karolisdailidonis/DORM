@@ -9,7 +9,7 @@ A lightweight PHP ORM framework with API and no dependencies other than the nati
 
 Run Requirements:
 - Minimal PHP Version is PHP 8.0
-- MariaDB 10.4
+- MariaDB 10.5.0
 
 Implemented functions:
 - PHP model class generator [ Dev ]
@@ -125,6 +125,9 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
         "surname": "Max",
       },
       "from": "person",
+      "before": {
+        "idFrom": "person"
+      }
     },
     {
       "requestJob": "update",

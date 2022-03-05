@@ -26,9 +26,14 @@ class Insert {
     }
 
     public function __toString(): string {
-
-        return "INSERT INTO " . $this->table
-                . " ( " . implode(", ", $this->columns ) . " ) VALUES ( '" . implode("', '",     $this->values ) . "' )";
+        
+        $query = "INSERT INTO " . $this->table
+        . " ( " . implode(", ", $this->columns ) . " ) VALUES ( '" . implode("', '",     $this->values ) . "' );";
+        
+        // MariaDB 10.5
+        // ToDo: Implement RETURNING
+        
+        return $query;
     }
 
 
