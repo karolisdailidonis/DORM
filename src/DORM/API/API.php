@@ -29,10 +29,9 @@ class API {
 
         if ( isset($request['tables'] ) && is_array($request['tables']) ){
 
-            $dbHandler = new DBHandler();
-            $modelList = new ModelList( $dbHandler->getConnection());
-            
-            $solvedStack = [];
+            $dbHandler      = new DBHandler();
+            $modelList      = new ModelList( $dbHandler->getConnection());
+            $solvedStack    = [];
 
             foreach ($request['tables'] as $table) {
 
@@ -41,19 +40,17 @@ class API {
 
                     if( is_array($modelFromList) && $modelFromList  != false ){
 
-
                         switch ($table['requestJob']) {
                             case 'read':
                                 try {
                                     $modelClass = new $modelFromList['class_name']();
-                                    $model = $modelClass->read( $table );
-                                    $stmt = $dbHandler->execute( $model );
-                                    $tableData = array();
-                                    $tableData['rows'] =  $stmt;
+                                    $model      = $modelClass->read( $table );
+                                    $stmt       = $dbHandler->execute( $model );
                                     
-                                    // ToDo: $tableData['sys'] =  ( $dbHandler->isMariaDB ) ? "isMariaDB" : "kp";
-                                    $tableData['references'] = $modelClass->getReferences( );
-                                    $tableData['query'] = $model;
+                                    $tableData                  = array();
+                                    $tableData['rows']          = $stmt;
+                                    $tableData['references']    = $modelClass->getReferences( );
+                                    $tableData['query']         = $model;
 
                                     $body[$modelFromList['table_name']] = $tableData;
                                     break;
@@ -69,8 +66,9 @@ class API {
                                 }
                             case 'insert':
                                 try {
-                                    if ( isset($table['before']['idFrom'] ) ){
-                                        $table['values']['person_id'] = $solvedStack[$table['before']['idFrom']]['insertID'];
+                                    if ( isset($table['before']['lastInsertId'] ) ){
+                                        $before = $table['before']['lastInsertId'];
+                                        $table['values'][ $before['setColumn']] = $solvedStack[ $before['fromTable']]['insertID'];
                                     }
 
                                     $model = (new $modelFromList['class_name']())->create( $table );

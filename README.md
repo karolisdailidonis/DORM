@@ -88,8 +88,8 @@ new API( true );
 ...
 class API {
 
-    protected $tokkenRequiered;
-    protected $tokken = "<you-tokken-key>";
+    protected $tokenRequiered;
+    protected $token = "<you-token-key>";
 ...
 
 ```
@@ -104,50 +104,59 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
   - delete
 ```json
 {
-  "schema": "DORM 0.0.3",
-  "tokken": "123456",
+  "schema": "DORM 0.0.2",
+  "token": "123456",
   "tables": [
     {
       "requestJob": "read",
       "columns": [
-        { "column": "ovc_number" },
-        { "column": "lead_child" }
+        { "column": "<column_name>" },
+        { "column": "<column_name>" }
       ],
-      "from": "ovc",
+      "from": "<table_name>",
+      "join":[
+        { 
+          "<table_name>": "<column_name>",
+          "<table_name>": "<column_name>"
+        }
+      ],
       "embed": [
-        { "table": "caregiver" }
+        { "table": "<table_name>" }
       ]
     },
     {
       "requestJob": "insert",
       "values": {
-        "name": "Bond",
-        "surname": "Max",
+        "<column_name>": "<value>",
+        "<column_name>": "<value>",
       },
-      "from": "person",
+      "from": "<table_name>",
       "before": {
-        "idFrom": "person"
+        "lastInsertId": { 
+          "fromTable": "<table_name>", 
+          "setColumn": "<column_name>" 
+        },
       }
     },
     {
       "requestJob": "update",
       "values": {
-        "name": "Bond",
-        "surname": "Max",
+        "<column_name>": "<value>",
+        "<column_name>": "<value>",
       },
-      "from": "person",
+      "from": "<table_name>",
       "where": {
-          "column": "person_id",
-          "value": 81, 
+          "column": "<column_name>",
+          "value": "<value>", 
           "condition": "=" 
       }
     },
     {
       "requestJob": "delete",
-      "from": "person",
+      "from": "<column_name>",
       "where": {
-          "column": "person_id",
-          "value": 81, 
+          "column": "<column_name>",
+          "value": "<value>", 
           "condition": "=" 
       }
     }
