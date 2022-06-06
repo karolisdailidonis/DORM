@@ -58,6 +58,10 @@ class DORMModel extends QueryBuilder {
         if ( isset($request['where']) ) {
             $query->where($request['where']['column'], $request['where']['condition'], $request['where']['value']);
         }
+
+        if (isset($request['limit'])) {
+            $query->limit( (int)$request['limit'] );
+        }
         
         return strval( $query );
     }

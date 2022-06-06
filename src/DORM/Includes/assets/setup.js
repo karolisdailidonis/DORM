@@ -1,18 +1,19 @@
-console.log("blubb");
 document.getElementById("defaultOpen").click();
 
 const responseHTML = document.querySelector('#response');
 const requestJob = document.querySelector('#requestJob');
 const apiurl = document.querySelector('#apiurl');
+const apiprotocol = document.querySelector('#apiprotocol');
 
 apiurl.value = window.location.hostname;
 console.log(apiurl);
+console.log(apiprotocol.value);
 
 
 console.log(requestJob.value);
 
 function request(){
-    var resp = axios.post( "https://" + apiurl.value + '/api.php',
+    var resp = axios.post( apiprotocol.value + apiurl.value + '/api.php',
             JSON.parse( requestJob.value )
         )
         .then(

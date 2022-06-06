@@ -79,6 +79,10 @@ class Setup
                 </div>
 
                 <div id="requests" class="box tabcontent">
+                    <select id="apiprotocol">
+                        <option value="https://">https://</option>
+                        <option value="http://">http://</option>
+                    </select>
                     <input id="apiurl" type="text">
 
                     <textarea id="response" cols="60" rows="20"></textarea>
