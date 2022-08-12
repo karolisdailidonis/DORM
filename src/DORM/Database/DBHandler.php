@@ -144,9 +144,11 @@ class DBHandler extends QueryBuilder
         return $this->connection;
     }
 
-    public function execute(string $sqlQuery): array {
+    public function execute(string $sqlQuery) {
             $query = $this->connection->prepare($sqlQuery);
             $query->execute();
-            return $query->fetchAll(\PDO::FETCH_ASSOC);
+
+            return $query;
+            // return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

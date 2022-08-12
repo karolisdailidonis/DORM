@@ -12,7 +12,7 @@ console.log(apiurl);
 console.log(requestJob.value);
 
 function request(){
-    var resp = axios.post( "http://" + apiurl.value + '/api.php',
+    var resp = axios.post( "https://" + apiurl.value + '/api.php',
             JSON.parse( requestJob.value )
         )
         .then(

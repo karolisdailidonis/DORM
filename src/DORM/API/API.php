@@ -45,8 +45,9 @@ class API {
                                 try {
                                     $modelClass = new $modelFromList['class_name']();
                                     $model      = $modelClass->read( $table );
-                                    $stmt       = $dbHandler->execute( $model );
-                                    
+                                    $stmt       = $dbHandler->execute( $model)->fetchAll(\PDO::FETCH_ASSOC);
+
+                                                                      
                                     $tableData                  = array();
                                     $tableData['rows']          = $stmt;
                                     $tableData['references']    = $modelClass->getReferences( );
@@ -71,23 +72,25 @@ class API {
                                         $table['values'][ $before['setColumn']] = $solvedStack[ $before['fromTable']]['insertID'];
                                     }
 
-                                    $model = (new $modelFromList['class_name']())->create( $table );
-                                    
-                                    $stmt = $dbHandler->execute( $model );
-                                    $lastInsertID = $dbHandler->getConnection()->lastInsertId();
-                                    $result = array( 'insertID' => $lastInsertID );
+                                    $model          = (new $modelFromList['class_name']())->create( $table );
+                                    $stmt           = $dbHandler->execute( $model );
+                                    $lastInsertID   = $dbHandler->getConnection()->lastInsertId();
+                                    $result         = array( 'insertID' => $lastInsertID );
 
                                     $solvedStack[ $modelFromList['table_name'] ] = $result;
 
-                                    $tableData = array();
-                                    $tableData['result'] = $result;
-                                    $tableData['query'] = $model;
+                                    $tableData              = array();
+                                    $tableData['result']    = $result;
+                                    $tableData['query']     = $model;
 
                                     $body[$modelFromList['table_name']] = $tableData;
                                     break;
 
                                 } catch (\PDOException $e) {
-                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
+                                    $errors[] = array( 
+                                        'message' => $e->getMessage() . "( " . $e->getLine() . " | " . $e->getFile() . " )", 
+                                        'request' => $table 
+                                    );
                                     break;
 
                                 } catch ( \Throwable $e) {
