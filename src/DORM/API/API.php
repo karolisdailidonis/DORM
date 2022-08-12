@@ -29,7 +29,7 @@ class API {
 
         if ( isset($request['tables'] ) && is_array($request['tables']) ){
 
-            $dbHandler      = new DBHandler();
+            $dbHandler      = DBHandler::getInstance();
             $modelList      = new ModelList( $dbHandler->getConnection());
             $solvedStack    = [];
 
