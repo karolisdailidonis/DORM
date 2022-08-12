@@ -110,7 +110,7 @@ class DBHandler extends QueryBuilder
         $exist = $this->execute("SELECT * FROM INFORMATION_SCHEMA.TABLES
            WHERE TABLE_NAME = 'dorm_model_list' ");
 
-        if(  count($exist) <= 0 ) $this->setDatabase();
+        if(  count($exist->fetchAll(\PDO::FETCH_ASSOC)) <= 0 ) $this->setDatabase();
 
         $ini = parse_ini_file('config.ini');
         $ini['dorm_db'] = "true";

@@ -1,29 +1,38 @@
-console.log("blubb");
 document.getElementById("defaultOpen").click();
 
 const responseHTML = document.querySelector('#response');
 const requestJob = document.querySelector('#requestJob');
 const apiurl = document.querySelector('#apiurl');
+const apiprotocol = document.querySelector('#apiprotocol');
+const toast = document.querySelector('#toast');
 
 apiurl.value = window.location.hostname;
-console.log(apiurl);
-
-
 console.log(requestJob.value);
 
 function request(){
-    var resp = axios.post( "https://" + apiurl.value + '/api.php',
-            JSON.parse( requestJob.value )
+
+    var resp = axios.post( apiprotocol.value + apiurl.value + '/api.php',
+            validateJSON( requestJob.value )
         )
         .then(
             (response, d) => {
             responseHTML.innerHTML = JSON.stringify( response.data, undefined, 4 );
             console.log( response );
-
+            showToast( 0,  "FIN" );
         })
         .catch(function (error) {
             console.log(error);
+            showToast( 1, error  + "( maybe https:// or http::// selection ) " );
         });
+}
+
+function validateJSON( json ){
+  try {
+    json = JSON.parse( json )
+    return json;
+  } catch (error) {
+   showToast( 1, error );
+  }
 }
 
 
@@ -46,4 +55,20 @@ function openCity(evt, cityName) {
   // Show the current tab, and add an "active" class to the button that opened the tab
   document.getElementById(cityName).style.display = "block";
   evt.currentTarget.className += " active";
+}
+
+function showToast( type, content){
+  // 0 = success
+  // 1 = error
+  toast.classList.add("show"); 
+
+  toast.innerHTML = content;
+  if ( type == 0 ) { 
+    toast.classList.add("success"); 
+    toast.classList.remove("error"); 
+  }
+  if ( type == 1 ) { 
+    toast.classList.remove("success"); 
+    toast.classList.add("error"); 
+  }
 }

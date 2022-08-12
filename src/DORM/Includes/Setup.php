@@ -79,7 +79,11 @@ class Setup
                 </div>
 
                 <div id="requests" class="box tabcontent">
-                    <input id="apiurl" type="text">
+                    <select id="apiprotocol">
+                        <option value="https://">https://</option>
+                        <option value="http://">http://</option>
+                    </select>
+                    <input id="apiurl" type="text"> /api.php
 
                     <textarea id="response" cols="60" rows="20"></textarea>
 
@@ -126,6 +130,10 @@ class Setup
                     </form>
                 </div>
             </div>
+        </div>
+
+        <div id="toast">
+            
         </div>
 
         <script src="<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/setup.js' ?>"></script>

@@ -57,3 +57,20 @@
 #dorm-setup .tabcontent {
     display: none;
 }
+
+#toast {
+    border: 3px solid;
+    padding: 10px 0;
+    display: none;
+}
+
+#toast.success {
+    border-color: green;
+}
+#toast.error {
+    border-color: red;
+}
+
+#toast.show {
+    display: block;
+}

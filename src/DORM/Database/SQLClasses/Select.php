@@ -10,6 +10,8 @@ class Select {
     private $where = null;
     
     private $leftJoin = [];
+
+    private $limit = 1000;
     
     public function __construct( array $columns = null ){
         ($columns != null ) ? $this->columns = $columns : $this->columns = array( '*' );
@@ -43,12 +45,18 @@ class Select {
         return $this;
     }
 
+    public function limit( int $limit ): self {
+        $this->limit = $limit;
+        return $this;
+    }
+
     public function __toString(): string {
 
         return 'SELECT ' . implode( ', ', $this->columns )
             . ' FROM ' . implode( ', ', $this->from )
             . ($this->leftJoin === [] ? '' : ' LEFT JOIN ' . implode(' LEFT JOIN ', $this->leftJoin))
-            . ($this->where === null  ?  " " : " WHERE " . $this->where);
+            . ($this->where === null  ?  " " : " WHERE " . $this->where)
+            . " LIMIT " . $this->limit;
     }
 
 }

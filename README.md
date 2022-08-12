@@ -120,6 +120,7 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
           "<table_name>": "<column_name>"
         }
       ],
+      "limit": 1000,
       "embed": [
         { "table": "<table_name>" }
       ]
