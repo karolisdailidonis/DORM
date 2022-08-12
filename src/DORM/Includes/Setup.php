@@ -8,12 +8,14 @@ class Setup
 {
     private $connection = null;
 
-    function __construct(){
+    function __construct()
+    {
         $this->connection = new DBHandler();
         $this->render();
     }
 
-    public function render(){
+    public function render()
+    {
 
         $this->connection->setDormDB();
 
@@ -133,7 +135,7 @@ class Setup
         </div>
 
         <div id="toast">
-            
+
         </div>
 
         <script src="<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/setup.js' ?>"></script>
