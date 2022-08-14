@@ -39,7 +39,7 @@ class Select {
         $sql = str_replace("%COLUMN1%", $column1, $sql);
 
         $sql = str_replace("%TABLE2%", $table2, $sql);
-        $sql = str_replace("%COLUMN2%", $column1, $sql);
+        $sql = str_replace("%COLUMN2%", $column2, $sql);
 
         $this->leftJoin[] = $sql;
         return $this;
