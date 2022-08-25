@@ -10,7 +10,7 @@ class Setup
 
     function __construct()
     {
-        $this->connection = new DBHandler();
+        $this->connection = DBHandler::getInstance();
         $this->render();
     }
 

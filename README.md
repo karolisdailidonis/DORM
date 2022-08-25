@@ -1,4 +1,4 @@
-# The DORM 0.0.4
+# The DORM 0.0.5
 A lightweight PHP ORM framework with API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
 ***
@@ -9,7 +9,7 @@ A lightweight PHP ORM framework with API and no dependencies other than the nati
 
 Run Requirements:
 - Minimal PHP Version is PHP 8.0
-- MariaDB 10.5.0
+- MariaDB 10.5.0 or SQL Server 2012 
 
 Implemented functions:
 - PHP model class generator [ Dev ]
@@ -29,6 +29,13 @@ include 'DORM/autoload.php';
 Later the composer option will be added as well.
 
 Next, set in the DORM/Database/config.ini file you database connection data.
+
+For the `db_type` you can use:
+
+| db_type | PDO |
+| ------- | --- |
+| `mysql` |  php\_pdo\_mysql   |
+| `mssql` |  php\_pdo\_sqlsrv\_[php version]\_[ts\|nts]\_[x86\|x64]   |
 
 To call one of the main functions, you must also use ``use`` in one of the three folders.
 
