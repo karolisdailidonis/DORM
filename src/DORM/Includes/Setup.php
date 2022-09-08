@@ -1,6 +1,7 @@
 <?php
 namespace DORM\Includes;
 
+use DORM\Config\Config;
 use DORM\Database\DBHandler;
 
 class Setup
@@ -13,12 +14,9 @@ class Setup
         $this->render();
     }
 
-    public function render()
-    {
-
-        echo "right access for Models Folder";
+    public function render() {
         
-        if (isset($_POST["generate-models"])) {
+        if ( isset($_POST["generate-models"]) && TableToModel::writeAccess()  ) {
 
             $this->connection->setDormDB();
             // ToDo: check have write acces
@@ -29,7 +27,7 @@ class Setup
                 echo '<br>';
 
                 foreach ($_POST['selectedTables'] as $value) {
-
+                    // ToDo: Refactor TableToModel class
                     $model = (new TableToModel(
                         $value,
                         $this->connection->getColumns($value),

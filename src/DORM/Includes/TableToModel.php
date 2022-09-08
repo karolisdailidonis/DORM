@@ -19,6 +19,29 @@ class TableToModel{
         $this->references = $references;
     }
 
+    /*
+    *   Check if folder for Models exist and is writeable
+    */
+    public static function writeAccess() : bool {
+        // ToDo: clean side effects after refactor logging
+
+        $path = dirname( __DIR__ ) . '/Models';
+        
+        if ( !file_exists($path)) {
+            echo "DORM: Missing Folder<br>";
+            echo $path . '<br>';
+            return false;
+        }
+        
+        if ( !is_writable( $path )) {
+            echo "DORM: Is nor writeable <br>";
+            echo $path . '<br>';
+            return false;
+        }
+
+        return true;
+    }
+
     public function writeFile(){
         $this->file = fopen( $this->filePath . '/' . $this->className . '.php', 'w' );
         $fileContent = <<<MODEL

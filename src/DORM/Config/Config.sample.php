@@ -29,7 +29,6 @@ class Config {
     ];
 
     // ToDo: Implement multiple token with different rights
-    static public $tokenRequiered = true;
     static public $tokens = '';
 
     // ToDo: Implement
@@ -37,6 +36,11 @@ class Config {
 
     // ToDo: Implement
     static public $trusted_domains = [ ];
+
+    // ToDo: Implement array for paths woth DORM as root
+    static public $paths = [
+        // './' =>  __DIR__ . '../'
+    ];
 
 }
 
