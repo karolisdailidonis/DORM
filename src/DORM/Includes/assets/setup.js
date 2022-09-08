@@ -9,6 +9,13 @@ const toast = document.querySelector('#toast');
 apiurl.value = window.location.hostname;
 console.log(requestJob.value);
 
+// ToDo: Format Request JSON 
+// requestJob.onkeyup = function( event ) {
+//   if ( event.keyCode == 13 ){
+//      requestJob.value = JSON.stringify( requestJob.value, undefined, 4 );
+//   }
+// }
+
 function request(){
 
     var resp = axios.post( apiprotocol.value + apiurl.value + '/api.php',
