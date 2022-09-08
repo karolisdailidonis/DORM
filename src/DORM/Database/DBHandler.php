@@ -180,15 +180,23 @@ class DBHandler extends QueryBuilder
 
         $this->connection->exec($sql);
     }
-    public function insertModel(string $tableName, string $className)
-    {
-        $sql = "
-        BEGIN TRANSACTION;
-        DELETE FROM dorm_model_list WHERE table_name = '{$tableName}';
-        INSERT INTO dorm_model_list (table_name, class_name) VALUES ('{$tableName}', '{$className}');
-        COMMIT;";
+    public function insertModel( string $tableName, string $className ) {
 
-        $this->connection->exec($sql);
+        $sql = $this->dbTypeExecute(
+            mysql: fn() => "
+                REPLACE INTO dorm_model_list ( table_name, class_name)
+                VALUES ( '{$tableName}', '{$className}' )
+            ",
+
+            mssql: fn () => "
+                BEGIN TRANSACTION;
+                    DELETE FROM dorm_model_list WHERE table_name = '{$tableName}';
+                    INSERT INTO dorm_model_list (table_name, class_name) VALUES ('{$tableName}', '{$className}');
+                COMMIT;
+            ",
+        );
+
+        $this->execute($sql);
     }
 
     public function getConnection()
