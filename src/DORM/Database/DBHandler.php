@@ -1,6 +1,7 @@
 <?php
 
 namespace DORM\Database;
+use DORM\Config\Config;
 
 use DORM\Includes\INIWriter;
 
@@ -26,24 +27,21 @@ class DBHandler extends QueryBuilder
     private $db_host;
     private $db_user;
     private $db_password;
+    // private $db_type;
 
     private $setDB;
     private $error;
-
-    // SUPPORT
-    public $isMariaDB = false;
-    private $isMYSQL = false;
-
 
     function __construct()
     {
         $ini = parse_ini_file('config.ini');
 
-        $this->db_type      = $ini['db_type'];
-        $this->db_name      = $ini['db_name'];
-        $this->db_host      = $ini['db_host'];
-        $this->db_user      = $ini['db_user'];
-        $this->db_password  = $ini['db_password'];
+        $this->db_type      = Config::$database['dbtype'];
+        $this->db_name      = Config::$database['dbname'];
+        $this->db_host      = Config::$database['dbhost'];
+        $this->db_user      = Config::$database['dbuser'];
+        $this->db_password  = Config::$database['dbpass'];
+        $this->db_port      = Config::$database['dbport'];
 
         $this->setDB        = $ini['dorm_db'];
 
@@ -53,8 +51,9 @@ class DBHandler extends QueryBuilder
     /**
     * executes a function according to the database type with mysql as default
     */
-    public function dbTypeExecute($mysql = null, $mssql = null)
+    public function dbTypeExecute( $mysql = null, $mssql = null )
     {
+
         if (strtolower($this->db_type) == 'mysql' && $mysql) return $mysql();
         if (strtolower($this->db_type) == 'mssql' && $mssql) return $mssql();
 
@@ -67,33 +66,32 @@ class DBHandler extends QueryBuilder
         $this->connection = null;
 
         try {
-            $this->connection = new \PDO(
-                $this->dbTypeExecute(
-                    mysql: fn () => "mysql:host=$this->db_host; dbname=$this->db_name",
-                    mssql: fn () => "sqlsrv:server=$this->db_host; Database=$this->db_name",
-                ),
-                $this->db_user,
-                $this->db_password
-            );
 
-            $this->dbTypeExecute(
-                mysql: $this->connection->exec("set names utf8"),
-            );
+            try {
+                $this->connection = new \PDO(
+                    $this->dbTypeExecute(
+                        mysql: fn () => "mysql:host=$this->db_host; dbname=$this->db_name",
+                        mssql: fn () => "sqlsrv:server=$this->db_host, $this->db_port; Database=$this->db_name",
+                    ),
+                    $this->db_user,
+                    $this->db_password
+                );
+
+
+            } catch ( \PDOException $e){
+                // ToDo: Clean error handling 
+                echo "DORM: Can not connect to DB";
+                echo $e;
+                die();
+            }
+
+            // $this->dbTypeExecute(
+            //     mysql: $this->connection->exec("set names utf8"),
+            // );
 
             $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $this->connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 1);
 
-            // $dbVersion = $this->connection->query('select version()')->fetchColumn();
-            // if (strpos( $dbVersion , "MariaDB" ) ) {
-            //     $this->isMariaDB = true;
-
-            //     // defined('DORM_CONSTANTS') or define('DORM_CONSTANTS', array() );
-
-            //     // $val =  DORM_CONSTANTS[0];
-            //     // define("IS_MARIADB", true);
-            //     // preg_match("/^[0-9\.]+/", $dbVersion, $match);
-            //     // define("DB_VERSION", $match[0] );
-            // };
         } catch (\PDOException  $exception) {
             $this->error = "No connection to Database: " . $exception->getMessage();
         }

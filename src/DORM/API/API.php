@@ -3,14 +3,16 @@ namespace DORM\API;
 
 use DORM\Database\DBHandler;
 use DORM\Includes\ModelList;
+use DORM\Config\Config;
 
 class API {
 
     protected $tokenRequiered;
-    protected $token = "1234556";
+    protected $token = '';
 
     function __construct( bool $tokenRequiered = false ){
         $this->tokenRequiered = $tokenRequiered;
+        $this->token = Config::$tokens;
         ini_set('display_errors', 0 );
         $this->request();
     }
