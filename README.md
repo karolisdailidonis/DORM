@@ -23,12 +23,13 @@ Implemented functions:
 ## Install
 
 Simply download the main DORM folder from the src/ and paste it into your project. The project follows PSR-4 code style guide with namespaces and autoload, that means you only need to include the autoload.
+
 ```php
 include 'DORM/autoload.php';
 ```
 Later the composer option will be added as well.
 
-Next, set in the DORM/Database/config.ini file you database connection data.
+Next, rename DORM/Config/Config.sample.php to Config.php and set you database connection data.
 
 For the `db_type` you can use:
 
@@ -83,20 +84,19 @@ use DORM\API\API;
 
 new API();
 ```
-If you want to use tokken for authentification, give the api class a boolen ```true``` and set in the API.php file you new tokken key. 
+If you want to use token for authentification, give the api class a boolen ```true``` and set in the Config.php file you new token key. 
 ```php
 #api.php
 use DORM\API\API;
 
 new API( true );
 
-#DORM/API/API.php
+#DORM/Config/Config.php
 
 ...
-class API {
+class Config {
 
-    protected $tokenRequiered;
-    protected $token = "<you-token-key>";
+    public static $token = "<you-token-key>";
 ...
 
 ```

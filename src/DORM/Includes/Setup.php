@@ -1,5 +1,4 @@
 <?php
-
 namespace DORM\Includes;
 
 use DORM\Database\DBHandler;
@@ -17,9 +16,12 @@ class Setup
     public function render()
     {
 
-        $this->connection->setDormDB();
-
+        echo "right access for Models Folder";
+        
         if (isset($_POST["generate-models"])) {
+
+            $this->connection->setDormDB();
+            // ToDo: check have write acces
 
             if (isset($_POST["selectedTables"])) {
 

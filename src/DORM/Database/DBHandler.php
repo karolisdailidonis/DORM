@@ -1,9 +1,6 @@
 <?php
-
 namespace DORM\Database;
 use DORM\Config\Config;
-
-use DORM\Includes\INIWriter;
 
 class DBHandler extends QueryBuilder
 {
@@ -27,23 +24,20 @@ class DBHandler extends QueryBuilder
     private $db_host;
     private $db_user;
     private $db_password;
-    // private $db_type;
+    private $db_port;
+    private $db_type;
 
     private $setDB;
     private $error;
 
     function __construct()
     {
-        $ini = parse_ini_file('config.ini');
-
         $this->db_type      = Config::$database['dbtype'];
         $this->db_name      = Config::$database['dbname'];
         $this->db_host      = Config::$database['dbhost'];
         $this->db_user      = Config::$database['dbuser'];
         $this->db_password  = Config::$database['dbpass'];
         $this->db_port      = Config::$database['dbport'];
-
-        $this->setDB        = $ini['dorm_db'];
 
         $this->connect();
     }
@@ -70,30 +64,25 @@ class DBHandler extends QueryBuilder
             try {
                 $this->connection = new \PDO(
                     $this->dbTypeExecute(
-                        mysql: fn () => "mysql:host=$this->db_host; dbname=$this->db_name",
+                        mysql: fn () => "mysql:host=$this->db_host:$this->db_port; dbname=$this->db_name",
                         mssql: fn () => "sqlsrv:server=$this->db_host, $this->db_port; Database=$this->db_name",
                     ),
                     $this->db_user,
                     $this->db_password
                 );
 
-
             } catch ( \PDOException $e){
                 // ToDo: Clean error handling 
-                echo "DORM: Can not connect to DB";
+                echo "DORM:No connection to Database";
                 echo $e;
                 die();
             }
-
-            // $this->dbTypeExecute(
-            //     mysql: $this->connection->exec("set names utf8"),
-            // );
 
             $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $this->connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 1);
 
         } catch (\PDOException  $exception) {
-            $this->error = "No connection to Database: " . $exception->getMessage();
+            $this->error = "DORM:No connection to Database: " . $exception->getMessage();
         }
         return $this;
     }
@@ -153,16 +142,12 @@ class DBHandler extends QueryBuilder
 
     public function setDormDB()
     {
-
         $exist = $this->execute("SELECT * FROM INFORMATION_SCHEMA.TABLES
            WHERE TABLE_NAME = 'dorm_model_list' ");
 
-        if (count($exist->fetchAll(\PDO::FETCH_ASSOC)) <= 0) $this->setDatabase();
-
-        $ini = parse_ini_file('config.ini');
-        $ini['dorm_db'] = "true";
-
-        $ini = (new INIWriter())->writeValue($ini, __DIR__ . '/config.ini');
+        if (count($exist->fetchAll(\PDO::FETCH_ASSOC)) <= 0)  {
+            $this->setDatabase();
+        }
     }
 
     public function setDatabase()
