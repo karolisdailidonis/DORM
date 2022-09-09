@@ -18,7 +18,7 @@ console.log(requestJob.value);
 
 function request(){
 
-    var resp = axios.post( apiprotocol.value + apiurl.value + '/api.php',
+    var resp = axios.post( apiprotocol.value + apiurl.value,
             validateJSON( requestJob.value )
         )
         .then(

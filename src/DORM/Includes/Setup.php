@@ -85,7 +85,7 @@ class Setup
                         <option value="https://">https://</option>
                         <option value="http://">http://</option>
                     </select>
-                    <input id="apiurl" type="text"> /api.php
+                    <input id="apiurl" type="text">
 
                     <textarea id="response" cols="60" rows="20"></textarea>
 
