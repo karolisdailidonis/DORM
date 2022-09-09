@@ -10,6 +10,8 @@ spl_autoload_register(function ($className) {
 	$fileName =  $className . '.php';
 	$fileName = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $fileName);
 
+	$fileName =  dirname( __DIR__ ) . "/" . $fileName;
+	
 	if (file_exists($fileName)) {
 		require_once $fileName;
 	}
