@@ -85,15 +85,18 @@ class Setup
                 </div>
 
                 <div id="requests" class="box tabcontent">
-                    <select id="apiprotocol">
-                        <option value="https://">https://</option>
-                        <option value="http://">http://</option>
-                    </select>
-                    <input id="apiurl" type="text">
+                    <div>
+                        <select id="apiprotocol">
+                            <option value="https://">https://</option>
+                            <option value="http://">http://</option>
+                        </select>
+                        <input id="apiurl" type="text">
+                    </div>
 
-                    <textarea id="response" cols="60" rows="20"></textarea>
-
-                    <textarea id="requestJob" cols="60" rows="20">
+                    <h2>Response:</h2>
+                    <textarea id="response" rows="20"></textarea>
+            	    <h2>Request:</h2>
+                    <textarea id="requestJob" rows="20">
                         {
                             "schema": "DORM 0.0.3",
                             "token": "1234556",
@@ -115,7 +118,7 @@ class Setup
                             ]
                         }
                         </textarea>
-                    <button onclick="request()">Request</button>
+                    <button class="btn" onclick="request()">Request</button>
 
                 </div>
 

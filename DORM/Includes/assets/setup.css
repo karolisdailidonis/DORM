@@ -10,6 +10,7 @@
 
 #dorm-content {
     max-width: 500px;
+    width: 90%;
 }
 
 #dorm-setup form {
@@ -49,13 +50,35 @@
     cursor: pointer;
 }
 
+.active,
 #dorm-setup .btn:hover {
     background-color: rgb(26, 60, 140);
     color: #fff;
 }
 
+select,
+input[type="text"] {
+    padding: 5px;
+}
+
+textarea {
+    width: 100%;
+    max-width: 450px;
+}
+
 #dorm-setup .tabcontent {
     display: none;
+    flex-flow: column;
+    align-items: center;
+}
+
+#dorm-setup .tablinks {
+    border: unset;
+    border-radius: 0;
+    font-size: 1.0em;
+    padding: 10px;
+    margin: 0;
+    cursor: pointer;
 }
 
 #toast {

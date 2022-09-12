@@ -18,19 +18,19 @@ console.log(requestJob.value);
 
 function request(){
 
-    var resp = axios.post( apiprotocol.value + apiurl.value,
-            validateJSON( requestJob.value )
-        )
-        .then(
-            (response, d) => {
-            responseHTML.innerHTML = JSON.stringify( response.data, undefined, 4 );
-            console.log( response );
-            showToast( 0,  "FIN" );
-        })
-        .catch(function (error) {
-            console.log(error);
-            showToast( 1, error  + "( maybe https:// or http::// selection ) " );
-        });
+  var resp = axios.post( apiprotocol.value + apiurl.value,
+          validateJSON( requestJob.value )
+      )
+      .then(
+          (response, d) => {
+          responseHTML.innerHTML = JSON.stringify( response.data, undefined, 4 );
+          console.log( response );
+          showToast( 0,  "FIN" );
+      })
+      .catch(function (error) {
+          console.log(error);
+          showToast( 1, error  + "( maybe https:// or http::// selection ) " );
+      });
 }
 
 function validateJSON( json ){
@@ -60,7 +60,7 @@ function openCity(evt, cityName) {
   }
 
   // Show the current tab, and add an "active" class to the button that opened the tab
-  document.getElementById(cityName).style.display = "block";
+  document.getElementById(cityName).style.display = "flex";
   evt.currentTarget.className += " active";
 }
 
