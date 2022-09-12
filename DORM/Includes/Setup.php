@@ -15,6 +15,10 @@ class Setup
     }
 
     public function render() {
+
+        if ( isset( $_POST["init-dortdb"])) {
+            $this->connection->setDormDB();
+        }
         
         if ( isset($_POST["generate-models"]) && TableToModel::writeAccess()  ) {
 
@@ -128,6 +132,7 @@ class Setup
                         </div>
                         <div class="btn-container">
                             <input class="btn" type="submit" name="generate-models" value="Re-/Create model classes">
+                            <input class="btn" type="submit" name="init-dortdb" value="DORM DB INIT">
                         </div>
                     </form>
                 </div>

@@ -13,7 +13,7 @@ class API {
     function __construct( bool $tokenRequiered = false ){
         $this->tokenRequiered = $tokenRequiered;
         $this->token = Config::$tokens;
-        ini_set('display_errors', 0 );
+        ini_set('display_errors', 1 );
         $this->request();
     }
 
