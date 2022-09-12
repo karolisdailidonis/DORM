@@ -42,12 +42,13 @@ class API {
 
                     if( is_array($modelFromList) && $modelFromList  != false ){
 
+                        // ToDo: Make requestJob as class with abstract
                         switch ($table['requestJob']) {
                             case 'read':
                                 try {
                                     $modelClass = new $modelFromList['class_name']();
                                     $model      = $modelClass->read( $table );
-                                    $stmt       = $dbHandler->execute( $model)->fetchAll(\PDO::FETCH_ASSOC);
+                                    $stmt       = $dbHandler->execute( $model )->fetchAll(\PDO::FETCH_ASSOC);
 
                                                                       
                                     $tableData                  = array();
@@ -101,12 +102,20 @@ class API {
                                 }
                             case 'update':
                                 try {
-                                    $model = (new $modelFromList['class_name']())->updateData( $table );
-                                    $model = $dbHandler->execute( $model );
+                                    $modelClass = new $modelFromList['class_name']();
+                                    $model = $modelClass->updateData( $table );
+                                    $stmt = $dbHandler->execute( $model );
+
+                                    $tableData                  = array();
+                                    $tableData['query']         = $model;
+
+                                    $body[$modelFromList['table_name']] = $tableData;
                                     break;
+
                                 } catch (\PDOException $e) {
                                     $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
                                     break;
+
                                 } catch ( \Throwable $e) {
                                     $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
                                     break;

@@ -132,14 +132,6 @@ class DBHandler extends QueryBuilder
         return $this->execute($sql);
     }
 
-
-    public function isDormDB(): bool
-    {
-        if ($this->setDB == 'true') return true;
-
-        return false;
-    }
-
     public function setDormDB()
     {
         $exist = $this->execute("SELECT * FROM INFORMATION_SCHEMA.TABLES

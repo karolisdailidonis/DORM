@@ -66,6 +66,7 @@ class Select
                 . ($this->leftJoin === [] ? '' : ' LEFT JOIN ' . implode(' LEFT JOIN ', $this->leftJoin))
                 . ($this->where === null  ?  " " : " WHERE " . $this->where)
                 . " LIMIT " . $this->limit,
+                
             mssql: fn () => 'SELECT ' . " TOP " . $this->limit .  " " . implode(', ', $this->columns)
                 . ' FROM ' . implode(', ', $this->from)
                 . ($this->leftJoin === [] ? '' : ' LEFT JOIN ' . implode(' LEFT JOIN ', $this->leftJoin))
