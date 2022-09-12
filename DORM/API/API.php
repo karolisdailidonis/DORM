@@ -13,7 +13,7 @@ class API {
     function __construct( bool $tokenRequiered = false ){
         $this->tokenRequiered = $tokenRequiered;
         $this->token = Config::$tokens;
-        ini_set('display_errors', 1 );
+        ini_set('display_errors', Config::$displayErrors );
         $this->request();
     }
 
@@ -162,7 +162,6 @@ class API {
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
         $response = [];
-        // $response['sys'] =  array("db" => (IS_MARIADB) ? "isMariaDB" : "kp", "version" => DB_VERSION);
         $response['body'] = $body;
         $response['errors'] = $errors;
 

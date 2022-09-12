@@ -9,20 +9,13 @@ const toast = document.querySelector('#toast');
 apiurl.value = window.location.hostname;
 console.log(requestJob.value);
 
-// ToDo: Format Request JSON 
-// requestJob.onkeyup = function( event ) {
-//   if ( event.keyCode == 13 ){
-//      requestJob.value = JSON.stringify( requestJob.value, undefined, 4 );
-//   }
-// }
-
 function request(){
 
   var resp = axios.post( apiprotocol.value + apiurl.value,
           validateJSON( requestJob.value )
       )
       .then(
-          (response, d) => {
+          (response) => {
           responseHTML.innerHTML = JSON.stringify( response.data, undefined, 4 );
           console.log( response );
           showToast( 0,  "FIN" );
@@ -43,30 +36,26 @@ function validateJSON( json ){
 }
 
 
-function openCity(evt, cityName) {
-  // Declare all variables
+function openTab(evt, tabName) {
   var i, tabcontent, tablinks;
 
-  // Get all elements with class="tabcontent" and hide them
   tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
     tabcontent[i].style.display = "none";
   }
 
-  // Get all elements with class="tablinks" and remove the class "active"
   tablinks = document.getElementsByClassName("tablinks");
   for (i = 0; i < tablinks.length; i++) {
     tablinks[i].className = tablinks[i].className.replace(" active", "");
   }
 
-  // Show the current tab, and add an "active" class to the button that opened the tab
-  document.getElementById(cityName).style.display = "flex";
+  document.getElementById(tabName).style.display = "flex";
   evt.currentTarget.className += " active";
 }
 
 function showToast( type, content){
-  // 0 = success
-  // 1 = error
+  // 0 = success | 1 = error
+
   toast.classList.add("show"); 
 
   toast.innerHTML = content;

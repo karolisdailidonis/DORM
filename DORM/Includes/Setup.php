@@ -80,8 +80,8 @@ class Setup
             <div id="dorm-content">
                 <h1> Setup the DORM </h1>
                 <div class="tab">
-                    <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'requests')">API Request</button>
-                    <button class="tablinks" onclick="openCity(event, 'generator')">Model Generator</button>
+                    <button id="defaultOpen" class="tablinks" onclick="openTab(event, 'requests')">API Request</button>
+                    <button class="tablinks" onclick="openTab(event, 'generator')">Model Generator</button>
                 </div>
 
                 <div id="requests" class="box tabcontent">

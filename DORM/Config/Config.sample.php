@@ -28,6 +28,9 @@ class Config {
 
     ];
 
+    // In API
+    static public $displayErrors = 0;
+
     // ToDo: Implement multiple token with different rights
     static public $tokens = '';
 
