@@ -27,7 +27,6 @@ class DBHandler extends QueryBuilder
     private $db_port;
     private $db_type;
 
-    private $setDB;
     private $error;
 
     function __construct()
@@ -48,8 +47,8 @@ class DBHandler extends QueryBuilder
     public function dbTypeExecute( $mysql = null, $mssql = null )
     {
 
-        if (strtolower($this->db_type) == 'mysql' && $mysql) return $mysql();
-        if (strtolower($this->db_type) == 'mssql' && $mssql) return $mssql();
+        if (strtolower($this->db_type) == 'mysql' && $mysql) { return $mysql(); }
+        if (strtolower($this->db_type) == 'mssql' && $mssql) { return $mssql(); }
 
         // default function
         return $mysql();
@@ -202,6 +201,5 @@ class DBHandler extends QueryBuilder
         $query->execute();
 
         return $query;
-        // return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

@@ -39,7 +39,7 @@ class API {
                 if (isset($table['requestJob'])){
                     $modelFromList = $modelList->findModel($table['from']);
 
-                    if( is_array($modelFromList) && $modelFromList  != false ){
+                    if( is_array($modelFromList) && $modelFromList ){
 
                         // TODO: Make requestJob as class with abstract
                         switch ($table['requestJob']) {

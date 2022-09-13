@@ -11,7 +11,7 @@ console.log(requestJob.value);
 
 function request(){
 
-  var resp = axios.post( apiprotocol.value + apiurl.value,
+  axios.post( apiprotocol.value + apiurl.value,
           validateJSON( requestJob.value )
       )
       .then(
@@ -37,7 +37,7 @@ function validateJSON( json ){
 
 
 function openTab(evt, tabName) {
-  var i, tabcontent, tablinks;
+  const i, tabcontent, tablinks;
 
   tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {

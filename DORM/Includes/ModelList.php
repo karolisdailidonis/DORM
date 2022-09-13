@@ -23,9 +23,7 @@ class ModelList{
     public function findModel( string $tableName ){
         foreach ($this->modelList as $array) {
            
-            if( array_key_exists( 'table_name', $array)){
-                if ( $array['table_name'] == $tableName )  return $array;
-            }
+            if( array_key_exists( 'table_name', $array) && $array['table_name'] == $tableName ) { return $array; }
 
         }
 
