@@ -30,6 +30,15 @@ class Config {
 
     // In API
     static public $displayErrors = 0;
+    
+    /*
+    * Optional API REQUEST header.
+    * Always by default in the API()::Response class method setted: header( 'Content-Type: application/json; charset=UTF-8' ) 
+    */
+    static public $requestHeadersAPI = [
+        'Access-Control-Allow-Origin: *',
+        'Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With'
+    ];
 
     // ToDo: Implement multiple token with different rights
     static public $tokens = '';
