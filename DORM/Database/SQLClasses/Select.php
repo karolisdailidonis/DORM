@@ -28,7 +28,7 @@ class Select
         return $this;
     }
 
-    // ToDo: Where als eigene Klasse auslagern? wird auch in select gebraucht etc.
+    // TODO: Where als eigene Klasse auslagern? wird auch in select gebraucht etc.
     public function where(string $column, string $condition, string $value): self
     {
 
@@ -36,7 +36,7 @@ class Select
         return $this;
     }
 
-    // ToDo: reduce to one pair if same ?
+    // TODO: reduce to one pair if same ?
     public function join(string $table1, string $table2, string $column1, string $column2 = null): self
     {
 

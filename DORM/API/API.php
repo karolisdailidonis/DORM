@@ -41,7 +41,7 @@ class API {
 
                     if( is_array($modelFromList) && $modelFromList  != false ){
 
-                        // ToDo: Make requestJob as class with abstract
+                        // TODO: Make requestJob as class with abstract
                         switch ($table['requestJob']) {
                             case 'read':
                                 try {

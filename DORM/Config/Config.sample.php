@@ -40,16 +40,16 @@ class Config {
         'Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With'
     ];
 
-    // ToDo: Implement multiple token with different rights
+    // TODO: Implement multiple token with different rights
     static public $tokens = '';
 
-    // ToDo: Implement
+    // TODO: Implement
     public static $loglevel = 0;
 
-    // ToDo: Implement
+    // TODO: Implement
     static public $trusted_domains = [ ];
 
-    // ToDo: Implement array for paths woth DORM as root
+    // TODO: Implement array for paths woth DORM as root
     static public $paths = [
         // './' =>  __DIR__ . '../'
     ];

@@ -31,7 +31,7 @@ class Insert {
         . " ( " . implode(", ", $this->columns ) . " ) VALUES ( '" . implode("', '",     $this->values ) . "' );";
         
         // MariaDB 10.5
-        // ToDo: Implement RETURNING
+        // TODO: Implement RETURNING
         
         return $query;
     }

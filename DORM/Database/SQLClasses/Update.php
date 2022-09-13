@@ -22,7 +22,7 @@ class Update {
     }
 
 
-    // ToDo: Where als eigene Klasse auslagern? wird auch in select gebraucht etc.
+    // TODO: Where als eigene Klasse auslagern? wird auch in select gebraucht etc.
     public function where( string $column, string $condition, string $value ): self {
         $this->where = $column . " " . $condition . " '" . $value . "'";
         return $this; 
@@ -30,7 +30,7 @@ class Update {
 
     public function __toString(){
 
-        // ToDo: ask dbType
+        // TODO: ask dbType
         
         return "UPDATE " . $this->table
                 . " SET " . implode( ", ", $this->columns )

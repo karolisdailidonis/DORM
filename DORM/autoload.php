@@ -4,7 +4,7 @@
 */
 spl_autoload_register(function ($className) {
 
-	// ToDo: Prüfen ob ne classe aus dem eigenem namespace kommt.
+	// TODO: Prüfen ob ne classe aus dem eigenem namespace kommt.
 
 	// $fileName = dirname(__DIR__, 1 ) . '/' .  $className . '.php';
 	$fileName =  $className . '.php';
@@ -22,7 +22,7 @@ spl_autoload_register(function ($className) {
 */
 spl_autoload_register(function ($className) {
 
-	//ToDo: genauso, falls die klasse einen bekannten namespace hat, return
+	//TODO: genauso, falls die klasse einen bekannten namespace hat, return
 
 	$fileName = dirname(__DIR__, 1) . '/DORM/Models/' .  $className . '.php';
 

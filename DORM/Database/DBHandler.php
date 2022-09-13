@@ -72,7 +72,7 @@ class DBHandler extends QueryBuilder
                 );
 
             } catch ( \PDOException $e){
-                // ToDo: Clean error handling 
+                // TODO: Clean error handling 
                 echo "DORM:No connection to Database";
                 echo $e;
                 die();

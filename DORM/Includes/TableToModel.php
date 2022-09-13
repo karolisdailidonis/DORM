@@ -23,7 +23,7 @@ class TableToModel{
     *   Check if folder for Models exist and is writeable
     */
     public static function writeAccess() : bool {
-        // ToDo: clean side effects after refactor logging
+        // TODO: clean side effects after refactor logging
 
         $path = dirname( __DIR__ ) . '/Models';
         

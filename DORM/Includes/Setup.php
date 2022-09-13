@@ -23,7 +23,7 @@ class Setup
         if ( isset($_POST["generate-models"]) && TableToModel::writeAccess()  ) {
 
             $this->connection->setDormDB();
-            // ToDo: check have write acces
+            // TODO: check have write acces
 
             if (isset($_POST["selectedTables"])) {
 
@@ -31,7 +31,7 @@ class Setup
                 echo '<br>';
 
                 foreach ($_POST['selectedTables'] as $value) {
-                    // ToDo: Refactor TableToModel class
+                    // TODO: Refactor TableToModel class
                     $model = (new TableToModel(
                         $value,
                         $this->connection->getColumns($value),

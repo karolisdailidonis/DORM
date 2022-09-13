@@ -12,7 +12,7 @@ class Delete {
         $this->table = $table;
     }
 
-    // ToDo: Where als eigene Klasse auslagern? wird auch in select gebraucht etc.
+    // TODO: Where als eigene Klasse auslagern? wird auch in select gebraucht etc.
     public function where(string $column, string $condition, string $value): self
     {
         $this->where = $column . " " . $condition . " " . $value;
