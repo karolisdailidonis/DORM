@@ -96,8 +96,7 @@ class DORMModel extends QueryBuilder {
     }
 
     public function getReference( string $referencedTableName ){
-        $ref = $this->references[ $referencedTableName ];
-        return $ref;
+        return $this->references[ $referencedTableName ];
     }
 
     public function getReferences(){

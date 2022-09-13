@@ -21,11 +21,9 @@ class API {
         $body       = [];
         $errors     = [];
 
-        if( $this->tokenRequiered){
-            if(  !(isset($request['token']) && $request['token'] == $this->token) ){
-                $this->response( [], ['Permission denied']);
-                return false;
-            } 
+        if( $this->tokenRequiered && !(isset($request['token']) && $request['token'] == $this->token) ){
+            $this->response( [], ['Permission denied']);
+            return false;
         }
 
         if ( isset($request['tables'] ) && is_array($request['tables']) ){
