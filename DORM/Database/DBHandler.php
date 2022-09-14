@@ -91,8 +91,8 @@ class DBHandler extends QueryBuilder
     public function getTables()
     {
         $sql = $this->dbTypeExecute(
-            mysql: fn () => 'SHOW TABLES',
-            mssql: fn () => "SELECT * FROM SYSOBJECTS WHERE xtype = 'U';",
+            mysql: fn () => "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='" . $this->db_name . "' ORDER BY TABLE_NAME",
+            mssql: fn () => "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG='" . $this->db_name . "' ORDER BY TABLE_NAME",
         );
 
         $query = $this->connection->query($sql);
