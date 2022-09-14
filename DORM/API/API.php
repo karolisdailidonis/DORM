@@ -53,6 +53,19 @@ class API {
                                     $tableData['references']    = $modelClass->getReferences( );
                                     $tableData['query']         = $model;
 
+                                    // TODO: before/after clean solution
+                                    if( isset($table['after']['toBase64']) ) {
+
+                                        foreach ( $table['after']['toBase64'] as $columnname ) {
+
+                                            foreach ( $tableData['rows'] as $key => $value) {
+                                                $tableData['rows'][$key][$columnname] = base64_encode( $tableData['rows'][$key][$columnname] );
+                                            }
+                                            
+                                        }
+
+                                    }
+
                                     $body[$modelFromList['table_name']] = $tableData;
                                     break;
 
@@ -67,6 +80,7 @@ class API {
                                 }
                             case 'insert':
                                 try {
+                                    // TODO: before/after clean solution
                                     if ( isset($table['before']['lastInsertId'] ) ){
                                         $before = $table['before']['lastInsertId'];
                                         $table['values'][ $before['setColumn']] = $solvedStack[ $before['fromTable']]['insertID'];
@@ -150,14 +164,12 @@ class API {
         $this->response( $body, $errors );
     }
 
-
     public function response( $body, $errors){
         header('Content-Type: application/json; charset=UTF-8');
 
         foreach ( Config::$requestHeadersAPI as $value) {
             header( $value );
         }
-
 
         $response = [];
         $response['body'] = $body;

@@ -77,6 +77,8 @@ class DBHandler extends QueryBuilder
                 die();
             }
 
+            $this->execute("SET NAMES utf8");
+
             $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $this->connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 1);
 
