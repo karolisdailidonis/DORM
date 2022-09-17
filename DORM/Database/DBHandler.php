@@ -19,25 +19,12 @@ class DBHandler extends QueryBuilder
     }
 
     private $connection = null;
-
-    private $db_name;
-    private $db_host;
-    private $db_user;
-    private $db_password;
-    private $db_port;
-    private $db_type;
-
+    private $dbConfig;
     private $error;
 
-    function __construct()
+    function __construct( $dbConfigName = 'default' )
     {
-        $this->db_type      = Config::$database['dbtype'];
-        $this->db_name      = Config::$database['dbname'];
-        $this->db_host      = Config::$database['dbhost'];
-        $this->db_user      = Config::$database['dbuser'];
-        $this->db_password  = Config::$database['dbpass'];
-        $this->db_port      = Config::$database['dbport'];
-
+        $this->dbConfig = Config::$database[$dbConfigName];
         $this->connect();
     }
 
@@ -47,8 +34,8 @@ class DBHandler extends QueryBuilder
     public function dbTypeExecute( $mysql = null, $mssql = null )
     {
 
-        if (strtolower($this->db_type) == 'mysql' && $mysql) { return $mysql(); }
-        if (strtolower($this->db_type) == 'mssql' && $mssql) { return $mssql(); }
+        if (strtolower($this->dbConfig['dbtype']) == 'mysql' && $mysql) { return $mysql(); }
+        if (strtolower($this->dbConfig['dbtype']) == 'mssql' && $mssql) { return $mssql(); }
 
         // default function
         return $mysql();
@@ -63,11 +50,11 @@ class DBHandler extends QueryBuilder
             try {
                 $this->connection = new \PDO(
                     $this->dbTypeExecute(
-                        mysql: fn () => "mysql:host=$this->db_host:$this->db_port; dbname=$this->db_name",
-                        mssql: fn () => "sqlsrv:server=$this->db_host, $this->db_port; Database=$this->db_name",
+                        mysql: fn () => "mysql:host=" . $this->dbConfig['dbhost'] . ":" . $this->dbConfig['dbport'] . "; dbname=" . $this->dbConfig['dbname'],
+                        mssql: fn () => "sqlsrv:server=" . $this->dbConfig['dbhost'] . "," .  $this->dbConfig['dbport'] . "; Database=" . $this->dbConfig['dbname'],
                     ),
-                    $this->db_user,
-                    $this->db_password
+                    $this->dbConfig['dbuser'],
+                    $this->dbConfig['dbpass']
                 );
 
             } catch ( \PDOException $e){
@@ -91,8 +78,8 @@ class DBHandler extends QueryBuilder
     public function getTables()
     {
         $sql = $this->dbTypeExecute(
-            mysql: fn () => "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='" . $this->db_name . "' ORDER BY TABLE_NAME",
-            mssql: fn () => "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG='" . $this->db_name . "' ORDER BY TABLE_NAME",
+            mysql: fn () => "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='" .$this->dbConfig['dbname'] . "' ORDER BY TABLE_NAME",
+            mssql: fn () => "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG='" . $this->dbConfig['dbname'] . "' ORDER BY TABLE_NAME",
         );
 
         $query = $this->connection->query($sql);
