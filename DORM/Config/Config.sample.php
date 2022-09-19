@@ -11,20 +11,23 @@ class Config {
 
     static public $database = [
 
-        // Set dbtype to => 'mssql' | 'mysql'
-        'dbtype' => '',
+        'default' => [
 
-        // default: localhost
-        'dbhost' => '',
-
-        'dbname' => '',
-
-        'dbuser' => '',
-
-        'dbpass' => '',
-
-        // default MariaDB: 3306 
-        'dbport' => '',
+            // Set dbtype to => 'mssql' | 'mysql'
+            'dbtype' => '',
+    
+            // default: localhost
+            'dbhost' => '',
+    
+            'dbname' => '',
+    
+            'dbuser' => '',
+    
+            'dbpass' => '',
+    
+            // default MariaDB: 3306 
+            'dbport' => '',
+        ]
 
     ];
 

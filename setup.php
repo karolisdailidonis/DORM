@@ -6,6 +6,4 @@ include 'DORM/autoload.php';
 
 new Setup();
 
-$conn = DBHandler::getInstance();
-
 ?>

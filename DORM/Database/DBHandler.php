@@ -20,24 +20,23 @@ class DBHandler extends QueryBuilder
 
     private $connection = null;
     private $dbConfig;
+    private $useDBConfig = 'default';
     private $error;
 
-    function __construct( $dbConfigName = 'default' )
-    {
-        $this->dbConfig = Config::$database[$dbConfigName];
+    function __construct( ){
+        $this->dbConfig = Config::$database[ 'default' ];
         $this->connect();
     }
 
     /**
-    * executes a function according to the database type with mysql as default
+    * Executes a function according to the database type with mysql as default
     */
-    public function dbTypeExecute( $mysql = null, $mssql = null )
-    {
+    public function dbTypeExecute( $mysql = null, $mssql = null ) {
 
         if (strtolower($this->dbConfig['dbtype']) == 'mysql' && $mysql) { return $mysql(); }
         if (strtolower($this->dbConfig['dbtype']) == 'mssql' && $mssql) { return $mssql(); }
 
-        // default function
+        // Default function
         return $mysql();
     }
 
@@ -72,6 +71,7 @@ class DBHandler extends QueryBuilder
         } catch (\PDOException  $exception) {
             $this->error = "DORM:No connection to Database: " . $exception->getMessage();
         }
+
         return $this;
     }
 
