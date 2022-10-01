@@ -22,7 +22,7 @@ Implemented functions:
 
 ## Install
 
-Simply download the main DORM folder from the src/ and paste it into your project. The project follows PSR-4 code style guide with namespaces and autoload, that means you only need to include the autoload.
+Simply download the DORM repo and paste it into your project or Webspace root folder. The project follows PSR-4 code style guide with namespaces and autoload, that means you only need to include the autoload.
 
 ```php
 include 'DORM/autoload.php';
