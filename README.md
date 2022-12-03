@@ -1,4 +1,4 @@
-# The DORM 0.0.5
+# The DORM 0.0.6
 A lightweight PHP ORM framework with API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
 ***
@@ -111,7 +111,7 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
   - delete
 ```json
 {
-  "schema": "DORM 0.0.2",
+  "schema": "DORM 0.0.6",
   "token": "123456",
   "tables": [
     {
@@ -127,7 +127,7 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
           "<table_name>": "<column_name>"
         }
       ],
-      "limit": 1000,
+      "limit": 1000, // default 1000
       "embed": [
         { "table": "<table_name>" }
       ]
@@ -153,11 +153,20 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
         "<column_name>": "<value>",
       },
       "from": "<table_name>",
-      "where": {
-          "column": "<column_name>",
-          "value": "<value>", 
-          "condition": "=" 
-      }
+      "where": [
+        {
+            "column": "<column_name>",
+            "value": "<value>", 
+            "condition": "=" // all comparison support
+        },
+        {
+            "op": "AND / OR", // default AND
+            "column": "<column_name>",
+            "val1": "<value>", 
+            "val2": "<value>", 
+            "condition": "BETWEEN" //only this logical support 
+        }
+      ]
     },
     {
       "requestJob": "delete",

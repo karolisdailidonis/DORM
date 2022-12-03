@@ -1,6 +1,9 @@
 <?php
 namespace DORM\Database\SQLClasses;
 
+use DORM\Database\DBHandler;
+use DORM\Database\SQLClasses\Where;
+
 class Update {
 
     private $table;
@@ -21,21 +24,22 @@ class Update {
         return $this;
     }
 
-
-    // TODO: Where als eigene Klasse auslagern? wird auch in select gebraucht etc.
-    public function where( string $column, string $condition, string $value ): self {
-        $this->where = $column . " " . $condition . " '" . $value . "'";
-        return $this; 
+    public function where( $var ): self{
+        $this->where = new Where( $var );
+        return $this;
     }
 
     public function __toString(){
 
-        // TODO: ask dbType
-        
-        return "UPDATE " . $this->table
+        return DBHandler::getInstance()->dbTypeExecute( 
+             mysql: fn() => "UPDATE " . $this->table
                 . " SET " . implode( ", ", $this->columns )
-                . ( $this->where === null  ?  " " : " WHERE " . $this->where );
-                // . ( $this->conditions === [] ? "" : " WHERE " . implode( " AND ", $this->conditions));
+                . ( $this->where === null  ?  " " : $this->where ),
+
+             mssql: fn() => "UPDATE " . $this->table
+                . " SET " . implode( ", ", $this->columns )
+                . ( $this->where === null  ?  " " : $this->where )
+        );
     }
 
 }

@@ -3,10 +3,10 @@
 namespace DORM\Database\SQLClasses;
 
 use DORM\Database\DBHandler;
+use DORM\Database\SQLClasses\Where;
 
 class Select
 {
-
     private $columns = [];
 
     private $from = [];
@@ -28,11 +28,8 @@ class Select
         return $this;
     }
 
-    // TODO: Where als eigene Klasse auslagern? wird auch in select gebraucht etc.
-    public function where(string $column, string $condition, string $value): self
-    {
-
-        $this->where = $column . " " . $condition . " '" . $value . "'";
+    public function where( $var ): self {
+        $this->where = new Where( $var );
         return $this;
     }
 
@@ -64,13 +61,13 @@ class Select
             mysql: fn () => 'SELECT ' . implode(', ', $this->columns)
                 . ' FROM ' . implode(', ', $this->from)
                 . ($this->leftJoin === [] ? '' : ' LEFT JOIN ' . implode(' LEFT JOIN ', $this->leftJoin))
-                . ($this->where === null  ?  " " : " WHERE " . $this->where)
+                . ($this->where === null  ?  " " : $this->where)
                 . " LIMIT " . $this->limit,
                 
             mssql: fn () => 'SELECT ' . " TOP " . $this->limit .  " " . implode(', ', $this->columns)
                 . ' FROM ' . implode(', ', $this->from)
                 . ($this->leftJoin === [] ? '' : ' LEFT JOIN ' . implode(' LEFT JOIN ', $this->leftJoin))
-                . ($this->where === null  ?  " " : " WHERE " . $this->where)
+                . ($this->where === null  ?  " " : $this->where)
         );
     }
 }

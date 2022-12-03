@@ -11,7 +11,7 @@ class API {
     protected $token = '';
 
     function __construct( bool $tokenRequiered = false ){
-        $this->tokenRequiered = $tokenRequiered;
+        // $this->tokenRequiered = $tokenRequiered;
         $this->token = Config::$tokens;
         $this->request();
     }
@@ -46,7 +46,6 @@ class API {
                                     $modelClass = new $modelFromList['class_name']();
                                     $model      = $modelClass->read( $table );
                                     $stmt       = $dbHandler->execute( $model )->fetchAll(\PDO::FETCH_ASSOC);
-
                                                                       
                                     $tableData                  = array();
                                     $tableData['rows']          = $stmt;
@@ -161,10 +160,10 @@ class API {
             $errors[] = array( 'message' => 'no correct request found');
         }
 
-        $this->response( $body, $errors );
+        $this->response( $body, $errors, $request );
     }
 
-    public function response( $body, $errors){
+    public function response( $body, $errors, $request){
         header('Content-Type: application/json; charset=UTF-8');
 
         foreach ( Config::$requestHeadersAPI as $value) {
@@ -174,6 +173,7 @@ class API {
         $response = [];
         $response['body'] = $body;
         $response['errors'] = $errors;
+        // $response['request'] = $request;
 
         print_r( json_encode( $response ) );
     }

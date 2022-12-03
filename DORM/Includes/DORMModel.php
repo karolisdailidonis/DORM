@@ -55,8 +55,8 @@ class DORMModel extends QueryBuilder {
             }
         }
 
-        if ( isset($request['where']) ) {
-            $query->where($request['where']['column'], $request['where']['condition'], $request['where']['value']);
+        if ( isset($request['where']) && is_array($request['where']) ) {
+            $query->where($request['where']);
         }
 
         if (isset($request['limit'])) {
@@ -76,8 +76,8 @@ class DORMModel extends QueryBuilder {
             $query->set( $key, $value );
         }
 
-        if( isset($request['where'] )){
-            $query->where( $request['where']['column'], $request['where']['condition'], $request['where']['value'] );
+        if ( isset($request['where']) && is_array($request['where']) ) {
+            $query->where($request['where']);
         }
 
         return strval( $query );
@@ -88,9 +88,9 @@ class DORMModel extends QueryBuilder {
 
         $query = $this->delete( $this->tableName );
 
-        if ( isset($request['where'])) {
-            $query->where($request['where']['column'], $request['where']['condition'], $request['where']['value']);
-            }
+        if ( isset($request['where']) && is_array($request['where']) ) {
+            $query->where($request['where']);
+        }
     
         return strval( $query );
     }
