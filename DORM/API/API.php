@@ -26,21 +26,21 @@ class API {
             return false;
         }
 
-        if ( isset($request['tables'] ) && is_array($request['tables']) ){
+        if ( isset($request['jobs'] ) && is_array($request['jobs']) ){
 
             $dbHandler      = DBHandler::getInstance();
             $modelList      = new ModelList( $dbHandler->getConnection());
             $solvedStack    = [];
 
-            foreach ($request['tables'] as $table) {
+            foreach ($request['jobs'] as $table) {
 
-                if (isset($table['requestJob'])){
+                if (isset($table['job'])){
                     $modelFromList = $modelList->findModel($table['from']);
 
                     if( is_array($modelFromList) && $modelFromList ){
 
                         // TODO: Make requestJob as class with abstract
-                        switch ($table['requestJob']) {
+                        switch ($table['job']) {
                             case 'read':
                                 try {
                                     $modelClass = new $modelFromList['class_name']();
@@ -143,7 +143,7 @@ class API {
                                     break;
                                 }
                             default:          
-                                $errors[] = array( 'message' => 'wrong requestJob', 'request' => $table );
+                                $errors[] = array( 'message' => 'wrong job', 'request' => $table );
                                 break;
                         }
 
@@ -152,7 +152,7 @@ class API {
                     }
                 
                 } else {
-                    $errors[] = array( 'message' => 'missing key: requestJob', 'request' => $table );
+                    $errors[] = array( 'message' => 'missing key: job', 'request' => $table );
                 }
             }
 

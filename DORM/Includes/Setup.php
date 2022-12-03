@@ -100,9 +100,9 @@ class Setup
                         {
                             "schema": "DORM 0.0.3",
                             "token": "1234556",
-                            "tables": [
+                            "jobs": [
                                 {
-                                    "requestJob": "read",
+                                    "job": "read",
                                     "from": "person",
                                     "columns": [
                                         { "column": "surname"},

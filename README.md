@@ -113,9 +113,9 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
 {
   "schema": "DORM 0.0.6",
   "token": "123456",
-  "tables": [
+  "jobs": [
     {
-      "requestJob": "read",
+      "job": "read",
       "columns": [
         { "column": "<column_name>" },
         { "column": "<column_name>" }
@@ -133,7 +133,7 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
       ]
     },
     {
-      "requestJob": "insert",
+      "job": "insert",
       "values": {
         "<column_name>": "<value>",
         "<column_name>": "<value>",
@@ -147,7 +147,7 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
       }
     },
     {
-      "requestJob": "update",
+      "job": "update",
       "values": {
         "<column_name>": "<value>",
         "<column_name>": "<value>",
@@ -169,7 +169,7 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
       ]
     },
     {
-      "requestJob": "delete",
+      "job": "delete",
       "from": "<column_name>",
       "where": {
           "column": "<column_name>",
@@ -184,8 +184,7 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
 ### Response
 ```json
 { 
-  "schema": "DORM 0.0.2",
-  "tables": {
+  "body": {
       "ovc": {
         "rows": [
             {
@@ -194,17 +193,6 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
                 "ovc_status": null,
                 "generate_income": "Yes",
                 "lead_child": "0",
-                "time_sick": "10",
-                "vaccinated": "No",
-                "seeked_treatment": "No",
-                "disability": "Yes",
-                "birthcertification": "Yes",
-                "who_pays_fee": null,
-                "school_id": "39",
-                "days_missed": "0",
-                "class": "7",
-                "caregiver_id": "21",
-                "household_id": "1255"
             },
         ]
       },
