@@ -108,12 +108,13 @@ class Setup
                                         { "column": "surname"},
                                         { "column": "name"}
                                     ],
-                                    "where": {
-                                        "column": "person_id",
-                                        "value": 80,
-                                        "condition": "="
-                                    }
-                            
+                                    "where": [
+                                        {
+                                            "column": "person_id",
+                                            "value": 80,
+                                            "condition": "="
+                                        }
+                                    ]  
                                 }   
                             ]
                         }
