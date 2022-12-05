@@ -59,6 +59,10 @@ class DORMModel extends QueryBuilder {
             $query->where($request['where']);
         }
 
+        if ( isset($request['order']) ) {
+            $query->order($request['order']);
+        }
+
         if (isset($request['limit'])) {
             $query->limit( (int)$request['limit'] );
         }

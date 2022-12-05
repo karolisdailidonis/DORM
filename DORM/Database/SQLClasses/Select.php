@@ -17,6 +17,8 @@ class Select
 
     private $limit = 1000;
 
+    private $order = null;
+
     public function __construct(array $columns = null)
     {
         ($columns != null) ? $this->columns = $columns : $this->columns = array('*');
@@ -33,7 +35,14 @@ class Select
         return $this;
     }
 
+    public function order( $var ): self {
+        $this->order = ' ORDER BY ' . $var['column'] . ' ' .   ( ( isset($var['sort']) ) ? $var['sort'] : '' );
+        
+        return $this;
+    }
+
     // TODO: reduce to one pair if same ?
+    // TODO: make a single class ?
     public function join(string $table1, string $table2, string $column1, string $column2 = null): self
     {
 
@@ -62,12 +71,14 @@ class Select
                 . ' FROM ' . implode(', ', $this->from)
                 . ($this->leftJoin === [] ? '' : ' LEFT JOIN ' . implode(' LEFT JOIN ', $this->leftJoin))
                 . ($this->where === null  ?  " " : $this->where)
+                . ($this->order === null  ?  " " : $this->order)
                 . " LIMIT " . $this->limit,
                 
-            mssql: fn () => 'SELECT ' . " TOP " . $this->limit .  " " . implode(', ', $this->columns)
+            mssql: fn () => 'SELECT ' . "TOP " . $this->limit .  " " . implode(', ', $this->columns)
                 . ' FROM ' . implode(', ', $this->from)
                 . ($this->leftJoin === [] ? '' : ' LEFT JOIN ' . implode(' LEFT JOIN ', $this->leftJoin))
                 . ($this->where === null  ?  " " : $this->where)
+                . ($this->order === null  ?  " " : $this->order)
         );
     }
 }

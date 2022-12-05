@@ -173,7 +173,7 @@ class API {
         $response = [];
         $response['body'] = $body;
         $response['errors'] = $errors;
-        // $response['request'] = $request;
+        $response['request'] = $request;
 
         print_r( json_encode( $response ) );
     }

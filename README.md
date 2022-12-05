@@ -127,6 +127,7 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
           "<table_name>": "<column_name>"
         }
       ],
+      "order": { "column": "<column_name>", "sort": "DESC" } // only by read/select
       "limit": 1000, // default 1000
       "embed": [
         { "table": "<table_name>" }
