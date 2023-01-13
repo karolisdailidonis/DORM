@@ -5,13 +5,13 @@ use DORM\Database\DBHandler;
 use DORM\Includes\ModelList;
 use DORM\Config\Config;
 
-class API {
+final class API {
 
-    protected $tokenRequiered;
-    protected $token = '';
+    protected bool $tokenRequiered;
+    protected string $token = '';
 
-    function __construct( bool $tokenRequiered = false ){
-        // $this->tokenRequiered = $tokenRequiered;
+    public function __construct( bool $tokenRequiered = false ){
+        $this->tokenRequiered = $tokenRequiered;
         $this->token = Config::$tokens;
         $this->request();
     }
@@ -39,115 +39,30 @@ class API {
 
                     if( is_array($modelFromList) && $modelFromList ){
 
-                        // TODO: Make requestJob as class with abstract
-                        switch ($table['job']) {
-                            case 'read':
-                                try {
-                                    $modelClass = new $modelFromList['class_name']();
-                                    $model      = $modelClass->read( $table );
-                                    $stmt       = $dbHandler->execute( $model )->fetchAll(\PDO::FETCH_ASSOC);
-                                                                      
-                                    $tableData                  = array();
-                                    $tableData['rows']          = $stmt;
-                                    $tableData['references']    = $modelClass->getReferences( );
-                                    $tableData['query']         = $model;
+                        // Setup/proof
+                        $jobname = ucfirst($table['job']);
 
-                                    // TODO: before/after clean solution
-                                    if( isset($table['after']['toBase64']) ) {
+                        try {
+                            if ( !@include_once('Jobs/' . $jobname . '.php')){
+                                throw new \Exception ('Job does not exist/implemented');
+                            } 
 
-                                        foreach ( $table['after']['toBase64'] as $columnname ) {
+                            $job = (new \ReflectionClass($jobname))->newInstance( $modelFromList, $table, $dbHandler );
+                            $job->do( $modelFromList, $table, $dbHandler );
 
-                                            foreach ( $tableData['rows'] as $key => $value) {
-                                                $tableData['rows'][$key][$columnname] = base64_encode( $tableData['rows'][$key][$columnname] );
-                                            }
-                                            
-                                        }
-
-                                    }
-
-                                    $body[$modelFromList['table_name']] = $tableData;
-                                    break;
-
-                                } catch (\PDOException $e) {
-                                    $errors[] = array( 'message' => $e->getMessage(), 'request' =>$table, 'query' => $model );
-                                    break;
-
-                                } catch ( \Throwable $e) {
-                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table, 'query' => $model );
-                                    break;
-
-                                }
-                            case 'insert':
-                                try {
-                                    // TODO: before/after clean solution
-                                    if ( isset($table['before']['lastInsertId'] ) ){
-                                        $before = $table['before']['lastInsertId'];
-                                        $table['values'][ $before['setColumn']] = $solvedStack[ $before['fromTable']]['insertID'];
-                                    }
-
-                                    $model          = (new $modelFromList['class_name']())->create( $table );
-                                    $stmt           = $dbHandler->execute( $model );
-                                    $lastInsertID   = $dbHandler->getConnection()->lastInsertId();
-                                    $result         = array( 'insertID' => $lastInsertID );
-
-                                    $solvedStack[ $modelFromList['table_name'] ] = $result;
-
-                                    $tableData              = array();
-                                    $tableData['result']    = $result;
-                                    $tableData['query']     = $model;
-
-                                    $body[$modelFromList['table_name']] = $tableData;
-                                    break;
-
-                                } catch (\PDOException $e) {
-                                    $errors[] = array( 
-                                        'message' => $e->getMessage() . "( " . $e->getLine() . " | " . $e->getFile() . " )", 
-                                        'request' => $table 
-                                    );
-                                    break;
-
-                                } catch ( \Throwable $e) {
-                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table, 'query' => $model );
-                                    break;
-                                }
-                            case 'update':
-                                try {
-                                    $modelClass = new $modelFromList['class_name']();
-                                    $model = $modelClass->updateData( $table );
-                                    $stmt = $dbHandler->execute( $model );
-
-                                    $tableData                  = array();
-                                    $tableData['query']         = $model;
-
-                                    $body[$modelFromList['table_name']] = $tableData;
-                                    break;
-
-                                } catch (\PDOException $e) {
-                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
-                                    break;
-
-                                } catch ( \Throwable $e) {
-                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
-                                    break;
-                                }
-                            case 'delete':
-                                try {
-                                    $model = (new $modelFromList['class_name']())->deleteData( $table );
-                                    $model = $dbHandler->execute( $model );
-                                    break;
-                                } catch (\PDOException $e) {
-                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
-                                    break;
-                                } catch ( \Throwable $e) {
-                                    $errors[] = array( 'message' => $e->getMessage(), 'request' => $table );
-                                    break;
-                                }
-                            default:          
-                                $errors[] = array( 'message' => 'wrong job', 'request' => $table );
-                                break;
+                            if( $job->getJobData() != null ) {
+                                $body[$modelFromList['table_name']] = $job->getJobData();
+                            }
+                            
+                            if( $job->getError() != null ){
+                                $errors[] = $job->getError();
+                            }
+                        }
+                        catch( \Exception $e) {    
+                            $errors[] = array( 'message' =>  $e->getMessage(), 'request' => $table );
                         }
 
-                    }else {
+                    } else {
                         $errors[] = array( 'message' => 'can not found a model in the modellist', 'request' => $table );
                     }
                 
@@ -173,7 +88,6 @@ class API {
         $response = [];
         $response['body'] = $body;
         $response['errors'] = $errors;
-        $response['request'] = $request;
 
         print_r( json_encode( $response ) );
     }
