@@ -1,24 +1,30 @@
-# The DORM 0.0.6
+# The DORM 0.0.7
 A lightweight PHP ORM framework with API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
 ***
 **<font color="red">Caution, the software is still in a very early stage. Is unstable and definitely has security vulnerabilities</font>**
 ***
 
-
-
-Run Requirements:
+Requirements:
 - Minimal PHP Version is PHP 8.0
 - MariaDB 10.5.0 or SQL Server 2012 
 
-Implemented functions:
+Implemented:
 - PHP model class generator [ Dev ]
 - Custom Query Builder [ Dev ]
 - API [ Dev ]
   - With tokken auth
 - Setup GUI
   - Generate models from selected DB tables [ Dev ]
-  - HTTP Post API Request [ Dev ]
+  - Test API Requests [ Dev ]
+
+## Client helpers
+
+|  |  |
+| ------- | --- |
+| NPM | [https://www.npmjs.com/package/dorm-handler-js](https://www.npmjs.com/package/dorm-handler-js)|
+| dart | cooming soon|
+| c++ | cooming soon|
 
 ## Install
 
@@ -183,6 +189,7 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
 ```
 
 ### Response
+Here is an example response, more info in the [docu](https://github.com/karolisdailidonis/DORM/blob/main/doc/Responses.md)
 ```json
 { 
   "body": {
