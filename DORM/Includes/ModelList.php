@@ -3,7 +3,6 @@ namespace DORM\Includes;
 
 class ModelList
 {
-
     private $modelList = [];
     private $connection = null;
 
@@ -23,12 +22,10 @@ class ModelList
         return  $this->modelList;
     }
 
-    public function findModel(string $tableName): bool
+    public function findModel(string $tableName)
     {
         foreach ($this->modelList as $array) {
-           
             if( array_key_exists( 'table_name', $array) && $array['table_name'] == $tableName ) { return $array; }
-
         }
 
         return false;
