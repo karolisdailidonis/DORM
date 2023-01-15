@@ -32,26 +32,26 @@ final class API {
             $modelList      = new ModelList( $dbHandler->getConnection());
             $solvedStack    = [];
 
-            foreach ($request['jobs'] as $table) {
+            foreach ($request['jobs'] as $job) {
 
-                if (isset($table['job'])){
-                    $modelFromList = $modelList->findModel($table['from']);
+                if (isset($job['job'])){
+                    $modelFromList = $modelList->findModel($job['from']);
 
                     if( is_array($modelFromList) && $modelFromList ){
 
                         // Setup/proof
-                        $jobname = ucfirst($table['job']);
+                        $jobname = ucfirst($job['job']);
 
                         try {
                             if ( !@include_once('Jobs/' . $jobname . '.php')){
                                 throw new \Exception ('Job does not exist/implemented');
                             } 
 
-                            $job = (new \ReflectionClass($jobname))->newInstance( $modelFromList, $table, $dbHandler );
-                            $job->do( $modelFromList, $table, $dbHandler );
+                            $job = (new \ReflectionClass($jobname))->newInstance( $modelFromList, $job, $dbHandler );
+                            $job->do();
 
-                            if( $job->getJobData() != null ) {
-                                $body[$modelFromList['table_name']] = $job->getJobData();
+                            if( $job->getResult() != null ) {
+                                $body[$modelFromList['table_name']] = $job->getResult();
                             }
                             
                             if( $job->getError() != null ){
@@ -59,15 +59,15 @@ final class API {
                             }
                         }
                         catch( \Exception $e) {    
-                            $errors[] = array( 'message' =>  $e->getMessage(), 'request' => $table );
+                            $errors[] = array( 'message' =>  $e->getMessage(), 'request' => $job );
                         }
 
                     } else {
-                        $errors[] = array( 'message' => 'can not found a model in the modellist', 'request' => $table );
+                        $errors[] = array( 'message' => 'can not found a model in the modellist', 'request' => $job );
                     }
                 
                 } else {
-                    $errors[] = array( 'message' => 'missing key: job', 'request' => $table );
+                    $errors[] = array( 'message' => 'missing key: job', 'request' => $job );
                 }
             }
 

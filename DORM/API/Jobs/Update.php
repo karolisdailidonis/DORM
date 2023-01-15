@@ -5,20 +5,17 @@ class Update extends Job{
 
 	public function mid(){
 		try {
-			$modelClass = new $this->modelFromList['class_name']();
-			$model = $modelClass->updateData( $this->table );
-			$stmt = $this->dbHandler->execute( $model );
+			$query = $this->model->updateData( $this->job );
+			$stmt = $this->dbHandler->execute( $query );
 		
-			$tableData                  = array();
-			$tableData['query']         = $model;
-		
-			$this->jobData =  $tableData;
+			$this->result = array();
+			$this->result['query']  = $query;
 		
 		} catch (\PDOException $e) {
-			$this->error = array( 'message' => $e->getMessage(), 'request' => $this->table );
+			$this->error = array( 'message' => $e->getMessage(), 'request' => $this->job );
 		
 		} catch ( \Throwable $e) {
-			$this->error = array( 'message' => $e->getMessage(), 'request' => $this->table );
+			$this->error = array( 'message' => $e->getMessage(), 'request' => $this->job );
 		}
 
 	}

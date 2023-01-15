@@ -5,14 +5,14 @@ class Read extends Job {
 
 	public function mid(){
 		try {
-			$model = (new $this->dbHandler['class_name']())->deleteData( $this->table );
-			$model = $this->dbHandler->execute( $model );
+			$query = $this->model->deleteData( $this->table );
+			$stmt = $this->dbHandler->execute( $query );
 			
 		} catch (\PDOException $e) {
-			$this->error =  array( 'message' => $e->getMessage(), 'request' => $this->table );
+			$this->error =  array( 'message' => $e->getMessage(), 'request' => $this->job );
 
 		} catch ( \Throwable $e) {
-			$this->error =  array( 'message' => $e->getMessage(), 'request' => $this->table );
+			$this->error =  array( 'message' => $e->getMessage(), 'request' => $this->job );
 
 		}
 	}

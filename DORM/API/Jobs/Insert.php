@@ -5,33 +5,25 @@ class Insert extends Job {
 
 	public function mid(){
 		try {
-			// TODO: Outsource to own class
-			if ( isset($this->table['before']['lastInsertId'] ) ){
-				$before = $this->table['before']['lastInsertId'];
-				$this->table['values'][ $before['setColumn']] = $solvedStack[ $before['fromTable']]['insertID'];
-			}
-		
-			$model          = (new $this->modelFromList['class_name']())->create( $this->table );
-			$stmt           = $this->dbHandler->execute( $model );
+			$query          = $this->model->create( $this->job );
+			$stmt           = $this->dbHandler->execute( $query );
 			$lastInsertID   = $this->dbHandler->getConnection()->lastInsertId();
-			$result         = array( 'insertID' => $lastInsertID );
+			$insertResult   = array( 'insertID' => $lastInsertID );
 		
-			$solvedStack[ $this->modelFromList['table_name'] ] = $result;
+			$solvedStack[ $this->model->getTableName() ] = $insertResult;
 		
-			$tableData              = array();
-			$tableData['result']    = $result;
-			$tableData['query']     = $model;
-		
-			$this->jobData = $tableData;
+			$this->result              = array();
+			$this->result['result']    = $insertResult;
+			$this->result['query']     = $query;
 		
 		} catch (\PDOException $e) {
 			$this->error = array( 
 				'message' => $e->getMessage() . "( " . $e->getLine() . " | " . $e->getFile() . " )", 
-				'request' => $this->table 
+				'request' => $this->job 
 			);
 		
 		} catch ( \Throwable $e) {
-			$this->error =  array( 'message' => $e->getMessage(), 'request' => $this->table, 'query' => $model );
+			$this->error =  array( 'message' => $e->getMessage(), 'request' => $this->job, 'query' => $query );
 		}
 
 	}
