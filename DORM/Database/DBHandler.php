@@ -23,7 +23,8 @@ class DBHandler extends QueryBuilder
     private $useDBConfig = 'default';
     private $error;
 
-    function __construct( ){
+    public function __construct()
+    {
         $this->dbConfig = Config::$database[ 'default' ];
         $this->connect();
     }
@@ -31,7 +32,8 @@ class DBHandler extends QueryBuilder
     /**
     * Executes a function according to the database type with mysql as default
     */
-    public function dbTypeExecute( $mysql = null, $mssql = null ) {
+    public function dbTypeExecute($mysql = null, $mssql = null) 
+    {
 
         if (strtolower($this->dbConfig['dbtype']) == 'mysql' && $mysql) { return $mysql(); }
         if (strtolower($this->dbConfig['dbtype']) == 'mssql' && $mssql) { return $mssql(); }
@@ -56,7 +58,7 @@ class DBHandler extends QueryBuilder
                     $this->dbConfig['dbpass']
                 );
 
-            } catch ( \PDOException $e){
+            } catch (\PDOException $e){
                 // TODO: Clean error handling 
                 echo "DORM:No connection to Database";
                 echo $e;
@@ -160,8 +162,8 @@ class DBHandler extends QueryBuilder
 
         $this->connection->exec($sql);
     }
-    public function insertModel( string $tableName, string $className ) {
-
+    public function insertModel(string $tableName, string $className)
+    {
         $sql = $this->dbTypeExecute(
             mysql: fn() => "
                 REPLACE INTO dorm_model_list ( table_name, class_name)

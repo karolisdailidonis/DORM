@@ -8,7 +8,7 @@ class Setup
 {
     private $connection = null;
 
-    function __construct()
+    public function __construct()
     {
         $this->connection = DBHandler::getInstance();
         $this->render();
@@ -36,8 +36,8 @@ class Setup
                         $value,
                         $this->connection->getColumns($value),
                         $this->connection->getTableReferences($value),
-                    )
-                    )->writeFile();
+                    ))
+                    ->writeFile();
                     $this->connection->insertModel($model['tableName'], $model['className']);
 
                     echo $value;
@@ -71,9 +71,7 @@ class Setup
                 src: url(<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/Roboto-Regular.ttf' ?>) format("truetype");
             }
 
-            * {
-                font-family: "Roboto";
-            }
+            * {font-family: "Roboto", "Helvetica";}
         </style>
 
         <div id="dorm-setup">
@@ -127,12 +125,13 @@ class Setup
                     <h2> Tables found in the databes </h2>
                     <form id="model-generator" method="POST">
                         <div>
-                            <?php foreach ($this->connection->getTables() as $value) { ?>
+                            <?php foreach ($this->connection->getTables() as $value): ?>
                                 <div>
-                                    <input type="checkbox" name="selectedTables[]" id="<?php echo $value ?>" value="<?php echo $value ?>">
+                                    <input type="checkbox" name="selectedTables[]" 
+                                        id="<?php echo $value ?>" value="<?php echo $value ?>">
                                     <label for="<?php echo $value ?>"><?php echo $value ?></label>
                                 </div>
-                            <?php } ?>
+                            <?php endforeach; ?>
                         </div>
                         <div class="btn-container">
                             <input class="btn" type="submit" name="generate-models" value="Re-/Create model classes">

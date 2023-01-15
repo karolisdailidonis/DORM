@@ -19,6 +19,8 @@ class Select
 
     private $order = null;
 
+    static private $strLeftJoin = "LEFT JOIN";
+
     public function __construct(array $columns = null)
     {
         ($columns != null) ? $this->columns = $columns : $this->columns = array('*');
@@ -30,12 +32,14 @@ class Select
         return $this;
     }
 
-    public function where( $var ): self {
+    public function where( $var ): self
+    {
         $this->where = new Where( $var );
         return $this;
     }
 
-    public function order( $var ): self {
+    public function order( $var ): self
+    {
         $this->order = ' ORDER BY ' . $var['column'] . ' ' .   ( ( isset($var['sort']) ) ? $var['sort'] : '' );
         
         return $this;
@@ -69,14 +73,14 @@ class Select
         return DBHandler::getInstance()->dbTypeExecute(
             mysql: fn () => 'SELECT ' . implode(', ', $this->columns)
                 . ' FROM ' . implode(', ', $this->from)
-                . ($this->leftJoin === [] ? '' : ' LEFT JOIN ' . implode(' LEFT JOIN ', $this->leftJoin))
+                . ($this->leftJoin === [] ? '' : $this->strLeftJoin . implode($this->strLeftJoin, $this->leftJoin))
                 . ($this->where === null  ?  " " : $this->where)
                 . ($this->order === null  ?  " " : $this->order)
                 . " LIMIT " . $this->limit,
                 
             mssql: fn () => 'SELECT ' . "TOP " . $this->limit .  " " . implode(', ', $this->columns)
                 . ' FROM ' . implode(', ', $this->from)
-                . ($this->leftJoin === [] ? '' : ' LEFT JOIN ' . implode(' LEFT JOIN ', $this->leftJoin))
+                . ($this->leftJoin === [] ? '' : $this->strLeftJoin . implode($this->strLeftJoin, $this->leftJoin))
                 . ($this->where === null  ?  " " : $this->where)
                 . ($this->order === null  ?  " " : $this->order)
         );

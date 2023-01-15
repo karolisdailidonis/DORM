@@ -1,17 +1,20 @@
 <?php
 namespace DORM\Includes;
 
-class ModelList{
+class ModelList
+{
 
     private $modelList = [];
     private $connection = null;
 
-    function __construct( \PDO $connection){
+    public function __construct(\PDO $connection)
+    {
         $this->connection = $connection;
         $this->getList();
     }
 
-    public function getList() {
+    public function getList()
+    {
         $sql = "SELECT * FROM dorm_model_list";
         $query = $this->connection->query($sql);
 
@@ -20,7 +23,8 @@ class ModelList{
         return  $this->modelList;
     }
 
-    public function findModel( string $tableName ){
+    public function findModel(string $tableName): bool
+    {
         foreach ($this->modelList as $array) {
            
             if( array_key_exists( 'table_name', $array) && $array['table_name'] == $tableName ) { return $array; }

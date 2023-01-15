@@ -1,9 +1,6 @@
 <?php
 use DORM\API\API;
 
-include 'DORM/autoload.php';
+include_once 'DORM/autoload.php';
 
-
-new API( true );
-
-?>
+new API(true);
