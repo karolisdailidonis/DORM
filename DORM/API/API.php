@@ -47,7 +47,7 @@ final class API
                         try {
                             if (!@include_once('Jobs/' . $jobname . '.php')) {
                                 throw new \Exception('Job does not exist/implemented');
-                            } 
+                            }
 
                             $job = (new \ReflectionClass($jobname))->newInstance($modelFromList, $job, $dbHandler);
                             $job->do();
@@ -59,7 +59,7 @@ final class API
                             if ($job->getError() != null){
                                 $errors[] = $job->getError();
                             }
-                        } catch (\Exception $e) {    
+                        } catch (\Exception $e) {
                             $errors[] = array('message' =>  $e->getMessage(), 'request' => $job);
                         }
 
@@ -76,10 +76,10 @@ final class API
             $errors[] = array('message' => 'no correct request found');
         }
 
-        $this->response ($body, $errors, $request);
+        $this->response($body, $errors);
     }
 
-    public function response ($body, $errors, $request)
+    public function response($body, $errors)
     {
         header('Content-Type: application/json; charset=UTF-8');
 
@@ -93,5 +93,5 @@ final class API
 
         print_r(json_encode($response));
     }
-
 }
+// EOL

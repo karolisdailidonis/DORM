@@ -1,8 +1,8 @@
 <?php
 namespace DORM\Includes;
 
-class TableToModel{
-
+class TableToModel
+{
     private $filePath;
     private $tableName;
     private $file;
@@ -11,7 +11,8 @@ class TableToModel{
     private $relations;
     private $references;
     
-    function __construct( string $tableName, $columns, $references = null ){
+    public function __construct(string $tableName, $columns, $references = null)
+    {
         $this->tableName = $tableName;
         $this->filePath = dirname( __DIR__ ) . '/Models';
         $this->className = $this->toCamelCase($tableName);
@@ -22,7 +23,8 @@ class TableToModel{
     /*
     *   Check if folder for Models exist and is writeable
     */
-    public static function writeAccess() : bool {
+    public static function writeAccess(): bool
+    {
         // TODO: clean side effects after refactor logging
 
         $path = dirname( __DIR__ ) . '/Models';
@@ -42,8 +44,9 @@ class TableToModel{
         return true;
     }
 
-    public function writeFile(){
-        $this->file = fopen( $this->filePath . '/' . $this->className . '.php', 'w' );
+    public function writeFile()
+    {
+        $this->file = fopen($this->filePath . '/' . $this->className . '.php', 'w');
         $fileContent = <<<MODEL
         <?php
         /*
@@ -63,7 +66,7 @@ class TableToModel{
 
         MODEL;
 
-        foreach ( $this->columns as $column ) {
+        foreach ($this->columns as $column) {
             $fileContentCol = <<<MODEL
                     '%COLUMN_NAME%' => array( 'type' => '%DATA_TYPE%', 'length' => %CHARACTER_MAXIMUM_LENGTH%, 'nullable' => '%IS_NULLABLE%'),
             
@@ -87,9 +90,9 @@ class TableToModel{
 
         MODEL;
         
-        if( $this->references != null ){
+        if ($this->references != null) {
             
-            foreach ( $this->references as $reference ) {
+            foreach ($this->references as $reference) {
                 $fileContentCol = <<<MODEL
                         '%REFERENCED_TABLE_NAME%' => array( 'column' => '%COLUMN_NAME%', 'referenced_column' => '%REFERENCED_COLUMN_NAME%' ),
                 
@@ -100,7 +103,6 @@ class TableToModel{
                 $fileContentCol = str_replace("%REFERENCED_COLUMN_NAME%", $reference['REFERENCED_COLUMN_NAME'], $fileContentCol );
                 $fileContent .= $fileContentCol;
             }
-
         }
 
         $fileContent .= <<<MODEL
@@ -123,10 +125,11 @@ class TableToModel{
         fwrite( $this->file, $fileContent);
         fclose( $this->file );
 
-        return array( 'tableName' => $this->tableName, "className" => $this->className );
+        return array('tableName' => $this->tableName, "className" => $this->className);
     }
 
-    function toCamelCase($string){
+    public function toCamelCase($string)
+    {
         $string = str_replace('_', ' ', $string);
         $string = ucwords($string);
         $string = str_replace(' ', '', $string);
@@ -135,5 +138,3 @@ class TableToModel{
     }
 
 }
-
-?>

@@ -71,7 +71,7 @@ class Setup
                 src: url(<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/Roboto-Regular.ttf' ?>) format("truetype");
             }
 
-            * {font-family: "Roboto", "Helvetica";}
+            * {font-family: Roboto, Helvetica;}
         </style>
 
         <div id="dorm-setup">
