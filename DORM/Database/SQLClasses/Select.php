@@ -19,11 +19,14 @@ class Select
 
     private $order = null;
 
+    private $sqlType = null;
+
     static private $strLeftJoin = "LEFT JOIN";
 
-    public function __construct(array $columns = null)
+    public function __construct(array $columns = null, string $sqlType)
     {
         ($columns != null) ? $this->columns = $columns : $this->columns = array('*');
+        $this->sqlType = $sqlType;
     }
 
     public function from(string $table, string $alias = null): self
@@ -32,13 +35,13 @@ class Select
         return $this;
     }
 
-    public function where( $var ): self
+    public function where($var): self
     {
-        $this->where = new Where( $var );
+        $this->where = new Where($var);
         return $this;
     }
 
-    public function order( $var ): self
+    public function order($var): self
     {
         $this->order = ' ORDER BY ' . $var['column'] . ' ' .   ( ( isset($var['sort']) ) ? $var['sort'] : '' );
         
@@ -49,7 +52,6 @@ class Select
     // TODO: make a single class ?
     public function join(string $table1, string $table2, string $column1, string $column2 = null): self
     {
-
         $sql = "%TABLE2% ON %TABLE1%.%COLUMN1% = %TABLE2%.%COLUMN2%";
 
         $sql = str_replace("%TABLE1%", $table1, $sql);
@@ -70,19 +72,24 @@ class Select
 
     public function __toString(): string
     {
-        return DBHandler::getInstance()->dbTypeExecute(
-            mysql: fn () => 'SELECT ' . implode(', ', $this->columns)
-                . ' FROM ' . implode(', ', $this->from)
-                . ($this->leftJoin === [] ? '' : $this->strLeftJoin . implode($this->strLeftJoin, $this->leftJoin))
-                . ($this->where === null  ?  " " : $this->where)
-                . ($this->order === null  ?  " " : $this->order)
-                . " LIMIT " . $this->limit,
-                
-            mssql: fn () => 'SELECT ' . "TOP " . $this->limit .  " " . implode(', ', $this->columns)
-                . ' FROM ' . implode(', ', $this->from)
-                . ($this->leftJoin === [] ? '' : $this->strLeftJoin . implode($this->strLeftJoin, $this->leftJoin))
-                . ($this->where === null  ?  " " : $this->where)
-                . ($this->order === null  ?  " " : $this->order)
-        );
+        switch ($this->sqlType) {
+            case 'mysql':
+                return 'SELECT ' . implode(', ', $this->columns)
+                    . ' FROM ' . implode(', ', $this->from)
+                    . ($this->leftJoin === [] ? '' : $this->strLeftJoin . implode($this->strLeftJoin, $this->leftJoin))
+                    . ($this->where === null  ?  " " : $this->where)
+                    . ($this->order === null  ?  " " : $this->order)
+                    . " LIMIT " . $this->limit;
+
+            case 'mssql':
+                return 'SELECT ' . "TOP " . $this->limit .  " " . implode(', ', $this->columns)
+                    . ' FROM ' . implode(', ', $this->from)
+                    . ($this->leftJoin === [] ? '' : $this->strLeftJoin . implode($this->strLeftJoin, $this->leftJoin))
+                    . ($this->where === null  ?  " " : $this->where)
+                    . ($this->order === null  ?  " " : $this->order);
+
+            default:
+                return "NO SQL TYPE";
+        }
     }
 }

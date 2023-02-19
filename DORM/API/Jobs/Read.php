@@ -5,7 +5,7 @@ class Read extends Job
 {
 	public function mid(): void 
 	{
-		$query = $this->model->read($this->job );
+		$query = $this->model->read($this->job, $this->dbHandler->getDBType());
 
 		try {
 			$this->result                   = array();

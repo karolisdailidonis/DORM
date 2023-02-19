@@ -10,9 +10,12 @@ class Delete
 
     private $where = null;
 
-    public function __construct(string $table)
+    private $sqlType = null;
+
+    public function __construct(string $table, string $sqlType)
     {
         $this->table = $table;
+        $this->sqlType = $sqlType;
     }
 
     public function where($var): self
@@ -23,12 +26,17 @@ class Delete
 
     public function __toString()
     {
-        return DBHandler::getInstance()->dbTypeExecute( 
-            mysql: fn() => "DELETE FROM " . $this->table
-                . ($this->where === null  ?  " " : $this->where ),
+        switch ($this->sqlType) {
+            case 'mysql':
+                return "DELETE FROM " . $this->table
+                    . ($this->where === null  ?  " " : $this->where);
 
-            mssql: fn() => "DELETE FROM " . $this->table
-                . ($this->where === null  ?  " " : $this->where )
-        );
+            case 'mssql':
+                return "DELETE FROM " . $this->table
+                . ($this->where === null  ?  " " : $this->where);
+
+            default:
+                return "NO SQL TYPE";
+        }
     }
 }

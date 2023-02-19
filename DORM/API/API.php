@@ -9,11 +9,13 @@ final class API
 {
     protected bool $tokenRequiered;
     protected string $token = '';
+    protected string $dbConfig = '';
 
-    public function __construct(bool $tokenRequiered = false)
+    public function __construct(bool $tokenRequiered = false, string $dbConfig = 'default')
     {
         $this->tokenRequiered = $tokenRequiered;
         $this->token = Config::$tokens;
+        $this->dbConfig = $dbConfig;
         $this->request();
     }
 
@@ -30,7 +32,7 @@ final class API
 
         if (isset($request['jobs'] ) && is_array($request['jobs'])) {
 
-            $dbHandler      = DBHandler::getInstance();
+            $dbHandler      = new DBHandler($this->dbConfig);
             $modelList      = new ModelList($dbHandler->getConnection());
             $solvedStack    = [];
 
@@ -88,6 +90,7 @@ final class API
         }
 
         $response = [];
+        $response['db'] = $this->dbConfig;
         $response['body'] = $body;
         $response['errors'] = $errors;
 

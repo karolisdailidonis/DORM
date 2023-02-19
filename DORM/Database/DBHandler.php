@@ -4,28 +4,14 @@ use DORM\Config\Config;
 
 class DBHandler extends QueryBuilder
 {
-    private static ?DBHandler $instance = null;
-
-    /**
-     * gets the instance via lazy initialization (created on first usage)
-     */
-    public static function getInstance(): DBHandler
-    {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
     private $connection = null;
     private $dbConfig;
     private $useDBConfig = 'default';
     private $error;
 
-    public function __construct()
-    {
-        $this->dbConfig = Config::$database[ 'default' ];
+    public function __construct(string $database = 'default')
+    {   
+        $this->dbConfig = Config::$database[$database];
         $this->connect();
     }
 
@@ -34,7 +20,6 @@ class DBHandler extends QueryBuilder
     */
     public function dbTypeExecute($mysql = null, $mssql = null) 
     {
-
         if (strtolower($this->dbConfig['dbtype']) == 'mysql' && $mysql) { return $mysql(); }
         if (strtolower($this->dbConfig['dbtype']) == 'mssql' && $mssql) { return $mssql(); }
 
@@ -60,8 +45,7 @@ class DBHandler extends QueryBuilder
 
             } catch (\PDOException $e){
                 // TODO: Clean error handling 
-                echo "DORM:No connection to Database";
-                echo $e;
+                echo "DORM:No connection to Database " . $e;
                 die();
             }
 
@@ -99,7 +83,6 @@ class DBHandler extends QueryBuilder
     public function getTableReferences($tableName)
     {
         // TODO: replace REFERENCED_TABLE_SCHEMA
-
         $sql = $this->dbTypeExecute(
             mysql: fn () =>  "
             SELECT  TABLE_NAME,
@@ -107,7 +90,7 @@ class DBHandler extends QueryBuilder
                     REFERENCED_TABLE_NAME,
                     REFERENCED_COLUMN_NAME 
             FROM information_schema.KEY_COLUMN_USAGE
-            WHERE REFERENCED_TABLE_SCHEMA = 'kada0005_db4'
+            WHERE REFERENCED_TABLE_SCHEMA = '" . $this->dbConfig['dbname'] . "'
         	    AND TABLE_NAME = '{$tableName}'
         ",
             mssql: fn () => "
@@ -115,7 +98,7 @@ class DBHandler extends QueryBuilder
             FROM
             INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab, 
             INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col 
-                WHERE Tab.CONSTRAINT_CATALOG = 'dud' AND Tab.TABLE_NAME = '{$tableName}'
+                WHERE Tab.CONSTRAINT_CATALOG = '" . $this->dbConfig['dbname'] . "' AND Tab.TABLE_NAME = '{$tableName}'
             ",
         );
 
@@ -184,6 +167,11 @@ class DBHandler extends QueryBuilder
     public function getConnection()
     {
         return $this->connection;
+    }
+
+    public function getDBType(): string
+    {
+        return $this->dbConfig['dbtype'];
     }
 
     public function execute(string $sqlQuery)

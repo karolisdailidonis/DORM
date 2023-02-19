@@ -14,9 +14,12 @@ class Update
 
     private $where = null;
 
-    public function __construct(string $table)
+    private $sqlType = null;
+
+    public function __construct(string $table, string $sqlType)
     {
         $this->table = $table;
+        $this->sqlType = $sqlType;
     }
 
     public function set(string $column, string $value): self
@@ -33,14 +36,19 @@ class Update
 
     public function __toString()
     {
-        return DBHandler::getInstance()->dbTypeExecute( 
-             mysql: fn() => "UPDATE " . $this->table
-                . " SET " . implode( ", ", $this->columns )
-                . ( $this->where === null  ?  " " : $this->where ),
+        switch ($this->sqlType) {
+            case 'mysql':
+                return "UPDATE " . $this->table
+                   . " SET " . implode( ", ", $this->columns )
+                   . ( $this->where === null  ?  " " : $this->where );
 
-             mssql: fn() => "UPDATE " . $this->table
-                . " SET " . implode( ", ", $this->columns )
-                . ( $this->where === null  ?  " " : $this->where )
-        );
+            case 'mssql':
+                return "UPDATE " . $this->table
+                   . " SET " . implode( ", ", $this->columns )
+                   . ( $this->where === null  ?  " " : $this->where );
+
+            default:
+                return "NO SQL TYPE";
+        }
     }
 }

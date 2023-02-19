@@ -10,17 +10,21 @@ class Setup
 
     public function __construct()
     {
-        $this->connection = DBHandler::getInstance();
+        if (isset($_GET["dbConfig"]) && $_GET["dbConfig"] != null) {
+            $this->connection = new DBHandler($_GET["dbConfig"]);
+        } else {
+            $this->connection = new DBHandler();
+        }
         $this->render();
     }
 
     public function render() {
 
-        if ( isset( $_POST["init-dortdb"])) {
+        if (isset( $_POST["init-dortdb"])) {
             $this->connection->setDormDB();
         }
         
-        if ( isset($_POST["generate-models"]) && TableToModel::writeAccess()  ) {
+        if (isset($_POST["generate-models"]) && TableToModel::writeAccess()) {
 
             $this->connection->setDormDB();
             // TODO: check have write acces
@@ -77,6 +81,17 @@ class Setup
         <div id="dorm-setup">
             <div id="dorm-content">
                 <h1> Setup the DORM </h1>
+
+                <form>
+                    <select name="dbConfig">
+                        <?php foreach (Config::$database as $key => $value): ?>
+                            <option value="<?php echo $key ?>"><?php echo $key ?></option>
+                        <?php endforeach; ?>
+    
+                    </select>
+                    <input type="submit" value="Select Config">
+                </form>
+
                 <div class="tab">
                     <button id="defaultOpen" class="tablinks" onclick="openTab(event, 'requests')">API Request</button>
                     <button class="tablinks" onclick="openTab(event, 'generator')">Model Generator</button>
@@ -148,8 +163,6 @@ class Setup
 
         <script src="<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/setup.js' ?>"></script>
 <?php
-
-
     }
 }
 ?>

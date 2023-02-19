@@ -6,7 +6,7 @@ class Update extends Job
 	public function mid(): void
 	{
 		try {
-			$query = $this->model->updateData($this->job);
+			$query = $this->model->updateData($this->job, $this->dbHandler->getDBType());
 			$this->dbHandler->execute($query);
 		
 			$this->result = array();
