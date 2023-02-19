@@ -28,7 +28,7 @@ class Setup
 
             $this->connection->setDormDB();
             // TODO: check have write acces
-
+            // TODO: Refactor
             if (isset($_POST["selectedTables"])) {
 
                 echo 'generated new models: ';
@@ -64,15 +64,19 @@ class Setup
             $pathToWebRoot = substr($webRoot, strlen($serverRoot) + 1);
         }
 
+        // TODO: Refactor/remove
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== '') ? 'https://' : 'http://';
 
+        // TODO: Create concept for MVC Setup Page ...
+        // include_once dirname(__FILE__) . '/UI/views/playground.php';
 ?>
-        <link rel="stylesheet" href="<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/setup.css' ?>">
+        <link rel="stylesheet" href="<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/UI/assets/setup.css' ?>">
+        <!-- TODO: Download CDN to local -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <style type="text/css">
             @font-face {
                 font-family: "Roboto";
-                src: url(<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/Roboto-Regular.ttf' ?>) format("truetype");
+                src: url(<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/UI/assets/Roboto-Regular.ttf' ?>) format("truetype");
             }
 
             * {font-family: Roboto, Helvetica;}
@@ -84,10 +88,10 @@ class Setup
 
                 <form>
                     <select name="dbConfig">
+                        <!-- TODO: Refactor/Move -->
                         <?php foreach (Config::$database as $key => $value): ?>
                             <option value="<?php echo $key ?>"><?php echo $key ?></option>
                         <?php endforeach; ?>
-    
                     </select>
                     <input type="submit" value="Select Config">
                 </form>
@@ -161,7 +165,7 @@ class Setup
 
         </div>
 
-        <script src="<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/assets/setup.js' ?>"></script>
+        <script src="<?php echo $protocol . $_SERVER['HTTP_HOST'] . '/' . $pathToWebRoot . '/UI/assets/setup.js' ?>"></script>
 <?php
     }
 }

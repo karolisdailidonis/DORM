@@ -1,4 +1,4 @@
-# The DORM 0.0.7
+# The DORM 0.0.8
 A lightweight PHP ORM framework with API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
 ***
@@ -22,8 +22,8 @@ Implemented:
 
 |  |  |
 | ------- | --- |
-| NPM | [https://www.npmjs.com/package/dorm-handler-js](https://www.npmjs.com/package/dorm-handler-js)|
-| dart | cooming soon|
+| npm | [https://www.npmjs.com/package/dorm-handler-js](https://www.npmjs.com/package/dorm-handler-js)|
+| dart | [https://github.com/svki0001/DORM-Dart-Client](https://github.com/svki0001/DORM-Dart-Client)|
 | c++ | cooming soon|
 
 ## Install
@@ -110,11 +110,11 @@ class Config {
 
 The basic SQL CRUD commands are implemented, but only with simple WHERE and SET clauses. As in the example Shema respectively
 - requestJob´s
-  - read
+  - [read](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%-%Read.md)
     - embed ( left join, if table have references)
-  - insert
-  - update
-  - delete
+  - [insert](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%-%Insert.md)
+  - [update](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%-%Update.md)
+  - [delete](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%-%Delete.md)
 ```json
 {
   "schema": "DORM 0.0.6",
@@ -133,57 +133,12 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
           "<table_name>": "<column_name>"
         }
       ],
-      "order": { "column": "<column_name>", "sort": "DESC" } // only by read/select
-      "limit": 1000, // default 1000
+      "order": { "column": "<column_name>", "sort": "DESC" },
+      "limit": 1000, 
       "embed": [
         { "table": "<table_name>" }
       ]
     },
-    {
-      "job": "insert",
-      "values": {
-        "<column_name>": "<value>",
-        "<column_name>": "<value>",
-      },
-      "from": "<table_name>",
-      "before": {
-        "lastInsertId": { 
-          "fromTable": "<table_name>", 
-          "setColumn": "<column_name>" 
-        },
-      }
-    },
-    {
-      "job": "update",
-      "values": {
-        "<column_name>": "<value>",
-        "<column_name>": "<value>",
-      },
-      "from": "<table_name>",
-      "where": [
-        {
-            "column": "<column_name>",
-            "value": "<value>", 
-            "condition": "=" // all comparison support
-        },
-        {
-            "op": "AND / OR", // default AND
-            "column": "<column_name>",
-            "val1": "<value>", 
-            "val2": "<value>", 
-            "condition": "BETWEEN" //only this logical support 
-        }
-      ]
-    },
-    {
-      "job": "delete",
-      "from": "<column_name>",
-      "where": {
-          "column": "<column_name>",
-          "value": "<value>", 
-          "condition": "=" 
-      }
-    }
   ]
 }
 ```
