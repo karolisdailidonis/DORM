@@ -65,7 +65,7 @@ class Setup
         }
 
         // TODO: Refactor/remove
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== '') ? 'https://' : 'http://';
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== '') ? 'https://' : 'https://';
 
         // TODO: Create concept for MVC Setup Page ...
         // include_once dirname(__FILE__) . '/UI/views/playground.php';

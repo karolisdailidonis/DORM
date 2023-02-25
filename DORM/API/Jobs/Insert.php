@@ -1,5 +1,5 @@
 <?php
-use DORM\API\Jobs\Job;
+use DORM\Includes\Abstracts\Job;
 
 class Insert extends Job
 {
