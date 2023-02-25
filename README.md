@@ -110,11 +110,11 @@ class Config {
 
 The basic SQL CRUD commands are implemented, but only with simple WHERE and SET clauses. As in the example Shema respectively
 - requestJob´s
-  - [read](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%-%Read.md)
+  - [read](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%20-%20Read.md)
     - embed ( left join, if table have references)
-  - [insert](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%-%Insert.md)
-  - [update](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%-%Update.md)
-  - [delete](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%-%Delete.md)
+  - [insert](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%20-%20Insert.md)
+  - [update](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%20-%20Update.md)
+  - [delete](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%20-%20Delete.md)
 ```json
 {
   "schema": "DORM 0.0.6",
