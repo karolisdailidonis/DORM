@@ -1,4 +1,4 @@
-# The DORM 0.0.8
+# The DORM 0.0.9
 A lightweight PHP ORM framework with API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
 ***
@@ -13,7 +13,7 @@ Implemented:
 - PHP model class generator [ Dev ]
 - Custom Query Builder [ Dev ]
 - API [ Dev ]
-  - With tokken auth
+  - With "token" auth
 - Setup GUI
   - Generate models from selected DB tables [ Dev ]
   - Test API Requests [ Dev ]
@@ -64,22 +64,15 @@ The DORM has a simple setup page, which can be found at DORM/Includes/Setup.php
 
 
 ```php
+use DORM\Database\DBHandler;
 use DORM\Includes\Setup;
+
+include_once 'DORM/autoload.php';
 
 new Setup();
 ```
 
-
-## DB Table to Model generator
-```php
-<?php
-
-( new TableToModel( $tableName, $columnsArray ))->writeFile();
-
-?>
-```
-
-## API
+## API Endpoint
 
 You can use the DORM API anywhere, such as in your api.php file located in the root directory of the example.com/api.php website.
 
@@ -87,18 +80,24 @@ Just put this two line of Code
 
 ```php
 use DORM\API\API;
+use DORM\Includes\Auth\Ignore;
 
-new API();
+include_once 'DORM/autoload.php';
+
+new API(new Ignore(), '<my db config name from Config.php');
 ```
 If you want to use token for authentification, give the api class a boolen ```true``` and set in the Config.php file you new token key. 
 ```php
 #api.php
 use DORM\API\API;
+use DORM\Includes\Auth\SimpleToken;
 
-new API( true );
+include_once 'DORM/autoload.php';
+
+new API(new SimpleToken(), '<my db config name from Config.php');
+
 
 #DORM/Config/Config.php
-
 ...
 class Config {
 
