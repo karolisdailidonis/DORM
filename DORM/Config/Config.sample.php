@@ -43,14 +43,14 @@ class Config {
         'Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With'
     ];
 
-    // TODO: Implement multiple token with different rights
-    static public $tokens = '';
+    // Only for SimpleToken Authentification
+    static public $token = '';
 
     // TODO: Implement
     public static $loglevel = 0;
 
     // TODO: Implement
-    static public $trusted_domains = [ ];
+    static public $trusted_domains = [];
 
     // TODO: Implement array for paths woth DORM as root
     static public $paths = [
