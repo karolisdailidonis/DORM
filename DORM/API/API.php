@@ -25,8 +25,9 @@ final class API
     protected function request()
     {
         if (!$this->isAuth) {
-            $this->response([], ['Permission denied']);
-            return false;
+            $this->errors = 'Permission denied';
+            $this->response();
+            die;
         }
 
         if (isset($this->request['jobs'] ) && is_array($this->request['jobs'])) {
