@@ -36,6 +36,7 @@ class DORMModel extends QueryBuilder {
         $query =  $this->select($columns, $sqlType)
                         ->from($this->tableName);
 
+        // TODO: Buggy
         if (isset($request['embed'])) {
             foreach ($request['embed'] as $embed) {
                 $a = $this->getReference($embed['table']);
@@ -47,6 +48,7 @@ class DORMModel extends QueryBuilder {
             foreach ($request['join'] as $join) {
                 $arr = [];
                 $index = 0;
+                //TODO: foreach auflösen, unnötig
                 foreach ($join as $table => $column) {
                     $arr[ 'table' . $index] = $table;
                     $arr[ 'column' . $index] = $column;
@@ -60,12 +62,21 @@ class DORMModel extends QueryBuilder {
             $query->where($request['where']);
         }
 
+        if (isset($request['group']) && is_array($request['group'])) {
+            $query->group($request['group']);
+        }
+
         if (isset($request['order'])) {
             $query->order($request['order']);
         }
 
         if (isset($request['limit'])) {
             $query->limit((int)$request['limit']);
+        }
+
+        // TODO: maybe mix with columns array
+        if (isset($request['count'])) {
+            $query->count($request['count']);
         }
         
         return strval($query);

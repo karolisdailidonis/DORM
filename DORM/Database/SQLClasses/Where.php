@@ -12,7 +12,10 @@ class Where
 		">=" => "comparison",
 		"<=" => "comparison",
 		"<>" => "comparison",
-		"BETWEEN" => "between"
+		"BETWEEN" => "between",
+		"NOTNULL" => "notNull",
+		"ISNULL" => "isNull",
+
 	];
 
 	public function __construct(array $where = null)
@@ -28,6 +31,16 @@ class Where
 	protected function between($data): string
 	{
 		return "{$data['column']} BETWEEN '{$data['val1']}' AND '{$data['val2']}'";
+	}
+
+	protected function notNull($data): string
+	{
+		return $data["column"] . " IS NOT NULL"; 
+	}
+
+	protected function isNull($data): string
+	{
+		return $data["column"] . " IS NULL"; 
 	}
 	
 	public function __toString(): string
