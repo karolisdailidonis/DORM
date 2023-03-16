@@ -82,9 +82,15 @@ class Select
         return $this;
     }
 
-    public function count(string $column): self
+    public function count(array $columns): self
     {
-        $this->columns[] = "COUNT(".$column.") as count_" . $column;
+        foreach ($columns as $column) {
+            if (is_string($column)) {
+                $this->columns[] = "COUNT(".$column.") as count_" . str_replace(".", "_", $column);
+            } elseif (is_array($column)) {
+                $this->columns[] = "COUNT(" . (isset($column['args']) && in_array("distinct", $column['args']) ? " DISTINCT " : "" ) . $column['column'].") as count_" . str_replace(".", "_", $column['column']);
+            }
+        }
 
         return $this;
     }
