@@ -4,6 +4,8 @@ namespace DORM\Includes;
 use DORM\Database\QueryBuilder;
 use DORM\Database\DBHandler;
 
+// TODO: Move each job to job class
+// TODO: Add Methods for check of hidden, policy and other restriction
 class DORMModel extends QueryBuilder {
 
     // insert into model query
