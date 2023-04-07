@@ -115,7 +115,7 @@ class Select
                     . " LIMIT " . $this->limit;
 
             case 'mssql':
-                return 'SELECT ' . "TOP (" . $this->limit .  ") " .  ($this->columns != null ? implode(', ', $this->columns) : "*")
+                return 'SELECT ' .  ($this->columns != null ? implode(', ', $this->columns) : "*")
                     . '  FROM ' . implode(', ', $this->from)
                     . ($this->leftJoin === null ? '' : $this->strLeftJoin . implode($this->strLeftJoin, $this->leftJoin))
                     . ($this->where === null  ?  " " : $this->where)

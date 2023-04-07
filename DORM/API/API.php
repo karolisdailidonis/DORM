@@ -51,15 +51,19 @@ final class API
                                 throw new \Exception('Job does not exist/implemented');
                             }
 
-                            $job = (new \ReflectionClass($jobname))->newInstance($modelFromList, $job, $dbHandler);
-                            $job->do();
+                            $jobrun = (new \ReflectionClass($jobname))->newInstance($modelFromList, $job, $dbHandler);
+                            $jobrun->do();
 
-                            if ($job->getResult() != null) {
-                                $this->body[$modelFromList['table_name']] = $job->getResult();
+                            if ($jobrun->getResult() != null) {
+                                if(isset($job['alias'])) {
+                                    $this->body[$job['alias']] = $jobrun->getResult();
+                                } else {
+                                    $this->body[$modelFromList['table_name']] = $jobrun->getResult();
+                                }
                             }
                             
-                            if ($job->getError() != null) {
-                                $this->errors[] = $job->getError();
+                            if ($jobrun->getError() != null) {
+                                $this->errors[] = $jobrun->getError();
                             }
 
                         } catch (\Exception $e) {
