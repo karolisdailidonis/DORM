@@ -4,6 +4,7 @@ namespace DORM\API;
 use DORM\Database\DBHandler;
 use DORM\Includes\ModelList;
 use DORM\Includes\Abstracts\AuthController;
+use DORM\Includes\ErrorHandler;
 use DORM\Config\Config;
 
 final class API
@@ -16,10 +17,17 @@ final class API
 
     public function __construct(AuthController $authController, string $dbConfig)
     {
-        $this->request = json_decode(file_get_contents("php://input"), true);
-        $this->isAuth  = $authController->auth($this->request);
-        $this->dbConfig = $dbConfig;
-        $this->request();
+        ErrorHandler::setup();
+        try {
+            $this->request = json_decode(file_get_contents("php://input"), true);
+            $this->isAuth  = $authController->auth($this->request);
+            $this->dbConfig = $dbConfig;
+            $this->request();
+
+        } catch (\Throwable $th) {
+            ErrorHandler::apiOutput($th);
+            die;
+        }
     }
 
     protected function request()
@@ -86,6 +94,7 @@ final class API
         $this->response();
     }
 
+    // TODO: Refactor, see Response.php
     protected function response()
     {
         header('Content-Type: application/json; charset=UTF-8');

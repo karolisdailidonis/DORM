@@ -1,6 +1,8 @@
 <?php
 namespace DORM\Database;
+
 use DORM\Config\Config;
+use DORM\Includes\ErrorHandler;
 
 class DBHandler extends QueryBuilder
 {
@@ -11,6 +13,8 @@ class DBHandler extends QueryBuilder
 
     public function __construct(string $database = 'default')
     {   
+        ErrorHandler::setup();
+        if(!isset(Config::$database[$database])) {return;}
         $this->dbConfig = Config::$database[$database];
         $this->connect();
     }
@@ -45,7 +49,7 @@ class DBHandler extends QueryBuilder
 
             } catch (\PDOException $e){
                 // TODO: Clean error handling 
-                echo "DORM:No connection to Database " . $e;
+                // echo "DORM:No connection to Database " . $e;
                 die();
             }
 
@@ -55,7 +59,7 @@ class DBHandler extends QueryBuilder
             $this->connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 1);
 
         } catch (\PDOException  $exception) {
-            $this->error = "DORM:No connection to Database: " . $exception->getMessage();
+            // $this->error = "DORM:No connection to Database: " . $exception->getMessage();
         }
 
         return $this;
