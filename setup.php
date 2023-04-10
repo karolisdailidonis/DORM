@@ -1,4 +1,5 @@
 <?php
+// die;
 use DORM\Database\DBHandler;
 use DORM\Includes\Setup;
 

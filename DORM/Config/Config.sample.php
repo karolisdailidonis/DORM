@@ -31,9 +31,6 @@ class Config {
 
     ];
 
-    // In API
-    static public $displayErrors = 0;
-    
     /*
     * Optional API REQUEST header.
     * Always by default in the API()::Response class method setted: header( 'Content-Type: application/json; charset=UTF-8' ) 
@@ -46,17 +43,28 @@ class Config {
     // Only for SimpleToken Authentification
     static public $token = '';
 
+    /*
+    * Default is false, has little effect on setup and api, all errors and exceptios are caught as far as possible
+    */
+    static public $displayErrors = false;
+    
+    /*
+    * Default is false, if true, then it is important that a log path exists and write permissions are available 
+    */
+    static public $logErrors = false;
+    
+    /*
+    * Path to the log incl. file name, example command for write permission: chown -R www-data Logs
+    */
+    static public $paths = [
+        'logs' => __DIR__ . '/../Logs/errors.log'
+    ];
+    
     // TODO: Implement
     public static $loglevel = 0;
 
     // TODO: Implement
     static public $trusted_domains = [];
-
-    // TODO: Implement array for paths woth DORM as root
-    static public $paths = [
-        // './' =>  __DIR__ . '../'
-    ];
-
 }
 
 ?>

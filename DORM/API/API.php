@@ -4,6 +4,7 @@ namespace DORM\API;
 use DORM\Database\DBHandler;
 use DORM\Includes\ModelList;
 use DORM\Includes\Abstracts\AuthController;
+use DORM\Includes\ErrorHandler;
 use DORM\Config\Config;
 
 final class API
@@ -16,10 +17,17 @@ final class API
 
     public function __construct(AuthController $authController, string $dbConfig)
     {
-        $this->request = json_decode(file_get_contents("php://input"), true);
-        $this->isAuth  = $authController->auth($this->request);
-        $this->dbConfig = $dbConfig;
-        $this->request();
+        ErrorHandler::setup();
+        try {
+            $this->request = json_decode(file_get_contents("php://input"), true);
+            $this->isAuth  = $authController->auth($this->request);
+            $this->dbConfig = $dbConfig;
+            $this->request();
+
+        } catch (\Throwable $th) {
+            ErrorHandler::apiOutput($th);
+            die;
+        }
     }
 
     protected function request()
@@ -51,15 +59,19 @@ final class API
                                 throw new \Exception('Job does not exist/implemented');
                             }
 
-                            $job = (new \ReflectionClass($jobname))->newInstance($modelFromList, $job, $dbHandler);
-                            $job->do();
+                            $jobrun = (new \ReflectionClass($jobname))->newInstance($modelFromList, $job, $dbHandler);
+                            $jobrun->do();
 
-                            if ($job->getResult() != null) {
-                                $this->body[$modelFromList['table_name']] = $job->getResult();
+                            if ($jobrun->getResult() != null) {
+                                if(isset($job['alias'])) {
+                                    $this->body[$job['alias']] = $jobrun->getResult();
+                                } else {
+                                    $this->body[$modelFromList['table_name']] = $jobrun->getResult();
+                                }
                             }
                             
-                            if ($job->getError() != null) {
-                                $this->errors[] = $job->getError();
+                            if ($jobrun->getError() != null) {
+                                $this->errors[] = $jobrun->getError();
                             }
 
                         } catch (\Exception $e) {
@@ -82,6 +94,7 @@ final class API
         $this->response();
     }
 
+    // TODO: Refactor, see Response.php
     protected function response()
     {
         header('Content-Type: application/json; charset=UTF-8');
