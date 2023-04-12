@@ -1,4 +1,4 @@
-# The DORM 0.0.9
+# The DORM 0.1.0
 A lightweight PHP ORM framework with API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
 ***
@@ -13,6 +13,8 @@ Implemented:
 - PHP model class generator [ Dev ]
 - Custom Query Builder [ Dev ]
 - API [ Dev ]
+  - default request methods like nodes
+  - custom request methods
   - With "token" auth
 - Setup GUI
   - Generate models from selected DB tables [ Dev ]
@@ -167,6 +169,25 @@ Here is an example response, more info in the [docu](https://github.com/karolisd
   },
   "errors" : []      
 }
+```
+
+
+## Exceptions and Logs
+With the API calls all exceptions are intercepted, however these are not always meaningful on the client side, therefore activate logs and look in there.
+In the config you can activate the logging of errors and set the path to the file, see Config.sample.php
+
+```php
+    /*
+    * Default is false, if true, then it is important that a log path exists and write permissions are available 
+    */
+    static public $logErrors = false;
+    
+    /*
+    * Path to the log incl. file name, example command for write permission: chown -R www-data Logs
+    */
+    static public $paths = [
+        'logs' => __DIR__ . '/../Logs/errors.log'
+    ];
 ```
 
 
