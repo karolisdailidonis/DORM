@@ -45,8 +45,6 @@ class Replace
     {
         switch ($this->sqlType) {
             case 'mysql':
-                echo "REPLACE INTO " . $this->table
-                . " ( " . implode(", ", $this->columns ) . " ) VALUES ( '" . implode("', '", $this->values ) . "' );";
                 return "REPLACE INTO " . $this->table
                  . " ( " . implode(", ", $this->columns ) . " ) VALUES ( '" . implode("', '", $this->values ) . "' );";
 

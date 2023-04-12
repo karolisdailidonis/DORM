@@ -5,9 +5,8 @@ class Replace extends Job
 {
 	public function mid(): void
 	{
-		$query = $this->model->replaceData($this->job, $this->dbHandler->getDBType());
-
 		try {
+			$query = $this->model->replaceData($this->job, $this->dbHandler->getDBType());
 
 			$this->dbHandler->execute($query);
 			
