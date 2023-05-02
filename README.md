@@ -25,7 +25,7 @@ Implemented:
 |  |  |
 | ------- | --- |
 | npm | [https://www.npmjs.com/package/dorm-handler-js](https://www.npmjs.com/package/dorm-handler-js)|
-| dart | [https://github.com/svki0001/DORM-Dart-Client](https://github.com/svki0001/DORM-Dart-Client)|
+| dart | [https://pub.dev/packages/dorm_client](https://pub.dev/packages/dorm_client)|
 | c++ | cooming soon|
 
 ## Install
