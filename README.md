@@ -1,4 +1,4 @@
-# The DORM 0.1.0
+# The DORM 0.1.1
 A lightweight PHP ORM framework with API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
 ***
@@ -114,6 +114,7 @@ The basic SQL CRUD commands are implemented, but only with simple WHERE and SET 
   - [read](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%20-%20Read.md)
     - embed ( left join, if table have references)
   - [insert](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%20-%20Insert.md)
+  - [replace](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%20-%20Replace.md)
   - [update](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%20-%20Update.md)
   - [delete](https://github.com/karolisdailidonis/DORM/blob/main/doc/Job%20-%20Delete.md)
 ```json
