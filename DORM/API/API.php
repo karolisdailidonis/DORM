@@ -108,7 +108,7 @@ final class API
         $response['body'] = $this->body;
         $response['errors'] = $this->errors;
 
-        print_r(json_encode($response));
+        print_r(json_encode($response, JSON_NUMERIC_CHECK));
     }
 }
 // EOL
