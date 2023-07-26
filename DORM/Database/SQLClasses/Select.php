@@ -108,7 +108,7 @@ class Select
             case 'mysql':
                 return 'SELECT ' . ($this->columns != null ? implode(', ', $this->columns) : "*")
                     . ' FROM ' . implode(', ', $this->from)
-                    . ($this->leftJoin === [] ? '' : $this->strLeftJoin . implode($this->strLeftJoin, $this->leftJoin))
+                    . ($this->leftJoin === null ? '' : $this->strLeftJoin . implode($this->strLeftJoin, $this->leftJoin))
                     . ($this->where === null  ?  " " : $this->where)
                     . ($this->order === null  ?  " " : $this->order)
                     . ($this->group === null  ?  " " : " GROUP BY " . implode(', ', $this->group))

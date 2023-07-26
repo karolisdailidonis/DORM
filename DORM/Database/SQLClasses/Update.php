@@ -22,7 +22,8 @@ class Update
         $this->sqlType = $sqlType;
     }
 
-    public function set(string $column, string $value): self
+    // TODO: Check $value type
+    public function set(string $column, $value): self
     {
         $this->columns[] = $column . " = " . "'" . $value ."'";
         return $this;

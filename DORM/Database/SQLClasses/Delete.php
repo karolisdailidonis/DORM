@@ -8,6 +8,7 @@ class Delete
 {
     private $table;
 
+    // TODO: Make required
     private $where = null;
 
     private $sqlType = null;

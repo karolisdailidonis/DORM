@@ -14,10 +14,10 @@ class Read extends Job
 			$this->result ['query']         = $query;
 
 		} catch (\PDOException $e) {
-			$this->error = array('message' => $e->getMessage(), 'request' =>$this->job, 'query' => $query);
+			$this->error = array('message' => '[JOB] ' .  $e->getMessage(), 'request' =>$this->job, 'query' => $query);
 
 		} catch ( \Throwable $e) {
-			$this->error = array('message' => $e->getMessage(), 'request' => $this->job, 'query' => $query);
+			$this->error = array('message' => '[JOB] ' . $e->getMessage(), 'request' => $this->job, 'query' => $query);
 		}
 	}
 }
