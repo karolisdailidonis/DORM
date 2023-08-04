@@ -20,3 +20,22 @@ Extended:
 	}
 ]
 ```
+
+Nested:
+```json
+"where": [
+	{
+		"condition": "block",
+		"where": [
+			{
+				"op": "AND / OR",
+				"column": "<column_name>",
+				"val1": "<value>", 
+				"val2": "<value>", 
+				"condition": "BETWEEN"
+			}
+		]
+	}
+
+]
+```
