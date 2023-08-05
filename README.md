@@ -1,4 +1,4 @@
-# The DORM 0.1.2
+# The DORM 0.1.3
 A lightweight PHP ORM framework with API and no dependencies other than the native PHP extensions. In addition, it has a simple GUI for initializing models based on the tables in the database
 
 ***
