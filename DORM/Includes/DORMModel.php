@@ -112,6 +112,23 @@ class DORMModel extends QueryBuilder {
         return strval($query);
     }
 
+    public function replaceData(array $request, string $sqlType)
+    {
+        $columns    = [];
+        $values     = [];
+
+        foreach ($request['values'] as $key => $value) {
+            $columns[]  = $key;
+            $values[]   = $value;
+        }
+
+        $query = $this->replace($this->tableName, $sqlType)
+                        ->columns($columns)
+                        ->values($values);
+
+        return strval($query);
+    }
+
     public function getReference(string $referencedTableName)
     {
         return $this->references[$referencedTableName];

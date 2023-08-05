@@ -5,6 +5,7 @@ use DORM\Database\SQLClasses\Select;
 use DORM\Database\SQLClasses\Insert;
 use DORM\Database\SQLClasses\Update;
 use DORM\Database\SQLClasses\Delete;
+use DORM\Database\SQLClasses\Replace;
 
 class QueryBuilder
 {
@@ -26,5 +27,10 @@ class QueryBuilder
     public static function delete(string $tableName, string $sqlType): Delete
     {
         return new Delete($tableName, $sqlType);
+    }
+    
+    public static function replace(string $tableName, string $sqlType): Replace
+    {
+        return new Replace($tableName, $sqlType);
     }
 }
