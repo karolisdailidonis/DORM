@@ -6,18 +6,20 @@ use DORM\Includes\ModelList;
 use DORM\Includes\Abstracts\AuthController;
 use DORM\Includes\ErrorHandler;
 use DORM\Config\Config;
+use DORM\Includes\DORMError;
 
 final class API
 {
     protected bool $isAuth = false;
     protected string $dbConfig;
     protected $request = null;
-    protected $body = [];
-    protected $errors = [];
+    protected array $body = [];
+    protected DORMError $errors;
 
     public function __construct(AuthController $authController, string $dbConfig)
     {
         ErrorHandler::setup();
+        $this->errors = new DORMError();
         try {
             $this->request = json_decode(file_get_contents("php://input"), true);
             $this->isAuth  = $authController->auth($this->request);
@@ -25,6 +27,7 @@ final class API
             $this->request();
 
         } catch (\Throwable $th) {
+            // TODO: sorgt für ein Error 500
             ErrorHandler::apiOutput($th);
             die;
         }
@@ -33,62 +36,58 @@ final class API
     protected function request()
     {
         if (!$this->isAuth) {
-            $this->errors = 'Permission denied';
+            $this->errors->add('[API] Permission denied');
             $this->response();
-            die;
         }
 
-        if (isset($this->request['jobs'] ) && is_array($this->request['jobs'])) {
+        if (!isset($this->request['jobs'] ) && !is_array($this->request['jobs'])) {
+            $this->errors->add('[API] No correct request found');
+            $this->response();
+        }
 
-            $dbHandler      = new DBHandler($this->dbConfig);
-            $modelList      = new ModelList($dbHandler->getConnection());
-            $solvedStack    = [];
+        $dbHandler      = new DBHandler($this->dbConfig);
+        $modelList      = new ModelList($dbHandler->getConnection());
+        $solvedStack    = [];
 
-            foreach ($this->request['jobs'] as $job) {
+        foreach ($this->request['jobs'] as $job) {
 
-                if (isset($job['job'])){
-                    $modelFromList = $modelList->findModel($job['from']);
-
-                    if (is_array($modelFromList) && $modelFromList) {
-
-                        // Setup/proof
-                        $jobname = ucfirst($job['job']);
-
-                        try {
-                            if (!@include_once('Jobs/' . $jobname . '.php')) {
-                                throw new \Exception('Job does not exist/implemented');
-                            }
-
-                            $jobrun = (new \ReflectionClass($jobname))->newInstance($modelFromList, $job, $dbHandler);
-                            $jobrun->do();
-
-                            if ($jobrun->getResult() != null) {
-                                if(isset($job['alias'])) {
-                                    $this->body[$job['alias']] = $jobrun->getResult();
-                                } else {
-                                    $this->body[$modelFromList['table_name']] = $jobrun->getResult();
-                                }
-                            }
-                            
-                            if ($jobrun->getError() != null) {
-                                $this->errors[] = $jobrun->getError();
-                            }
-
-                        } catch (\Exception $e) {
-                            $this->errors[] = array('message' =>  $e->getMessage(), 'request' => $job);
-                        }
-
-                    } else {
-                        $this->errors[] = array('message' => 'can not found a model in the modellist', 'request' => $job);
-                    }
-                
-                } else {
-                    $this->errors[] = array('message' => 'missing key: job', 'request' => $job);
-                }
+            if (!isset($job['job'])){
+                $this->errors->add('[API] Missing key: job');
+                continue;
             }
+            
+            $modelFromList = $modelList->findModel($job['from']);
+            if (!is_array($modelFromList)) {
+                $this->errors->add('[API] Not found model in the modellist');
+                continue;
+            }
+            
+            // Setup/proof
+            $jobname = ucfirst($job['job']);
 
-        } else {
-            $this->errors[] = array('message' => 'no correct request found');
+            try {
+                if (!@include_once('Jobs/' . $jobname . '.php')) {
+                    throw new \Exception('Job does not exist/implemented');
+                }
+
+                $jobrun = (new \ReflectionClass($jobname))->newInstance($modelFromList, $job, $dbHandler);
+                $jobrun->do();
+
+                if ($jobrun->getResult() != null) {
+                    if(isset($job['alias'])) {
+                        $this->body[$job['alias']] = $jobrun->getResult();
+                    } else {
+                        $this->body[$modelFromList['table_name']] = $jobrun->getResult();
+                    }
+                }
+                
+                if ($jobrun->getError() != null) {
+                    $this->errors->add('[API] Executed job has an error', $jobrun->getError());
+                }
+                    
+            } catch (\Exception $e) {
+                    $this->errors->add('[API] ['. $jobname . '] ' . $e->getMessage());
+            }
         }
 
         $this->response();
@@ -106,9 +105,12 @@ final class API
         $response = [];
         $response['db'] = $this->dbConfig;
         $response['body'] = $this->body;
-        $response['errors'] = $this->errors;
+        $response['errors'] = $this->errors->getErrors();
 
         print_r(json_encode($response, JSON_NUMERIC_CHECK));
+        die;
     }
 }
+
+
 // EOL

@@ -1,5 +1,12 @@
 # Changelog
 
+## - 0.1.3
+- Refactor: Error outputs
+
+## - 0.1.2
+- Fix: JSON Output with Numeric 
+- Fix: Error if no columns array in job
+
 ## - 0.1.1
 - Implement: REPLACE job
 

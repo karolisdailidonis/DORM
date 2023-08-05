@@ -7,6 +7,7 @@ class ErrorHandler
 {
 	static public function setup()
 	{
+		// TODO: isbool etwas fehlerhaft,
 		if(isset(Config::$displayErrors) && is_bool(Config::$displayErrors)){
 			ini_set('display_errors', Config::$displayErrors);
 		} else {
@@ -22,7 +23,7 @@ class ErrorHandler
 		ini_set('html_errors', false);
 
 		set_error_handler(function(int $errNo, string $errMsg, string $file, int $line){
-			ErrorHandler::log($errMsg, $file);
+			ErrorHandler::log($errMsg, $file, $line);
 		});
 		
 		set_exception_handler(function($exception){
@@ -30,12 +31,12 @@ class ErrorHandler
 		});
 	}
 	
-	static public function log($message, $file = '')
+	static public function log(string $message, string $file = '', int $line = 0)
 	{
 		if (!isset(Config::$paths['logs']) || !is_writable(Config::$paths['logs'])) {
 			return false;
 		} else {
-			error_log("[".date("Y-m-d h:m:s",time())."], ".$file.', '.$message." \n", 3, Config::$paths['logs']);
+			error_log("[".date("Y-m-d h:m:s",time())."], ".$file.', ' . $line . ' ' .$message." \n", 3, Config::$paths['logs']);
 			return true;
 		}
 	}
@@ -48,10 +49,10 @@ class ErrorHandler
 		$response = [];
 		$response['body'] = [];
 		$response['errors'] = [];
-		$response['errors'][] = ["system" => "DORM Fatal Error"];
+		$response['errors'][] = ["message" => "[SYSTEM] DORM Fatal Error"];
 
 		if(!ErrorHandler::log($error->getMessage(), $error->getFile())) {
-			$response['errors'][] = ["system" => "Log file is not writetable: " . Config::$paths['logs']];
+			$response['errors'][] = ["message" => "[SYSTEM] Log file is not writetable: " . Config::$paths['logs']];
 		}
 
 		print_r(json_encode($response));
