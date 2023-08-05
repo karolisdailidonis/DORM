@@ -31,9 +31,11 @@ class DORMModel extends QueryBuilder {
     {
         $columns = [];
 
-        foreach ($request['columns'] as $entry) {
-            $columns[] = $entry['column'];
-        }
+         if (isset($request['columns'])) {
+             foreach ($request['columns'] as $entry) {
+                 $columns[] = $entry['column'];
+             }
+         }
 
         $query =  $this->select($columns, $sqlType)
                         ->from($this->tableName);

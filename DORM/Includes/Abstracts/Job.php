@@ -1,10 +1,12 @@
 <?php
 namespace DORM\Includes\Abstracts;
 
+use DORM\Includes\DORMError;
+
 abstract class Job
 {
 	protected ?array $result = null;
-	protected ?array $error = null;
+	protected array $error = [];
 	protected $model = null;
 
 	final public function __construct($modelFromList, $job, $dbHandler)
@@ -30,6 +32,14 @@ abstract class Job
 			$before = $this->job['before']['lastInsertId'];
 			$this->job['values'][ $before['setColumn']] = $solvedStack[ $before['fromTable']]['insertID'];
 		}
+
+		if (isset($this->job['before']['fromBase64'])) {
+
+			foreach ($this->job['before']['fromBase64'] as $columnname) {
+
+				$this->job['values'][$columnname] = base64_decode($this->job['values'][$columnname]);
+			}
+		}
 	}
 	
 	// TODO: Implement like Jobs
@@ -51,7 +61,7 @@ abstract class Job
 		return $this->result;
 	}
 
-	final public function getError(): ?array
+	final public function getError(): array
 	{
 		return $this->error;
 	}

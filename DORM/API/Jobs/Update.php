@@ -10,13 +10,13 @@ class Update extends Job
 			$this->dbHandler->execute($query);
 		
 			$this->result = array();
-			$this->result['query']  = $query;
+			// $this->result['query']  = $query;
 		
 		} catch (\PDOException $e) {
-			$this->error = array('message' => $e->getMessage(), 'request' => $this->job);
+			$this->error = array('message' => '[JOB] ' . $e->getMessage(), 'request' => $this->job);
 		
 		} catch (\Throwable $e) {
-			$this->error = array('message' => $e->getMessage(), 'request' => $this->job);
+			$this->error = array('message' => '[JOB] ' . $e->getMessage(), 'request' => $this->job);
 		}
 	}
 }
