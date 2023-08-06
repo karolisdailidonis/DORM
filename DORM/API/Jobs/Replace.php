@@ -15,12 +15,12 @@ class Replace extends Job
 		
 		} catch (\PDOException $e) {
 			$this->error = array( 
-				'message' => $e->getMessage() . "( " . $e->getLine() . " | " . $e->getFile() . " )", 
+				'message' => '[JOB] ' . $e->getMessage() . "( " . $e->getLine() . " | " . $e->getFile() . " )", 
 				'request' => $this->job 
 			);
 		
 		} catch (\Throwable $e) {
-			$this->error =  array('message' => $e->getMessage(), 'request' => $this->job, 'query' => $query);
+			$this->error =  array('message' => '[JOB] ' . $e->getMessage(), 'request' => $this->job, 'query' => $query);
 		}
 
 	}
