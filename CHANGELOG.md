@@ -3,6 +3,7 @@
 ## - 0.1.3
 - Refactor: Error outputs
 - Implement: loader and abstract for after subjobs
+- Implement: DORMInfo Class, return version in API response 
 
 ## - 0.1.2
 - Fix: JSON Output with Numeric 
