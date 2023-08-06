@@ -2,6 +2,7 @@
 
 ## - 0.1.3
 - Refactor: Error outputs
+- Implement: loader and abstract for after subjobs
 
 ## - 0.1.2
 - Fix: JSON Output with Numeric 

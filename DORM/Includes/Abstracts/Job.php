@@ -5,7 +5,7 @@ use DORM\Includes\DORMError;
 
 abstract class Job
 {
-	protected ?array $result = null;
+	protected array $result = [];
 	protected array $error = [];
 	protected $model = null;
 
@@ -22,7 +22,10 @@ abstract class Job
 	{
 		$this->before();
 		$this->mid();
-		$this->after();
+
+		if(is_array($this->job['after'])) {
+			$this->after();
+		}
 	}
 
 	// TODO: Implement like Jobs
@@ -42,21 +45,18 @@ abstract class Job
 		}
 	}
 	
-	// TODO: Implement like Jobs
 	final protected function after(): void
 	{
-		if (isset($this->job['after']['toBase64'])) {
-
-			foreach ($this->job['after']['toBase64'] as $columnname) {
-
-				foreach ($this->result['rows'] as $key => $value) {
-					$this->result['rows'][$key][$columnname] = base64_encode($this->result['rows'][$key][$columnname]);
-				}
+		foreach ($this->job['after'] as $key => $value) {
+			if(!@include_once(__DIR__ . '../../../API/Jobs/After/'.ucfirst($key).'.php')) {
+				$this->error[] = "[AFTER] No Class for [" .$key ."]";
+				continue;
 			}
+			('\\' . ucfirst($key))::do($value, $this->job, $this->result, $this->error);
 		}
 	}
 
-	final public function getResult(): ?array
+	final public function getResult(): array
 	{
 		return $this->result;
 	}

@@ -67,22 +67,23 @@ final class API
 
             try {
                 if (!@include_once('Jobs/' . $jobname . '.php')) {
-                    throw new \Exception('Job does not exist/implemented');
+                    $this->errors->add('[API] No Class for this job', $jobname);
+                    continue;
                 }
 
                 $jobrun = (new \ReflectionClass($jobname))->newInstance($modelFromList, $job, $dbHandler);
                 $jobrun->do();
 
-                if ($jobrun->getResult() != null) {
-                    if(isset($job['alias'])) {
-                        $this->body[$job['alias']] = $jobrun->getResult();
-                    } else {
-                        $this->body[$modelFromList['table_name']] = $jobrun->getResult();
-                    }
+                if(isset($job['alias'])) {
+                    $this->body[$job['alias']] = $jobrun->getResult();
+                } else {
+                    $this->body[$modelFromList['table_name']] = $jobrun->getResult();
                 }
-                
-                if ($jobrun->getError() != null) {
-                    $this->errors->add('[API] Executed job has an error', $jobrun->getError());
+
+                $jobError = $jobrun->getError();
+
+                if (count($jobError) > 0) {
+                    $this->errors->add('[API] Executed job has an error', $jobError);
                 }
                     
             } catch (\Exception $e) {
@@ -96,6 +97,8 @@ final class API
     // TODO: Refactor, see Response.php
     protected function response()
     {
+        header_remove();
+
         header('Content-Type: application/json; charset=UTF-8');
 
         foreach (Config::$requestHeadersAPI as $value) {
@@ -106,6 +109,8 @@ final class API
         $response['db'] = $this->dbConfig;
         $response['body'] = $this->body;
         $response['errors'] = $this->errors->getErrors();
+
+        http_response_code(200);
 
         print_r(json_encode($response, JSON_NUMERIC_CHECK));
         die;
