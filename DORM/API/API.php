@@ -7,6 +7,7 @@ use DORM\Includes\Abstracts\AuthController;
 use DORM\Includes\ErrorHandler;
 use DORM\Config\Config;
 use DORM\Includes\DORMError;
+use DORM\Includes\DORMInfo;
 
 final class API
 {
@@ -106,6 +107,7 @@ final class API
         }
 
         $response = [];
+        $response['version'] = DORMInfo::getVersion();
         $response['db'] = $this->dbConfig;
         $response['body'] = $this->body;
         $response['errors'] = $this->errors->getErrors();
