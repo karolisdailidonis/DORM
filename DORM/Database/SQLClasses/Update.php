@@ -12,6 +12,7 @@ class Update
 
     private $conditions = [];
 
+    // TODO: Make Required
     private $where = null;
 
     private $sqlType = null;
@@ -23,8 +24,18 @@ class Update
     }
 
     // TODO: Check $value type
-    public function set(string $column, $value): self
+    public function set(string $column, $value, $isFunc = false): self
     {
+        if(($value == null || $value == 'NULL'|| $value == 'null' || is_null($value)) && gettype($value) != 'integer') {
+            $this->columns[] = $column . " = NULL";
+            return $this;
+        }
+
+        if ($isFunc) {
+            $this->columns[] = $column . " = " . $value;
+            return $this;
+        }
+
         $this->columns[] = $column . " = " . "'" . $value ."'";
         return $this;
     }
