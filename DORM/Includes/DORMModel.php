@@ -91,6 +91,10 @@ class DORMModel extends QueryBuilder {
         $query = $this->update($this->tableName, $sqlType);
 
         foreach ($request['values'] as $key => $value) {
+            if(is_array($value)) {
+                $query->set($key, $value['value'], true);
+                continue;
+            }
             $query->set($key, $value);
         }
 

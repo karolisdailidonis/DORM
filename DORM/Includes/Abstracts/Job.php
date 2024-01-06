@@ -23,12 +23,12 @@ abstract class Job
 		$this->before();
 		$this->mid();
 
-		if(is_array($this->job['after'])) {
+		if(isset($this->job['after']) && is_array($this->job['after'])) {
 			$this->after();
 		}
 	}
 
-	// TODO: Implement like Jobs
+	// TODO: Implement like after
 	final protected function before(): void
 	{
 		if (isset($this->job['before']['lastInsertId'])) {
@@ -37,10 +37,13 @@ abstract class Job
 		}
 
 		if (isset($this->job['before']['fromBase64'])) {
-
 			foreach ($this->job['before']['fromBase64'] as $columnname) {
 
-				$this->job['values'][$columnname] = base64_decode($this->job['values'][$columnname]);
+				$tstVar = <<<FOOBAR
+				CAST(CAST(N'' AS XML).value('xs:base64Binary("{$this->job['values'][$columnname]}")', 'VARBINARY(MAX)') AS VARCHAR(MAX))
+				FOOBAR;
+
+				$this->job['values'][$columnname] = ['value' => $tstVar, 'isFunc' => true];
 			}
 		}
 	}
