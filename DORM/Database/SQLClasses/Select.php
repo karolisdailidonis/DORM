@@ -57,16 +57,23 @@ class Select
     // TODO: reduce to one pair if same ?
     // TODO: make a single class ?
     // TODO: implement as trait ?
-    public function join(string $table1, string $table2, string $column1, string $column2 = null): self
+    public function join(string $table1, string $table2, string $column1, $column2 = null): self
     {
-        $sql = "%TABLE2% ON %TABLE1%.%COLUMN1% = %TABLE2%.%COLUMN2%";
-
+        $sql = "%TABLE2% ON %TABLE1%.%COLUMN1% = %TABLENAME%.%COLUMN2%";
+        
         $sql = str_replace("%TABLE1%", $table1, $sql);
         $sql = str_replace("%COLUMN1%", $column1, $sql);
-
-        $sql = str_replace("%TABLE2%", $table2, $sql);
-        $sql = str_replace("%COLUMN2%", $column2, $sql);
-
+        
+        if( $table2 == 'sqlquery') {
+            $sql = str_replace("%TABLE2%", "(" . $column2['query'] . ") as sqlquery"  , $sql);
+            $sql = str_replace("%TABLENAME%", 'sqlquery', $sql);
+            $sql = str_replace("%COLUMN2%", $column2['on'], $sql);
+        } else {
+            $sql = str_replace("%TABLE2%", $table2, $sql);
+            $sql = str_replace("%TABLENAME%", $table2, $sql);
+            $sql = str_replace("%COLUMN2%", $column2, $sql);
+        }
+        
         if ( $this->leftJoin == null) {
             $this->leftJoin = [];
         }

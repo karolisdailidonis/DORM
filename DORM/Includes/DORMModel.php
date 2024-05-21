@@ -33,7 +33,7 @@ class DORMModel extends QueryBuilder {
 
          if (isset($request['columns'])) {
              foreach ($request['columns'] as $entry) {
-                 $columns[] = $entry['column'];
+                $columns[] = $entry['column'];
              }
          }
 
@@ -91,6 +91,10 @@ class DORMModel extends QueryBuilder {
         $query = $this->update($this->tableName, $sqlType);
 
         foreach ($request['values'] as $key => $value) {
+            if(is_array($value)) {
+                $query->set($key, $value['value'], true);
+                continue;
+            }
             $query->set($key, $value);
         }
 
