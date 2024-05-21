@@ -15,6 +15,7 @@ final class API
     protected string $dbConfig;
     protected $request = null;
     protected array $body = [];
+    protected bool $JSONwithoutKonst = false;
     protected DORMError $errors;
 
     public function __construct(AuthController $authController, string $dbConfig)
@@ -36,6 +37,10 @@ final class API
 
     protected function request()
     {
+        if (isset($this->request['apiConfig']['nocheck'] )) {
+            $this->JSONwithoutKonst = true;
+        }
+
         if (!$this->isAuth) {
             $this->errors->add('[API] Permission denied');
             $this->response();
@@ -56,6 +61,7 @@ final class API
                 $this->errors->add('[API] Missing key: job');
                 continue;
             }
+
             
             $modelFromList = $modelList->findModel($job['from']);
             if (!is_array($modelFromList)) {
@@ -114,10 +120,13 @@ final class API
 
         http_response_code(200);
 
+        if ($this->JSONwithoutKonst) {
+            print_r(json_encode($response));
+            die;
+        }
+
         print_r(json_encode($response, JSON_NUMERIC_CHECK));
         die;
     }
 }
-
-
 // EOL

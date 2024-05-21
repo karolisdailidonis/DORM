@@ -33,7 +33,7 @@ class DORMModel extends QueryBuilder {
 
          if (isset($request['columns'])) {
              foreach ($request['columns'] as $entry) {
-                 $columns[] = $entry['column'];
+                $columns[] = $entry['column'];
              }
          }
 
