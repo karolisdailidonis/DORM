@@ -8,24 +8,31 @@ class DBHandler extends QueryBuilder
 {
     private $connection = null;
     private $dbConfig;
-    private $useDBConfig = 'default';
     private $error;
+    private ?string $dbName = null;
 
-    public function __construct(string $database = 'default')
-    {   
+    public function __construct(string $database = 'default', string $tenantDbName = null)
+    {
         ErrorHandler::setup();
-        if(!isset(Config::$database[$database])) {return;}
+        if (!isset(Config::$database[$database])) {
+            return;
+        }
         $this->dbConfig = Config::$database[$database];
+        $this->dbName = ($tenantDbName == null) ? $this->dbConfig['dbName'] : $tenantDbName;
         $this->connect();
     }
 
     /**
-    * Executes a function according to the database type with mysql as default
-    */
-    public function dbTypeExecute($mysql = null, $mssql = null) 
+     * Executes a function according to the database type with mysql as default
+     */
+    public function dbTypeExecute($mysql = null, $mssql = null)
     {
-        if (strtolower($this->dbConfig['dbtype']) == 'mysql' && $mysql) { return $mysql(); }
-        if (strtolower($this->dbConfig['dbtype']) == 'mssql' && $mssql) { return $mssql(); }
+        if (strtolower($this->dbConfig['dbtype']) == 'mysql' && $mysql) {
+            return $mysql();
+        }
+        if (strtolower($this->dbConfig['dbtype']) == 'mssql' && $mssql) {
+            return $mssql();
+        }
 
         // Default function
         return $mysql();
@@ -37,29 +44,23 @@ class DBHandler extends QueryBuilder
 
         try {
 
-            try {
-                $this->connection = new \PDO(
-                    $this->dbTypeExecute(
-                        mysql: fn () => "mysql:host=" . $this->dbConfig['dbhost'] . ":" . $this->dbConfig['dbport'] . "; dbname=" . $this->dbConfig['dbname'],
-                        mssql: fn () => "sqlsrv:server=" . $this->dbConfig['dbhost'] . "," .  $this->dbConfig['dbport'] . "; Database=" . $this->dbConfig['dbname'],
-                    ),
-                    $this->dbConfig['dbuser'],
-                    $this->dbConfig['dbpass']
-                );
-
-            } catch (\PDOException $e){
-                // TODO: Clean error handling 
-                // echo "DORM:No connection to Database " . $e;
-                die();
-            }
+            $this->connection = new \PDO(
+                $this->dbTypeExecute(
+                    mysql: fn () => "mysql:host=" . $this->dbConfig['dbhost'] . ":" . $this->dbConfig['dbport'] . "; dbname=" . $this->dbName,
+                    mssql: fn () => "sqlsrv:server=" . $this->dbConfig['dbhost'] . "," .  $this->dbConfig['dbport'] . "; Database=" . $this->dbName,
+                ),
+                $this->dbConfig['dbuser'],
+                $this->dbConfig['dbpass']
+            );
 
             $this->execute("SET NAMES utf8");
 
             $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $this->connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 1);
-
         } catch (\PDOException  $exception) {
-            // $this->error = "DORM:No connection to Database: " . $exception->getMessage();
+            $this->error = "DORM:No connection to Database: " . $exception->getMessage();
+        } catch (\Throwable $th) {
+            $this->error = "DORM:No connection to Database: " . $th->getMessage();
         }
 
         return $this;
@@ -68,8 +69,8 @@ class DBHandler extends QueryBuilder
     public function getTables()
     {
         $sql = $this->dbTypeExecute(
-            mysql: fn () => "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='" .$this->dbConfig['dbname'] . "' ORDER BY TABLE_NAME",
-            mssql: fn () => "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG='" . $this->dbConfig['dbname'] . "' ORDER BY TABLE_NAME",
+            mysql: fn () => "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='{$this->dbName}' ORDER BY TABLE_NAME",
+            mssql: fn () => "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG='{$this->dbName}' ORDER BY TABLE_NAME",
         );
 
         $query = $this->connection->query($sql);
@@ -94,7 +95,7 @@ class DBHandler extends QueryBuilder
                     REFERENCED_TABLE_NAME,
                     REFERENCED_COLUMN_NAME 
             FROM information_schema.KEY_COLUMN_USAGE
-            WHERE REFERENCED_TABLE_SCHEMA = '" . $this->dbConfig['dbname'] . "'
+            WHERE REFERENCED_TABLE_SCHEMA = '{$this->dbName}'
         	    AND TABLE_NAME = '{$tableName}'
         ",
             mssql: fn () => "
@@ -102,7 +103,7 @@ class DBHandler extends QueryBuilder
             FROM
             INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab, 
             INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col 
-                WHERE Tab.CONSTRAINT_CATALOG = '" . $this->dbConfig['dbname'] . "' AND Tab.TABLE_NAME = '{$tableName}'
+                WHERE Tab.CONSTRAINT_CATALOG = '{$this->dbName}' AND Tab.TABLE_NAME = '{$tableName}'
             ",
         );
 
@@ -114,7 +115,7 @@ class DBHandler extends QueryBuilder
         $exist = $this->execute("SELECT * FROM INFORMATION_SCHEMA.TABLES
            WHERE TABLE_NAME = 'dorm_model_list' ");
 
-        if (count($exist->fetchAll(\PDO::FETCH_ASSOC)) <= 0)  {
+        if (count($exist->fetchAll(\PDO::FETCH_ASSOC)) <= 0) {
             $this->setDatabase();
         }
     }
@@ -152,7 +153,7 @@ class DBHandler extends QueryBuilder
     public function insertModel(string $tableName, string $className)
     {
         $sql = $this->dbTypeExecute(
-            mysql: fn() => "
+            mysql: fn () => "
                 REPLACE INTO dorm_model_list ( table_name, class_name)
                 VALUES ( '{$tableName}', '{$className}' )
             ",
