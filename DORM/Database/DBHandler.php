@@ -11,15 +11,19 @@ class DBHandler extends QueryBuilder
     private $error;
     private ?string $dbName = null;
 
-    public function __construct(string $database = 'default', string $tenantDbName = null)
+    public function __construct(string $database, string $tenantDbName = null)
     {
         ErrorHandler::setup();
-        if (!isset(Config::$database[$database])) {
-            return;
+        try {
+            if (!isset(Config::$database[$database])) {
+                return;
+            }
+            $this->dbConfig = Config::$database[$database];
+            $this->dbName = ($tenantDbName == null) ? $this->dbConfig['dbName'] : $tenantDbName;
+            $this->connect();
+        } catch (\Throwable $th) {
+           die;
         }
-        $this->dbConfig = Config::$database[$database];
-        $this->dbName = ($tenantDbName == null) ? $this->dbConfig['dbName'] : $tenantDbName;
-        $this->connect();
     }
 
     /**
