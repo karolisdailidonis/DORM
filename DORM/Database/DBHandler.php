@@ -19,7 +19,7 @@ class DBHandler extends QueryBuilder
                 return;
             }
             $this->dbConfig = Config::$database[$database];
-            $this->dbName = ($tenantDbName == null) ? $this->dbConfig['dbName'] : $tenantDbName;
+            $this->dbName = ($tenantDbName == null) ? $this->dbConfig['dbname'] : $tenantDbName;
             $this->connect();
         } catch (\Throwable $th) {
            die;
