@@ -111,8 +111,7 @@ class Select
                     . ($this->leftJoin === null ? '' : $this->strLeftJoin . implode($this->strLeftJoin, $this->leftJoin))
                     . ($this->where === null  ?  " " : $this->where)
                     . ($this->order === null  ?  " " : $this->order)
-                    . ($this->group === null  ?  " " : " GROUP BY " . implode(', ', $this->group))
-                    . " LIMIT " . $this->limit;
+                    . ($this->group === null  ?  " " : " GROUP BY " . implode(', ', $this->group));
 
             case 'mssql':
                 return 'SELECT ' .  ($this->columns != null ? implode(', ', $this->columns) : "*")
