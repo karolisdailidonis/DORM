@@ -1,4 +1,5 @@
 <?php
+
 namespace DORM\API;
 
 use DORM\Database\DBHandler;
@@ -17,8 +18,11 @@ final class API
     protected array $body = [];
     protected bool $JSONwithoutKonst = false;
     protected DORMError $errors;
+    protected bool $asJsonContent;
 
-    public function __construct(AuthController $authController, string $dbConfig, string $tenantDbName = null)
+
+    //TODO: Ref constructor to arr with config values
+    public function __construct(AuthController $authController, string $dbConfig, string $tenantDbName = null, bool $asJsonContent = true)
     {
         ErrorHandler::setup();
         $this->errors = new DORMError();
@@ -26,6 +30,7 @@ final class API
             $this->request = json_decode(file_get_contents("php://input"), true);
             $this->isAuth  = $authController->auth($this->request);
             $this->dbHandler = new DBHandler($dbConfig, $tenantDbName);
+            $this->asJsonContent = $asJsonContent;
             $this->request();
         } catch (\Throwable $th) {
             // TODO: sorgt für ein Error 500
@@ -36,7 +41,7 @@ final class API
 
     protected function request()
     {
-        if (isset($this->request['apiConfig']['nocheck'] )) {
+        if (isset($this->request['apiConfig']['nocheck'])) {
             $this->JSONwithoutKonst = true;
         }
 
@@ -95,12 +100,22 @@ final class API
             }
         }
 
-        $this->response();
+        $this->response($this->asJsonContent);
     }
 
     // TODO: Refactor, see Response.php
-    protected function response()
+    protected function response(bool $asJsonContent = true)
     {
+        // Create response
+        $response = [];
+        $response['version'] = DORMInfo::getVersion();
+        $response['body'] = $this->body;
+        $response['errors'] = $this->errors->getErrors();
+
+        if (!$asJsonContent) {
+            return $response;
+        }
+
         header_remove();
 
         header('Content-Type: application/json; charset=UTF-8');
@@ -108,11 +123,6 @@ final class API
         foreach (Config::$requestHeadersAPI as $value) {
             header($value);
         }
-
-        $response = [];
-        $response['version'] = DORMInfo::getVersion();
-        $response['body'] = $this->body;
-        $response['errors'] = $this->errors->getErrors();
 
         http_response_code(200);
 
