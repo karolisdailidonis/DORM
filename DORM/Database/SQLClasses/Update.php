@@ -48,6 +48,11 @@ class Update
 
     public function __toString()
     {
+
+        if($this->where === null) {
+            throw new \Exception("SECURITY: UPDATE needs a WHERE argument");
+        }
+
         switch ($this->sqlType) {
             case 'mysql':
                 return "UPDATE " . $this->table
