@@ -1,4 +1,7 @@
 # Changelog
+## - 0.1.5
+- API optional response as PHP Object
+- UPDATE & DELETE requieres where
 
 ## - 0.1.3
 - Refactor: Error outputs
