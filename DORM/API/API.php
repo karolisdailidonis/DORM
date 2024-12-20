@@ -15,6 +15,7 @@ final class API
     protected bool $isAuth = false;
     protected DBHandler $dbHandler;
     protected $request = null;
+    public array $response = [];
     protected array $body = [];
     protected bool $JSONwithoutKonst = false;
     protected DORMError $errors;
@@ -22,7 +23,7 @@ final class API
 
 
     //TODO: Ref constructor to arr with config values
-    public function __construct(AuthController $authController, string $dbConfig, string $tenantDbName = null, bool $asJsonContent = true)
+    public function __construct(AuthController $authController, string $dbConfig, string $tenantDbName = null, bool $asJsonContent = true, bool $noCheckDirect = false)
     {
         ErrorHandler::setup();
         $this->errors = new DORMError();
@@ -31,6 +32,7 @@ final class API
             $this->isAuth  = $authController->auth($this->request);
             $this->dbHandler = new DBHandler($dbConfig, $tenantDbName);
             $this->asJsonContent = $asJsonContent;
+            $this->JSONwithoutKonst = $noCheckDirect;
             $this->request();
         } catch (\Throwable $th) {
             // TODO: sorgt für ein Error 500
@@ -100,20 +102,19 @@ final class API
             }
         }
 
-        $this->response($this->asJsonContent);
+        return $this->response($this->asJsonContent);
     }
 
     // TODO: Refactor, see Response.php
     protected function response(bool $asJsonContent = true)
     {
         // Create response
-        $response = [];
-        $response['version'] = DORMInfo::getVersion();
-        $response['body'] = $this->body;
-        $response['errors'] = $this->errors->getErrors();
+        $this->response['version'] = DORMInfo::getVersion();
+        $this->response['body'] = $this->body;
+        $this->response['errors'] = $this->errors->getErrors();
 
         if (!$asJsonContent) {
-            return $response;
+            return $this->response;
         }
 
         header_remove();
@@ -127,11 +128,11 @@ final class API
         http_response_code(200);
 
         if ($this->JSONwithoutKonst) {
-            print_r(json_encode($response));
+            print_r(json_encode($this->response));
             die;
         }
 
-        print_r(json_encode($response, JSON_NUMERIC_CHECK));
+        print_r(json_encode($this->response, JSON_NUMERIC_CHECK));
         die;
     }
 }
